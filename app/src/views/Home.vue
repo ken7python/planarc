@@ -21,9 +21,7 @@
     <div v-else>
       <p>ユーザー情報を取得中...</p>
     </div>
-    <div class="mt-3">
-      <a @click="logout" href="">ログアウト</a>
-    </div>
+    <button class="btn" @click="logout">Logout</button>
   </div>
 </template>
 

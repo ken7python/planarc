@@ -23,23 +23,23 @@
       <h2>ログイン</h2>
       <form @submit.prevent="login_">
         <div class="mb-3">
-          <label for="username" class="form-label">ユーザ名</label>
-          <input type="text" class="form-control" id="username" v-model="username">
+<!--          <label for="username" class="form-label">ユーザ名</label>-->
+          <input type="text" id="username" v-model="username" placeholder="ユーザ名">
         </div>
         <div class="mb-3">
-          <label for="password" class="form-label">パスワード</label>
-          <input type="password" class="form-control" id="password" v-model="password">
+<!--          <label for="password" class="form-label">パスワード</label>-->
+          <input type="password" id="password" v-model="password" placeholder="パスワード">
         </div>
-        <button type="submit" class="btn btn-primary">ログイン</button>
+        <button type="submit" class="btn">ログイン</button>
       </form>
 
-      <div v-if="errorMessage != ''" class="alert alert-danger mt-3">
+      <div v-if="errorMessage != ''" class="alert">
         {{ errorMessage }}
       </div>
 
-      <div class="mt-3">
-        <a href="/signup">ユーザ登録</a>
-      </div>
+<!--      <div class="mt-3">-->
+<!--        <a href="/signup">ユーザ登録</a>-->
+<!--      </div>-->
   </div>
 </template>
 
