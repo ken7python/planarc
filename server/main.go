@@ -44,15 +44,15 @@ func main() {
 
 	r.Static("/static", "./static")
 
-	r.GET("/", func(c *gin.Context) {
-		c.File("templates/index.html")
-	})
-	r.GET("/signup", func(c *gin.Context) {
-		c.File("templates/signup.html")
-	})
-	r.GET("/login", func(c *gin.Context) {
-		c.File("templates/login.html")
-	})
+	//r.GET("/", func(c *gin.Context) {
+	//	c.File("templates/index.html")
+	//})
+	//r.GET("/signup", func(c *gin.Context) {
+	//	c.File("templates/signup.html")
+	//})
+	//r.GET("/login", func(c *gin.Context) {
+	//	c.File("templates/login.html")
+	//})
 
 	api := r.Group("/api")
 	api.Use(rateLimitMiddleware())
