@@ -1,8 +1,13 @@
 <script setup lang="ts">
   import { useRoute } from 'vue-router'
   import homeIcon from '@/assets/icons/home.svg';
+  import dailyIcon from '@/assets/icons/calendar_today.svg';
+  import flagIcon from '@/assets/icons/flag.svg';
+
   import logoutIcon from '@/assets/icons/logout.svg';
   import backIcon from '@/assets/icons/back.svg';
+  import accountIcon from '@/assets/icons/account_circle.svg';
+
 
   import { CONST } from '@/logic/const.js';
   import { user } from '@/logic/user.js';
@@ -32,7 +37,7 @@
     <!-- AUTH -->
     <div id="AUTH" v-if="route.path === CONST.authLink">
       <div class="title">
-        <homeIcon class="icon"></homeIcon>
+        <accountIcon class="icon"></accountIcon>
         <h2 class="link">ユーザ登録・ログイン</h2>
         <span class="spacer"></span>
       </div>
@@ -42,7 +47,7 @@
     <div id="LOGIN" v-if="route.path === CONST.loginLink">
       <backIcon class="icon back" @click="back"></backIcon>
       <div class="title">
-        <homeIcon class="icon"></homeIcon>
+        <accountIcon class="icon"></accountIcon>
         <h2 class="link">ログイン</h2>
         <span class="spacer"></span>
       </div>
@@ -52,7 +57,7 @@
     <div id="Signup" v-if="route.path === CONST.signupLink">
       <backIcon class="icon back" @click="back"></backIcon>
       <div class="title">
-        <homeIcon class="icon"></homeIcon>
+        <accountIcon class="icon"></accountIcon>
         <h2 class="link">ユーザ登録</h2>
         <span class="spacer"></span>
       </div>
@@ -62,7 +67,7 @@
     <div id="DAILY" v-if="route.path === CONST.dailyLink">
 
       <div class="title">
-        <homeIcon class="icon"></homeIcon>
+        <dailyIcon class="icon"></dailyIcon>
         <h2 class="link">DAILY</h2>
         <span class="spacer"></span>
       </div>
@@ -71,7 +76,7 @@
     <!-- FLAG -->
     <div id="FLAG" v-if="route.path === CONST.flagLink">
       <div class="title">
-        <homeIcon class="icon"></homeIcon>
+        <flagIcon class="icon"></flagIcon>
         <h2 class="link">未完了リスト</h2>
         <span class="spacer"></span>
       </div>

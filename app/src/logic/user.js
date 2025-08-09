@@ -78,6 +78,6 @@ export const user = {
     },
 
     directToLogin: function(){
-        window.location.href = '/auth';
+        window.location.href = CONST.authLink;
     }
 }
