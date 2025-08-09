@@ -1,5 +1,5 @@
 .btn {
-    background-color: #007bff;
+    background-color: #49A2E0;
     color: white;
     border: none;
     padding: 15px 30px;
@@ -13,12 +13,14 @@
 }
 
 input[type="text"], input[type="password"] {
-    width: 80vw;
+    width: 280px;
+    background-color: #FFFFFF;
     padding: 10px;
     font-size: 16px;
     margin: 4px 0;
-    border: 1px solid #ccc;
+    border: 1px solid #E2E8F8;
     border-radius: 4px;
+    color: #AEB7BD;
 }
 
 .alert {
