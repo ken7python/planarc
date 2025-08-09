@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { register } from '@/assets/user.js';
+import { user } from '@/logic/user.js';
 import { ref } from 'vue';
 
 let username = ref('');
@@ -13,7 +13,7 @@ async function handleSubmit() {
     errorMessage.value = "パスワードが一致しません。";
     return;
   }
-  res = await register(username.value, password.value);
+  res = await user.register(username.value, password.value);
   console.log(res);
   if (res.ok) {
     location.href = '/';

@@ -3,8 +3,8 @@
   import homeIcon from '@/assets/icons/home.svg';
   import logoutIcon from '@/assets/icons/logout.svg';
 
-
   import { CONST } from '@/logic/const.js';
+  import { user } from '@/logic/user.js';
 
   const route = useRoute()
 
@@ -18,7 +18,7 @@
       <h2 class="link">HOME</h2>
       <span class="spacer"></span>
     </div>
-    <logoutIcon class="icon logout"></logoutIcon>
+    <logoutIcon class="icon logout" @click="user.logout"></logoutIcon>
   </div>
 </template>
 

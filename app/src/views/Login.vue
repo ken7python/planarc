@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { login } from '@/assets/user.js';
+  import { user } from '@/logic/user.js';
   import { ref } from 'vue';
 
   const username = ref('');
@@ -8,7 +8,7 @@
   let res;
 
   async function login_() {
-    res = await login(username.value, password.value);
+    res = await user.login(username.value, password.value);
     console.log(res.error);
     if (res.ok) {
       location.href = '/';
