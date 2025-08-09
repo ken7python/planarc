@@ -32,3 +32,7 @@ input[type="text"], input[type="password"] {
     margin: 4px;
     margin-top: 130px;
 }
+
+body {
+    background-color: #FAFAFA;
+}
