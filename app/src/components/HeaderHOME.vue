@@ -3,6 +3,9 @@
   const log = "StudyLog";
   const subject = "AddSubject";
 
+  import noteIcon from '@/assets/icons/note_alt.svg';
+  import subjectIcon from '@/assets/icons/subject.svg';
+
   let menu = ref(log);
 
   function getColor(trueMenu: string){
@@ -13,12 +16,14 @@
     }
   }
 
-  function getIconStyle(trueMenu: string,filename: string){
+  function getIconStyle(trueMenu: string){
     return {
       color: getColor(trueMenu),
-      width: '40px',
-      height: '40px',
+      width: '30px',
+      height: '30px',
       display: 'inline-block',
+      position: 'relative',
+      top: '5px',
     }
   }
 
@@ -43,13 +48,21 @@
   <div id="header_home">
     <!-- 勉強時間 -->
     <div class="menu">
-      <a :style="getLinkStyle(log)" @click="toStudyLog()">勉強時間</a>
+      <a :style="getLinkStyle(log)" @click="toStudyLog()">
+        <noteIcon :style='getIconStyle(log)'></noteIcon>
+        勉強時間
+      </a>
       <div v-if="menu === log" class="underline"></div>
+      <div v-else style="height: 4px;"></div>
     </div>
     <!-- 科目作成 -->
     <div class="menu">
-      <a :style="getLinkStyle(subject)" @click="toAddSubject()">科目作成</a>
+      <a :style="getLinkStyle(subject)" @click="toAddSubject()">
+        <subjectIcon :style='getIconStyle(subject)'></subjectIcon>
+        科目作成
+      </a>
       <div v-if="menu === subject" class="underline"></div>
+      <div v-else style="height: 4px;"></div>
     </div>
   </div>
 </template>
