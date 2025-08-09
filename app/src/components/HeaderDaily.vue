@@ -1,9 +1,11 @@
 <script setup lang="ts">
   import { ref } from 'vue';
-  const log = "StudyLog";
-  const subject = "AddSubject";
+  const list = "TodoList";
+  const studylog = "StudyLog";
+  const track = "TimeTrack";
+  const letter = "Letter";
 
-  let menu = ref(log);
+  let menu = ref(list);
 
   function getColor(trueMenu: string){
     if (menu.value === trueMenu) {
@@ -27,29 +29,32 @@
     return {
       color: getColor(trueMenu),
       fontWeight: weight,
-      fontSize: '24px',
+      fontSize: '14px',
     }
-  }
-
-  function toStudyLog() {
-    menu.value = log;
-  }
-  function toAddSubject() {
-    menu.value = subject;
   }
 </script>
 
 <template>
   <div id="header_home">
-    <!-- 勉強時間 -->
+    <!-- TODOLIST -->
     <div class="menu">
-      <a :style="getLinkStyle(log)" @click="toStudyLog()">勉強時間</a>
-      <div v-if="menu === log" class="underline"></div>
+      <a :style="getLinkStyle(list)" @click="menu = list;">TODO<br>LIST</a>
+      <div v-if="menu === list" class="underline"></div>
     </div>
-    <!-- 科目作成 -->
+    <!-- 勉強記録 -->
     <div class="menu">
-      <a :style="getLinkStyle(subject)" @click="toAddSubject()">科目作成</a>
-      <div v-if="menu === subject" class="underline"></div>
+      <a :style="getLinkStyle(studylog)" @click="menu = studylog">勉強記録</a>
+      <div v-if="menu === studylog" class="underline"></div>
+    </div>
+    <!-- TIME TRACK -->
+    <div class="menu">
+      <a :style="getLinkStyle(track)" @click="menu = track">TIME<br>TRACK</a>
+      <div v-if="menu === track" class="underline"></div>
+    </div>
+    <!-- 振り返り -->
+    <div class="menu">
+      <a :style="getLinkStyle(letter)" @click="menu = letter">振り返り</a>
+      <div v-if="menu === letter" class="underline"></div>
     </div>
   </div>
 </template>
@@ -62,7 +67,7 @@
     width: 100%;
     height: 60px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     background-color: #1C409A;
     text-align: center;
   }
