@@ -40,21 +40,25 @@
     <div class="menu">
       <a :style="getLinkStyle(list)" @click="menu = list;">TODO<br>LIST</a>
       <div v-if="menu === list" class="underline"></div>
+      <div v-else style="height: 4px;"></div>
     </div>
     <!-- 勉強記録 -->
     <div class="menu">
       <a :style="getLinkStyle(studylog)" @click="menu = studylog">勉強記録</a>
       <div v-if="menu === studylog" class="underline"></div>
+      <div v-else style="height: 4px;"></div>
     </div>
     <!-- TIME TRACK -->
     <div class="menu">
       <a :style="getLinkStyle(track)" @click="menu = track">TIME<br>TRACK</a>
       <div v-if="menu === track" class="underline"></div>
+      <div v-else style="height: 4px;"></div>
     </div>
     <!-- 振り返り -->
     <div class="menu">
       <a :style="getLinkStyle(letter)" @click="menu = letter">振り返り</a>
       <div v-if="menu === letter" class="underline"></div>
+      <div v-else style="height: 4px;"></div>
     </div>
   </div>
 </template>
