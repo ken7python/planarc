@@ -1,12 +1,14 @@
 <script setup lang="ts">
-
+  import { CONST } from '@/logic/const.js';
+  import Header from "@/components/Header.vue";
 </script>
 
 <template>
   <div>
+    <Header />
     <div id="main">
-      <router-link to="/signup" class="btn">ユーザ登録</router-link>
-      <router-link to="/login" class="btn">ログイン</router-link>
+      <router-link :to="CONST.signupLink" class="btn">ユーザ登録</router-link>
+      <router-link :to="CONST.loginLink" class="btn">ログイン</router-link>
     </div>
   </div>
 </template>

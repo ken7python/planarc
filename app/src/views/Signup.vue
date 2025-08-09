@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { user } from '@/logic/user.js';
 import { ref } from 'vue';
+import Header from "@/components/Header.vue";
 
 let username = ref('');
 let password = ref('');
@@ -24,6 +25,7 @@ async function handleSubmit() {
 </script>
 
 <template>
+  <Header />
   <h1 class="mb-4">サインアップ</h1>
   <form @submit.prevent="handleSubmit">
     <div class="mb-3">

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { user } from '@/logic/user.js';
   import { ref } from 'vue';
+  import Header from "@/components/Header.vue";
 
   const username = ref('');
   const password = ref('');
@@ -19,6 +20,7 @@
 </script>
 
 <template>
+  <Header />
   <div>
       <h2>ログイン</h2>
       <form @submit.prevent="login_">

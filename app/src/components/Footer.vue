@@ -47,12 +47,12 @@
       <!-- DAILY -->
       <router-link class="footer-item" :to="CONST.dailyLink">
         <dailyIcon :style='getIconStyle(CONST.dailyLink)'></dailyIcon>
-        <p :style="getLinkStyle(CONST.dailyLink)">日記</p>
+        <p :style="getLinkStyle(CONST.dailyLink)">日</p>
       </router-link>
       <!-- FLAG -->
       <router-link class="footer-item" :to="CONST.flagLink">
         <flagIcon :style='getIconStyle(CONST.flagLink)'></flagIcon>
-        <p :style="getLinkStyle(CONST.flagLink)">フラグ</p>
+        <p :style="getLinkStyle(CONST.flagLink)">未完了リスト</p>
       </router-link>
 
     </div>
