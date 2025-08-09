@@ -10,6 +10,10 @@
     username.value = data.username;
   }
   loadData();
+
+  // const onLongpress = (e: CustomEvent) => {
+  //   alert("長押しイベントが発生しました: ");
+  // }
 </script>
 
 <template>
@@ -23,6 +27,11 @@
     </div>
     <button class="btn" @click="logout">Logout</button>
   </div>
+
+<!--    <div>-->
+<!--      &lt;!&ndash; デフォルト（500ms） &ndash;&gt;-->
+<!--      <div v-use-longpress="1000" @longpress="onLongpress"><button class="btn">長押しのサンプル</button></div>-->
+<!--    </div>-->
 </template>
 
 <style scoped>
