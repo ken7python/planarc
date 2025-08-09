@@ -20,7 +20,7 @@ input[type="text"], input[type="password"] {
     margin: 4px 0;
     border: 1px solid #E2E8F8;
     border-radius: 4px;
-    color: #AEB7BD;
+    /*color: #AEB7BD;*/
 }
 
 .alert {

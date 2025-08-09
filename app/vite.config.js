@@ -2,11 +2,13 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import{ fileURLToPath, URL } from 'node:url'
 import { VitePWA } from 'vite-plugin-pwa'
+import svgLoader from 'vite-svg-loader'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
       vue(),
+    svgLoader(),
     VitePWA({
       registerType: 'autoUpdate', // 自動更新（またはprompt）
       includeAssets: ['vite.svg',],

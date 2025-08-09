@@ -1,9 +1,11 @@
 <script setup lang="ts">
-
+  import Footer from "../components/Footer.vue";
 </script>
 
 <template>
-  $END$
+  <div>
+    <Footer />
+  </div>
 </template>
 
 <style scoped>

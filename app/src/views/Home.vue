@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { profile,logout } from '@/assets/user.js';
-0
+  import Footer from "../components/Footer.vue";
+
   let data: any;
   let username = ref('');
   async function loadData() {
@@ -27,11 +28,7 @@
     </div>
     <button class="btn" @click="logout">Logout</button>
   </div>
-
-<!--    <div>-->
-<!--      &lt;!&ndash; デフォルト（500ms） &ndash;&gt;-->
-<!--      <div v-use-longpress="1000" @longpress="onLongpress"><button class="btn">長押しのサンプル</button></div>-->
-<!--    </div>-->
+  <Footer />
 </template>
 
 <style scoped>
