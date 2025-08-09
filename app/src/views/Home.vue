@@ -3,6 +3,7 @@
   import { user } from '@/logic/user.js';
   import Footer from "@/components/Footer.vue";
   import Header from "@/components/Header.vue";
+  import HeaderHome from "../components/HeaderHOME.vue";
 
   let data: any;
   let username = ref('');
@@ -22,6 +23,7 @@
   <div>
     <header>
       <Header />
+      <HeaderHome />
     </header>
     <div id="main">
       <h1>Welcome to PlanArc</h1>

@@ -28,9 +28,9 @@ input[type="text"], input[type="password"] {
     margin-top: 10px;
 }
 
-#app {
+#main {
     margin: 4px;
-    margin-top: 130px;
+    margin-top: 160px;
 }
 
 body {

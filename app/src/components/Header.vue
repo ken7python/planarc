@@ -86,7 +86,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px;
+    height: 60px;
     background-color: #1C409A;
     display: flex;
     justify-content: center;
@@ -121,7 +121,7 @@
   .logout {
     position: absolute;
     right: 20px;
-    top: 20px;
+    top: 10px;
     width: 40px;
     height: 40px;
     cursor: pointer;
@@ -130,7 +130,7 @@
   .back {
     position: absolute;
     left: 20px;
-    top: 25px;
+    top: 15px;
     cursor: pointer;
     width: 30px;
     height: 30px;
