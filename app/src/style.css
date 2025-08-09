@@ -27,3 +27,8 @@ input[type="text"], input[type="password"] {
     color: red;
     margin-top: 10px;
 }
+
+#app {
+    margin: 4px;
+    margin-top: 130px;
+}
