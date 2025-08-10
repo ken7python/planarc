@@ -5,44 +5,9 @@
 
   import noteIcon from '@/assets/icons/note_alt.svg';
   import subjectIcon from '@/assets/icons/subject.svg';
+  import { header } from '@/logic/header.js';
 
   let menu = ref(log);
-
-  function getColor(trueMenu: string){
-    if (menu.value === trueMenu) {
-      return '#FFFFFF';
-    } else {
-      return '#739DDB';
-    }
-  }
-
-  function getIconStyle(trueMenu: string){
-    return {
-      color: getColor(trueMenu),
-      width: '30px',
-      height: '30px',
-      display: 'inline-block',
-      position: 'relative',
-      top: '5px',
-    }
-  }
-
-  function getLinkStyle(trueMenu: string){
-    const weight = menu.value === trueMenu ? 'bold' : 'normal';
-    return {
-      color: getColor(trueMenu),
-      fontWeight: weight,
-      fontSize: '24px',
-    }
-  }
-
-  function underlineStyle(trueMenu: string) {
-    return {
-      width: '100%',
-      height: '8px',
-      backgroundColor: menu.value === trueMenu ? '#66BEBC' : '',
-    };
-  }
 
   const props = defineProps<{
     menu: string;
@@ -61,19 +26,19 @@
   <div id="header_home">
     <!-- 勉強時間 -->
     <div class="menu">
-      <a :style="getLinkStyle(log)" @click="menu = log;">
-        <noteIcon :style='getIconStyle(log)'></noteIcon>
+      <a :style="header.getLinkStyle(menu,log)" @click="menu = log;">
+        <noteIcon :style='header.getIconStyle(log)'></noteIcon>
         勉強時間
       </a>
-      <div :style="underlineStyle(log)"></div>
+      <div :style="header.getUnderlineStyle(menu,log)"></div>
     </div>
     <!-- 科目作成 -->
     <div class="menu">
-      <a :style="getLinkStyle(subject)" @click="menu = subject">
-        <subjectIcon :style='getIconStyle(subject)'></subjectIcon>
+      <a :style="header.getLinkStyle(menu,subject)" @click="menu = subject">
+        <subjectIcon :style='header.getIconStyle(subject)'></subjectIcon>
         科目作成
       </a>
-      <div :style="underlineStyle(subject)"></div>
+      <div :style="header.getUnderlineStyle(menu,subject)"></div>
     </div>
   </div>
 </template>
