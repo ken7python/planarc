@@ -36,11 +36,11 @@ export const header = {
         }
     },
 
-    log: "StudyLog",
+    log: "StudyTime",
     subject: "AddSubject",
 
     list: "TodoList",
     studylog: "StudyLog",
     track: "TimeTrack",
-    letter: "Letter",
+    letter: "Note",
 }
