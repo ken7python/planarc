@@ -5,7 +5,9 @@
 <template>
   <div>
     <textarea></textarea>
+    <br>
     <button class="btn">AIからのコメント</button>
+    <br>
     <textarea></textarea>
   </div>
 </template>
