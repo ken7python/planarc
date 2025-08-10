@@ -26,6 +26,14 @@ import {ref, watch} from 'vue';
     }
   }
 
+  function getUnderlineStyle(trueMenu: string) {
+    return {
+      width: '100%',
+      height: '8px',
+      backgroundColor: menu.value === trueMenu ? '#66BEBC' : '',
+    };
+  }
+
   function getLinkStyle(trueMenu: string){
     const weight = menu.value === trueMenu ? 'bold' : 'normal';
     return {
@@ -62,8 +70,7 @@ import {ref, watch} from 'vue';
           LIST
         </span>
       </div>
-      <div v-if="menu === list" class="underline"></div>
-      <div v-else style="height: 4px;"></div>
+      <div :style="getUnderlineStyle(list)"></div>
     </div>
 
     <!-- 勉強記録 -->
@@ -76,8 +83,7 @@ import {ref, watch} from 'vue';
           勉強記録
         </span>
       </a>
-      <div v-if="menu === studylog" class="underline"></div>
-      <div v-else style="height: 4px;"></div>
+      <div :style="getUnderlineStyle(studylog)"></div>
     </div>
     <!-- TIME TRACK -->
     <div class="menu">
@@ -89,8 +95,7 @@ import {ref, watch} from 'vue';
           TIME<br>TRACK
         </span>
       </a>
-      <div v-if="menu === track" class="underline"></div>
-      <div v-else style="height: 4px;"></div>
+      <div :style="getUnderlineStyle(track)"></div>
     </div>
     <!-- 振り返り -->
     <div class="menu">
@@ -102,8 +107,7 @@ import {ref, watch} from 'vue';
           振り返り
         </span>
       </a>
-      <div v-if="menu === letter" class="underline"></div>
-      <div v-else style="height: 4px;"></div>
+      <div :style="getUnderlineStyle(letter)"></div>
     </div>
   </div>
 </template>
@@ -129,12 +133,6 @@ import {ref, watch} from 'vue';
     justify-content: end;
     flex: 1;
     height: 100%;
-  }
-  .underline {
-    width: 100%;
-    height: 4px;
-    background-color: #66BEBC;
-    margin-top: 8px;
   }
   .menuGrid {
     display: flex;

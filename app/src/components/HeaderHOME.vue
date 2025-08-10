@@ -36,19 +36,20 @@
     }
   }
 
+  function underlineStyle(trueMenu: string) {
+    return {
+      width: '100%',
+      height: '8px',
+      backgroundColor: menu.value === trueMenu ? '#66BEBC' : '',
+    };
+  }
+
   const props = defineProps<{
     menu: string;
   }>();
   const emit = defineEmits<{
     (e: 'update:menu', menu: string): void;
   }>();
-
-  function toStudyLog() {
-    menu.value = log;
-  }
-  function toAddSubject() {
-    menu.value = subject;
-  }
 
   watch(menu, (newMenu) => {
     console.log('menu changed:', newMenu);
@@ -60,21 +61,19 @@
   <div id="header_home">
     <!-- 勉強時間 -->
     <div class="menu">
-      <a :style="getLinkStyle(log)" @click="toStudyLog()">
+      <a :style="getLinkStyle(log)" @click="menu = log;">
         <noteIcon :style='getIconStyle(log)'></noteIcon>
         勉強時間
       </a>
-      <div v-if="menu === log" class="underline"></div>
-      <div v-else style="height: 4px;"></div>
+      <div :style="underlineStyle(log)"></div>
     </div>
     <!-- 科目作成 -->
     <div class="menu">
-      <a :style="getLinkStyle(subject)" @click="toAddSubject()">
+      <a :style="getLinkStyle(subject)" @click="menu = subject">
         <subjectIcon :style='getIconStyle(subject)'></subjectIcon>
         科目作成
       </a>
-      <div v-if="menu === subject" class="underline"></div>
-      <div v-else style="height: 4px;"></div>
+      <div :style="underlineStyle(subject)"></div>
     </div>
   </div>
 </template>
@@ -96,10 +95,5 @@
     justify-content: end;
     align-items: center;
     flex-direction: column;
-  }
-  .underline {
-    width: 100%;
-    height: 4px;
-    background-color: #66BEBC;
   }
 </style>
