@@ -9,6 +9,8 @@
   import subjectIcon from '@/assets/icons/subject.svg';
   import { header } from '@/logic/header.js';
 
+  header.fontsize = '24px';
+
   let menu = ref(log);
 
   const props = defineProps<{

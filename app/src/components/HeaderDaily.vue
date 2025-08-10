@@ -17,7 +17,7 @@
   const letter = header.letter;
 
   let menu = ref(list);
-  header.fontsize = '16px';
+  header.fontsize = '14px';
 
   const props = defineProps<{
     menu: string;
