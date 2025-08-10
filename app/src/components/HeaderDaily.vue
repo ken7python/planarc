@@ -1,47 +1,19 @@
 <script setup lang="ts">
-import {ref, watch} from 'vue';
-  const list = "TodoList";
-  const studylog = "StudyLog";
-  const track = "TimeTrack";
-  const letter = "Letter";
+  import {ref, watch} from 'vue';
 
   import listIcon from '@/assets/icons/list.svg';
   import studylogIcon from '@/assets/icons/timer.svg';
   import trackIcon from '@/assets/icons/barefoot.svg';
   import letterIcon from '@/assets/icons/ink_pen.svg';
+  import { header } from '@/logic/header.js';
+
+  const list = "TodoList";
+  const studylog = "StudyLog";
+  const track = "TimeTrack";
+  const letter = "Letter";
 
   let menu = ref(list);
-
-  function getColor(trueMenu: string){
-    if (menu.value === trueMenu) {
-      return '#FFFFFF';
-    } else {
-      return '#739DDB';
-    }
-  }
-
-  function getIconStyle(trueMenu: string){
-    return {
-      color: getColor(trueMenu),
-    }
-  }
-
-  function getUnderlineStyle(trueMenu: string) {
-    return {
-      width: '100%',
-      height: '8px',
-      backgroundColor: menu.value === trueMenu ? '#66BEBC' : '',
-    };
-  }
-
-  function getLinkStyle(trueMenu: string){
-    const weight = menu.value === trueMenu ? 'bold' : 'normal';
-    return {
-      color: getColor(trueMenu),
-      fontWeight: weight,
-      fontSize: '16px',
-    }
-  }
+  header.fontsize = '16px';
 
   const props = defineProps<{
     menu: string;
@@ -60,7 +32,7 @@ import {ref, watch} from 'vue';
   <div id="header_home">
     <!-- TODOLIST -->
     <div class="menu">
-      <div :style="getLinkStyle(list)" @click="menu = list;" class="menuGrid">
+      <div :style="header.getLinkStyle(menu, list)" @click="menu = list;" class="menuGrid">
         <div class="iconDiv">
           <listIcon />
         </div>
@@ -70,12 +42,12 @@ import {ref, watch} from 'vue';
           LIST
         </span>
       </div>
-      <div :style="getUnderlineStyle(list)"></div>
+      <div :style="header.getUnderlineStyle(menu, list)"></div>
     </div>
 
     <!-- 勉強記録 -->
     <div class="menu">
-      <a :style="getLinkStyle(studylog)" @click="menu = studylog" class="menuGrid">
+      <a :style="header.getLinkStyle(menu, studylog)" @click="menu = studylog" class="menuGrid">
         <div class="iconDiv">
           <studylogIcon />
         </div>
@@ -83,11 +55,11 @@ import {ref, watch} from 'vue';
           勉強記録
         </span>
       </a>
-      <div :style="getUnderlineStyle(studylog)"></div>
+      <div :style="header.getUnderlineStyle(menu, studylog)"></div>
     </div>
     <!-- TIME TRACK -->
     <div class="menu">
-      <a :style="getLinkStyle(track)" @click="menu = track" class="menuGrid">
+      <a :style="header.getLinkStyle(menu, track)" @click="menu = track" class="menuGrid">
         <div class="iconDiv">
           <trackIcon />
         </div>
@@ -95,11 +67,11 @@ import {ref, watch} from 'vue';
           TIME<br>TRACK
         </span>
       </a>
-      <div :style="getUnderlineStyle(track)"></div>
+      <div :style="header.getUnderlineStyle(menu, track)"></div>
     </div>
     <!-- 振り返り -->
     <div class="menu">
-      <a :style="getLinkStyle(letter)" @click="menu = letter" class="menuGrid">
+      <a :style="header.getLinkStyle(menu, letter)" @click="menu = letter" class="menuGrid">
         <div class="iconDiv">
           <letterIcon />
         </div>
@@ -107,7 +79,7 @@ import {ref, watch} from 'vue';
           振り返り
         </span>
       </a>
-      <div :style="getUnderlineStyle(letter)"></div>
+      <div :style="header.getUnderlineStyle(menu, letter)"></div>
     </div>
   </div>
 </template>
