@@ -7,10 +7,14 @@
   import letterIcon from '@/assets/icons/ink_pen.svg';
   import { header } from '@/logic/header.js';
 
-  const list = "TodoList";
-  const studylog = "StudyLog";
-  const track = "TimeTrack";
-  const letter = "Letter";
+  // const list = "TodoList";
+  // const studylog = "StudyLog";
+  // const track = "TimeTrack";
+  // const letter = "Letter";
+  const list = header.list;
+  const studylog = header.studylog;
+  const track = header.track;
+  const letter = header.letter;
 
   let menu = ref(list);
   header.fontsize = '16px';

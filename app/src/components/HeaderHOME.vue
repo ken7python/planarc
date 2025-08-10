@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import { ref, watch } from 'vue';
-  const log = "StudyLog";
-  const subject = "AddSubject";
+  // const log = "StudyLog";
+  // const subject = "AddSubject";
+  const log = header.log;
+  const subject = header.subject;
 
   import noteIcon from '@/assets/icons/note_alt.svg';
   import subjectIcon from '@/assets/icons/subject.svg';

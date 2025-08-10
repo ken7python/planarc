@@ -1,15 +1,20 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { user } from '@/logic/user.js';
+
   import Footer from "@/components/Footer.vue";
   import Header from "@/components/Header.vue";
-  import HeaderHome from "../components/HeaderHOME.vue";
+  import HeaderHome from "@/components/HeaderHOME.vue";
+  import { header } from "@/logic/header.js";
+
+  import StudyTime from "./StudyTime.vue";
+  import AddSubject from "./AddSubject.vue";
 
   let data: any;
   let username = ref('');
 
-  const log = 'StudyLog';
-  const subject = 'AddSubject';
+  const log = header.log;
+  const subject = header.subject;
   const activeMenu = ref< log | subject >(log);
 
 
@@ -35,7 +40,9 @@
 <!--      <div v-else>-->
 <!--        <p>ユーザー情報を取得中...</p>-->
 <!--      </div>-->
-    {{ activeMenu }}
+<!--    {{ activeMenu }}-->
+      <study-time v-if="activeMenu === log" />
+      <add-subject v-if="activeMenu === subject" />
     </div>
     <footer>
       <Footer />

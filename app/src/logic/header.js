@@ -35,4 +35,12 @@ export const header = {
             top: '5px',
         }
     },
+
+    log: "StudyTime",
+    subject: "AddSubject",
+
+    list: "TodoList",
+    studylog: "StudyLog",
+    track: "TimeTrack",
+    letter: "Note",
 }
