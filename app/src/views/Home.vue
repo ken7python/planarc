@@ -7,32 +7,35 @@
 
   let data: any;
   let username = ref('');
+
+  const log = 'StudyLog';
+  const subject = 'AddSubject';
+  const activeMenu = ref< log | subject >(log);
+
+
   async function loadData() {
     data = await user.profile();
     // console.log(data);
     username.value = data.username;
   }
   loadData();
-
-  // const onLongpress = (e: CustomEvent) => {
-  //   alert("長押しイベントが発生しました: ");
-  // }
 </script>
 
 <template>
   <div>
     <header>
       <Header />
-      <HeaderHome />
+      <HeaderHome v-model:menu="activeMenu" />
     </header>
     <div id="main">
-      <h1>Welcome to PlanArc</h1>
-      <div v-if="username">
-        <p>ようこそ、{{ username }}さん！</p>
-      </div>
-      <div v-else>
-        <p>ユーザー情報を取得中...</p>
-      </div>
+<!--      <h1>Welcome to PlanArc</h1>-->
+<!--      <div v-if="username">-->
+<!--        <p>ようこそ、{{ username }}さん！</p>-->
+<!--      </div>-->
+<!--      <div v-else>-->
+<!--        <p>ユーザー情報を取得中...</p>-->
+<!--      </div>-->
+    {{ activeMenu }}
     </div>
     <footer>
       <Footer />

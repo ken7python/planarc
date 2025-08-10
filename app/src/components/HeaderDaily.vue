@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+import {ref, watch} from 'vue';
   const list = "TodoList";
   const studylog = "StudyLog";
   const track = "TimeTrack";
@@ -34,6 +34,18 @@
       fontSize: '16px',
     }
   }
+
+  const props = defineProps<{
+    menu: string;
+  }>();
+  const emit = defineEmits<{
+    (e: 'update:menu', menu: string): void;
+  }>();
+
+  watch(menu, (newMenu) => {
+    console.log('menu changed:', newMenu);
+    emit('update:menu', newMenu);
+  });
 </script>
 
 <template>

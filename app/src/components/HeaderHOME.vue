@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   const log = "StudyLog";
   const subject = "AddSubject";
 
@@ -36,12 +36,24 @@
     }
   }
 
+  const props = defineProps<{
+    menu: string;
+  }>();
+  const emit = defineEmits<{
+    (e: 'update:menu', menu: string): void;
+  }>();
+
   function toStudyLog() {
     menu.value = log;
   }
   function toAddSubject() {
     menu.value = subject;
   }
+
+  watch(menu, (newMenu) => {
+    console.log('menu changed:', newMenu);
+    emit('update:menu', newMenu);
+  });
 </script>
 
 <template>
