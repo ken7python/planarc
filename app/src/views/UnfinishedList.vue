@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    <p>勉強記録画面を作成予定</p>
+    <p>未完了リストを追加予定</p>
   </div>
 </template>
 

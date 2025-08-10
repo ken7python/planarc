@@ -4,7 +4,7 @@
 
 <template>
   <div>
-
+    <p>TIMETRACKを作成予定</p>
   </div>
 </template>
 
