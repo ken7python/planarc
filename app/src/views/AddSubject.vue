@@ -8,7 +8,7 @@
   <div>
     <div id="addSubject">
       <input type="text" placeholder="科目名を入力" v-model="subjectName" />
-      <p>色を選択<input type="color" v-model="subjectName" /></p>
+      <p>色を選択<input type="color" v-model="subjectColor" /></p>
 
       <button class="btn">追加</button>
     </div>
