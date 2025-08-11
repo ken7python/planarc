@@ -6,6 +6,8 @@ import (
 
 	"time"
 
+	"fmt"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/time/rate"
@@ -44,9 +46,12 @@ func main() {
 
 	r.Static("/static", "./static")
 
-	//r.GET("/", func(c *gin.Context) {
-	//	c.File("templates/index.html")
-	//})
+	r.GET("/", func(c *gin.Context) {
+		//c.File("templates/index.html")
+		c.JSON(200, gin.H{
+			"message": "Welcome to the PlanArc API",
+		})
+	})
 	//r.GET("/signup", func(c *gin.Context) {
 	//	c.File("templates/signup.html")
 	//})
@@ -62,5 +67,6 @@ func main() {
 	accounts.POST("/login", login)
 	accounts.GET("/profile", authMiddleware(), profile)
 
+	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")
 }
