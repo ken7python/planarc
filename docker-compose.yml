@@ -9,8 +9,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_HOST: ${MYSQL_ROOT_HOST}
       TZ: Asia/Tokyo
-    # ports:
-      # - "3310:3306"
+    ports:
+      - "3307:3306"
 
   server:
     build:
@@ -31,6 +31,6 @@ services:
       - ./app:/app
       - /app/node_modules
     ports:
-      - "5173:5173"
+      - "4173:4173"
     depends_on:
       - server
