@@ -1,1 +1,4 @@
-sh ./app/build.sh && docker compose up server db --build
+cd app
+sh build.sh
+cd ..
+docker compose up server db

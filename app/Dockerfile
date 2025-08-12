@@ -3,4 +3,4 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN sh ./build.sh
+CMD["npm","run","dev",]
