@@ -1,4 +1,5 @@
 // const.js
+import { api } from '@/logic/api.js';
 
 export const CONST = {
     homeLink: '/',
@@ -9,7 +10,7 @@ export const CONST = {
     loginLink: '/login',
 
     api: function(){
-        return 'https://api.planarc.kencode.tech/api';
+        return api;
     },
     account_url: function() {
         return `${CONST.api()}/accounts`;
