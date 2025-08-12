@@ -39,5 +39,11 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     }
-  }
+  },
+  server: {
+    host: true, // 外部アクセス許可
+    port: 5173,
+    allowedHosts: ['planarc.kencode.tech']
+  },
+  preview: { port: 4173 }
 })
