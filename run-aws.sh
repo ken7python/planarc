@@ -1,4 +1,1 @@
-cd app
-sh build.sh
-cd ..
-docker compose up server db
+docker compose up db server

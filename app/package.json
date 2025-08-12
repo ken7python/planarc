@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --config vite.config.js",
-    "build:aws": "vite build --config vite.config.aws.js",
-    "build": "vite build --config vite.config.js",
+    "dev": "vite --config vite.config.js --mode local",
+    "build:aws": "vite build --config vite.config.aws.js --mode aws",
+    "build": "vite build --config vite.config.js --mode local",
     "preview": "vite preview"
   },
   "dependencies": {
