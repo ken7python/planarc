@@ -9,7 +9,7 @@ export const CONST = {
     loginLink: '/login',
 
     api: function(){
-        return 'http://localhost:8080/api';
+        return 'https://api.planarc.kencode.tech/api';
     },
     account_url: function() {
         return `${CONST.api()}/accounts`;
