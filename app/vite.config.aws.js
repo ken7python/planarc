@@ -43,14 +43,14 @@ export default defineConfig({
   server: {
     host: true, // 外部アクセス許可
     port: 4173,
-    // allowedHosts: ['planarc.kencode.tech'],
-    // hmr: {
-    //   host: 'planarc.kencode.tech',
-    //   // host: 'localhost'
-    //   protocol: 'wss',
-    //   clientPort: 443
-    //
-    // },
+    allowedHosts: ['planarc.kencode.tech'],
+    hmr: {
+      host: 'planarc.kencode.tech',
+      // host: 'localhost'
+      protocol: 'wss',
+      clientPort: 443
+    
+    },
   },
   preview: { port: 4173 }
 })
