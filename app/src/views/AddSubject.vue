@@ -8,13 +8,15 @@
   <div>
     <div id="addSubject">
       <input type="text" placeholder="科目名を入力" v-model="subjectName" />
+      <br>
 
       <label class="color-field">
         <span class="color-label">色を選択：</span>
         <input type="color" value="#5B8DEF" aria-label="Select accent color" v-model="subjectColor" />
       </label>
+      <br>
 
-      <button class="btn">追加</button>
+      <button class="btn" style="margin: 0 auto;">追加</button>
     </div>
     <div id="subjectList">
       <p>科目のリストを追加予定</p>
