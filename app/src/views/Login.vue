@@ -21,7 +21,7 @@
 
 <template>
   <Header />
-  <div>
+  <div id="LoginView">
       <h2>ログイン</h2>
       <form @submit.prevent="login_">
         <div class="mb-3">
@@ -46,5 +46,8 @@
 </template>
 
 <style scoped>
-
+  #LoginView {
+    margin-left: 2vw;
+    margin-top: 70px;
+  }
 </style>
