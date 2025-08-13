@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div>
+  <div id="note">
     <textarea></textarea>
     <br>
     <button class="btn">AIからのコメント</button>
@@ -13,5 +13,7 @@
 </template>
 
 <style scoped>
-
+  #note {
+    text-align: center;
+  }
 </style>

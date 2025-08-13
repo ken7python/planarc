@@ -19,5 +19,10 @@
 </template>
 
 <style scoped>
-
+  #addSubject {
+    text-align: center;
+  }
+  #subjectList {
+    text-align: center;
+  }
 </style>
