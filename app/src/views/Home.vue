@@ -10,18 +10,16 @@
   import StudyTime from "./StudyTime.vue";
   import AddSubject from "./AddSubject.vue";
 
-  let data: any;
-  let username = ref('');
-
   const log = header.log;
   const subject = header.subject;
   const activeMenu = ref< log | subject >(log);
 
 
+  const username = ref<string | null>(null);
   async function loadData() {
-    data = await user.profile();
-    // console.log(data);
-    username.value = data.username;
+    const profile = await user.profile();
+    // console.log(profile);
+    username.value = profile.username;
   }
   loadData();
 </script>
@@ -35,11 +33,15 @@
     <div id="main">
 <!--      <h1>Welcome to PlanArc</h1>-->
 <!--      <div v-if="username">-->
-<!--        <p>ようこそ、{{ username }}さん！</p>-->
-<!--      </div>-->
-<!--      <div v-else>-->
-<!--        <p>ユーザー情報を取得中...</p>-->
-<!--      </div>-->
+      <div id="welcome" style="">
+        <div v-if="username">
+          <p>ようこそ、{{ username }}さん！</p>
+        </div>
+        <div v-else>
+          <p>ユーザー情報を取得中...</p>
+        </div>
+        <hr>
+      </div>
 <!--    {{ activeMenu }}-->
       <study-time v-if="activeMenu === log" />
       <add-subject v-if="activeMenu === subject" />
@@ -51,5 +53,8 @@
 </template>
 
 <style scoped>
-
+  #welcome {
+    /* 行間をなくす */
+    line-height: 2px;
+  }
 </style>
