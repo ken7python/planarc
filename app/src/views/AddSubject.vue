@@ -8,7 +8,11 @@
   <div>
     <div id="addSubject">
       <input type="text" placeholder="科目名を入力" v-model="subjectName" />
-      <p>色を選択<input type="color" v-model="subjectColor" /></p>
+
+      <label class="color-field">
+        <span class="color-label">色を選択：</span>
+        <input type="color" value="#5B8DEF" aria-label="Select accent color" v-model="subjectColor" />
+      </label>
 
       <button class="btn">追加</button>
     </div>
@@ -19,5 +23,37 @@
 </template>
 
 <style scoped>
+  #addSubject {
+    text-align: center;
+  }
+  #subjectList {
+    text-align: center;
+  }
 
+  .color-field {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .color-field input[type="color"] {
+    width: 40px;
+    height: 40px;
+    border: none;
+    padding: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .color-field input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 4px;
+  }
+
+  .color-field input[type="color"]::-moz-color-swatch {
+    border: none;
+    border-radius: 4px;
+  }
 </style>

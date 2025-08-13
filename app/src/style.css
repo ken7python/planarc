@@ -6,7 +6,9 @@
     font-size: 20px;
     text-decoration: none;
     margin: 5px;
-    border-radius: 32px;
+    width: 270px;
+    height: 70px;
+    border-radius: 16px;
 }
 .btn:hover {
     background-color: #0056b3;
@@ -21,6 +23,26 @@ input[type="text"], input[type="password"] {
     border: 1px solid #E2E8F8;
     border-radius: 4px;
     /*color: #AEB7BD;*/
+}
+.selectbox {
+    width: 300px;
+    background-color: #FFFFFF;
+    padding: 10px;
+    font-size: 16px;
+    margin: 4px 0;
+    border: 1px solid #E2E8F8;
+    border-radius: 4px;
+}
+
+textarea {
+    width: 280px;
+    height: 22vh;
+    background-color: #FFFFFF;
+    padding: 10px;
+    font-size: 16px;
+    margin: 4px 0;
+    border: 1px solid #E2E8F8;
+    border-radius: 4px;
 }
 
 .alert {
