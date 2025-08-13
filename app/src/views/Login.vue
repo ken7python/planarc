@@ -48,5 +48,6 @@
 <style scoped>
   #LoginView {
     margin-left: 2vw;
+    margin-top: 70px;
   }
 </style>

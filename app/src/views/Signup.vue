@@ -56,5 +56,6 @@ async function handleSubmit() {
 <style scoped>
   #SignupView {
     margin-left: 2vw;
+    margin-top: 70px;
   }
 </style>
