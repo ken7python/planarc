@@ -35,7 +35,7 @@
       </select>
       <br>
       <br>
-      <button class="btn">追加</button>
+      <button class="btn" style="margin: 0 auto;">追加</button>
     </div>
     <div id="TODOList">
       <p>TODOのリストを追加予定</p>
@@ -45,6 +45,9 @@
 
 <style scoped>
   #AddTodo {
+    text-align: center;
+  }
+  #TODOList {
     text-align: center;
   }
 </style>
