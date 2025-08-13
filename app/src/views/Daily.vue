@@ -42,7 +42,6 @@
 
 <style scoped>
   #main {
-    /* min-height: calc(100dvh - 80px - 60px - 60px); */
     height: calc(100dvh - 80px - 60px - 60px);;
     display: grid;
     grid-template-rows: auto 1fr auto; /* ヘッダー=auto / 中央=残り / フッター=auto */
