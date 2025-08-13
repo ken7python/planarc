@@ -15,7 +15,7 @@ services:
       - db_data:/var/lib/mysql
 
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--protocol=TCP", "--default-auth=caching_sha2_password"]
       interval: 5s
       timeout: 5s
       retries: 10
