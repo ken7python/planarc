@@ -31,17 +31,6 @@
       <HeaderHome v-model:menu="activeMenu" />
     </header>
     <div id="main">
-<!--      <h1>Welcome to PlanArc</h1>-->
-<!--      <div v-if="username">-->
-      <div id="welcome" style="">
-        <div v-if="username">
-          <p>ようこそ、{{ username }}さん！</p>
-        </div>
-        <div v-else>
-          <p>ユーザー情報を取得中...</p>
-        </div>
-        <hr>
-      </div>
 <!--    {{ activeMenu }}-->
       <study-time v-if="activeMenu === log" />
       <add-subject v-if="activeMenu === subject" />
@@ -53,8 +42,10 @@
 </template>
 
 <style scoped>
-  #welcome {
-    /* 行間をなくす */
-    line-height: 2px;
+  #main {
+    //min-height: calc(100dvh - 80px - 60px);
+    height: calc(100dvh - 80px - 60px - 60px); /* ヘッダー80px / フッター60px */
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* ヘッダー=auto / 中央=残り / フッター=auto */
   }
 </style>
