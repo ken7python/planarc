@@ -26,7 +26,7 @@ async function handleSubmit() {
 
 <template>
   <Header />
-  <h1 class="mb-4">サインアップ</h1>
+  <h1 class="mb-4">ユーザ登録</h1>
   <form @submit.prevent="handleSubmit">
     <div class="mb-3">
 <!--      <label for="username" class="form-label">ユーザー名:</label>-->
@@ -41,7 +41,7 @@ async function handleSubmit() {
       <input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="パスワード確認:" required />
     </div>
     <div class="mb-3">
-      <button type="submit" class="btn">サインアップ</button>
+      <button type="submit" class="btn">ユーザ登録</button>
     </div>
     <div v-if="errorMessage" class="alert">
       {{ errorMessage }}
