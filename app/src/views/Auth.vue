@@ -7,8 +7,13 @@
   <div>
     <Header />
     <div id="main">
-      <router-link :to="CONST.signupLink" class="btn">ユーザ登録</router-link>
-      <router-link :to="CONST.loginLink" class="btn">ログイン</router-link>
+      <router-link :to="CONST.signupLink" class="btn">
+        <p>ユーザ登録</p>
+      </router-link>
+
+      <router-link :to="CONST.loginLink" class="btn">
+        <p>ログイン</p>
+      </router-link>
     </div>
   </div>
 </template>

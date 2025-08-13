@@ -9,6 +9,9 @@
     width: 270px;
     height: 70px;
     border-radius: 16px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
 }
 .btn:hover {
     background-color: #0056b3;
