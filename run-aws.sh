@@ -1,4 +1,4 @@
 cd app
 sh build-aws.sh
-docker compose build app server
+# sh build.sh
 docker compose up db server
