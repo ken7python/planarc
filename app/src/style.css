@@ -6,8 +6,8 @@
     font-size: 20px;
     text-decoration: none;
     margin: 5px;
-    width: 270px;
-    height: 70px;
+    width: 280px;
+    height: 60px;
     border-radius: 16px;
     display: flex;
     align-content: center;
@@ -17,24 +17,16 @@
     background-color: #0056b3;
 }
 
-input[type="text"], input[type="password"] {
-    width: 280px;
+input[type="text"], input[type="password"], .selectbox {
+    width: 80vw;
     background-color: #FFFFFF;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     font-size: 16px;
     margin: 4px 0;
     border: 1px solid #E2E8F8;
     border-radius: 4px;
-    /*color: #AEB7BD;*/
-}
-.selectbox {
-    width: 300px;
-    background-color: #FFFFFF;
-    padding: 10px;
-    font-size: 16px;
-    margin: 4px 0;
-    border: 1px solid #E2E8F8;
-    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .alert {
@@ -42,11 +34,78 @@ input[type="text"], input[type="password"] {
     margin-top: 10px;
 }
 
-#main {
-    margin: 4px;
-    margin-top: 120px;
+#List {
+    background-color: #1C409A;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 2vw;
+    padding-right: 2vw;
+
+    margin-right: -5px;
+    margin-left: -5px;
+
+    flex: 1 1 auto;
+    overflow-y: auto; /* 縦方向のスクロールを有効に */
+
+}
+
+.list-ul {
+    list-style: none;  /* デフォルトの点を消す */
+    padding: 0;
+    margin: 0;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between; /* 左右に配置 */
+    background-color: #FFFFFF;
+    border: 2px solid white; /* 白い枠 */
+
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    border-radius: 8px; /* 角を丸く */
+    font-size: 1.1rem;
+}
+.right {
+    display: flex;
+    justify-content: flex-end; /* 右寄せ */
+    align-items: center;       /* 上下中央揃え */
+}
+.squareBtn{
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    /*background-color: #5B8DEF;*/
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.btnTrash {
+    background-color: #E53E3E;
+}
+.btnUnfinished {
+    background-color: #AEB7BD;
+}
+.btnEdit {
+   background-color: #D9D9D9;
 }
 
 body {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+#main {
+    /*margin: 4px;*/
+    margin-top: 120px;
+    padding: 4px;
+    /*padding-top: 120px;*/
+}
+
+
+body {
     background-color: #FAFAFA;
+    margin: 0;
 }
