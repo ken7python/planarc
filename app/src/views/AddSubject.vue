@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import {getColorboxStyle} from "@/logic/style/colorbox";
+  import AddIcon from '@/assets/icons/add.svg';
+  import EditIcon from '@/assets/icons/edit.svg';
+
   let subjectName = ref<string>('');
   let subjectColor = ref<string>('#000000');
 
@@ -30,7 +33,10 @@
       </label>
       <br>
 
-      <button class="btn" style="margin: 0 auto;">追加</button>
+      <button class="btn" style="margin: 0 auto;">
+        <AddIcon class="icon"></AddIcon>
+        追加
+      </button>
     </div>
     <br>
   </div>
@@ -44,7 +50,9 @@
           <span>{{ subject.name }}</span>
         </div>
         <div class="right">
-          <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;"></button>
+          <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;">
+            <EditIcon></EditIcon>
+          </button>
         </div>
       </li>
     </ul>

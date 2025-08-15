@@ -109,7 +109,6 @@
     color: #FFFFFF;
     width: 35px;
     height: 35px;
-    margin-top: 0;
     display: inline-block;
   }
   .link {

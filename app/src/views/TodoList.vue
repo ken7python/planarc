@@ -3,6 +3,10 @@
   import { selectStyle } from '@/logic/style/selectStyle';
   import {getColorboxStyle} from "@/logic/style/colorbox";
 
+  import Addicon from '@/assets/icons/add.svg';
+  import EditIcon from '@/assets/icons/edit.svg';
+  import MoveIcon from '@/assets/icons/move.svg';
+
   let subjectName = ref('');
   let todoText = ref('');
   let status = ref('MUST');
@@ -47,26 +51,31 @@
       </select>
       <br>
       <br>
-      <button class="btn" style="margin: 0 auto;">追加</button>
+      <button class="btn" style="margin: 0 auto;">
+        <Addicon></Addicon>
+        追加
+      </button>
     </div>
     <br>
   </div>
 
   <div id="List">
     <p style="color: white;line-height: 0">TODOリストのサンプル(まだ追加できません)</p>
-    <ul class="list-ul">
-      <li class="list-item" v-for="(task, index) in TODO" :key="index">
+    <ul class="list-ul" v-for="(task, index) in TODO" :key="index" style="display: flex;">
+      <li class="list-item" style="width: 100%;">
         <div>
           <span :style="getColorboxStyle(task.color)" style="margin-right: 4px;margin-left: 4px;"></span>
           <span>{{ task.name }}</span>
         </div>
         <div class="right">
 <!--          <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;"></button>-->
-          <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" />
-          <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;"></button>
-
+          <button class="squareBtn btnEdit" @click=""><EditIcon></EditIcon></button>
         </div>
       </li>
+      <div class="right">
+        <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" />
+        <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;"><MoveIcon></MoveIcon></button>
+      </div>
     </ul>
   </div>
 </template>

@@ -2,6 +2,8 @@
   import {ref} from "vue";
   import { user } from "@/logic/user.js";
   import { getColorboxStyle } from "@/logic/style/colorbox";
+  import moveIcon from '@/assets/icons/move.svg';
+  import deleteIcon from '@/assets/icons/delete.svg';
 
   const username = ref<string | null>(null);
 
@@ -37,8 +39,8 @@
             <span>{{ task.name }}</span>
           </div>
           <div class="right">
-            <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;"></button>
-            <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;"></button>
+            <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;"><moveIcon></moveIcon></button>
+            <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;"><deleteIcon></deleteIcon></button>
           </div>
         </li>
       </ul>

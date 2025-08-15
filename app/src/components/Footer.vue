@@ -81,7 +81,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
     height: 100%;
+  }
+  svg{
+    margin: 0;
   }
 </style>
