@@ -109,3 +109,7 @@ body {
     background-color: #FAFAFA;
     margin: 0;
 }
+
+svg {
+    margin: auto 0;
+}
