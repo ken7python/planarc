@@ -1,12 +1,16 @@
 <script setup lang="ts">
-
+  import commentIcon from '@/assets/icons/comment.svg';
+  import { ref } from 'vue';
 </script>
 
 <template>
   <div id="note">
     <textarea placeholder="メモ"></textarea>
     <br>
-    <button class="btn" style="margin: 0 auto;">AIからのコメント</button>
+    <button class="btn" style="margin: 0 auto;">
+      <commentIcon style="margin-right: 8px;"></commentIcon>
+      AIからのコメント
+    </button>
     <br>
     <div id="comment">
       <p>AIからのコメントがここに表示されます。</p>

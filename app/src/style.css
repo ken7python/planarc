@@ -78,7 +78,7 @@ input[type="text"], input[type="password"], .selectbox {
     display: flex;               /* フレックスコンテナにする */
     align-items: center;          /* 垂直方向の中央寄せ */
     justify-content: center;      /* 水平方向の中央寄せ */
-    
+
     width: 30px;
     height: 30px;
     border-radius: 6px;
