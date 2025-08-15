@@ -1,5 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue';
+  import Stopwatch from '@/views/Stopwatch.vue';
+  import Handinput from '@/views/Handinput.vue';
   import _default from "chart.js/dist/plugins/plugin.tooltip";
   const strongGray = "#737373"
   const lightGray = "#F2F2F2"
@@ -37,6 +39,11 @@
       <div id="handinput" :style="getMenuStyle(handinput)" @click="select(handinput)">
         <a>手動入力</a>
       </div>
+    </div>
+
+    <div id="content">
+      <Stopwatch v-if="selectedMenu === stopwatch" />
+      <Handinput v-if="selectedMenu === handinput" />
     </div>
   </div>
 </template>
