@@ -3,6 +3,8 @@
   import { selectStyle } from '@/logic/style/selectStyle';
   import {getColorboxStyle} from "@/logic/style/colorbox";
 
+  import Addicon from '@/assets/icons/add.svg';
+
   let subjectName = ref('');
   let todoText = ref('');
   let status = ref('MUST');
@@ -47,7 +49,10 @@
       </select>
       <br>
       <br>
-      <button class="btn" style="margin: 0 auto;">追加</button>
+      <button class="btn" style="margin: 0 auto;">
+        <Addicon></Addicon>
+        追加
+      </button>
     </div>
     <br>
   </div>
