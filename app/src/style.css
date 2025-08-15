@@ -103,7 +103,7 @@ input[type="time"] {
 
     flex: 1 1 auto;
     overflow-y: auto; /* 縦方向のスクロールを有効に */
-
+    /*height: 160px;*/
 }
 
 .list-ul {

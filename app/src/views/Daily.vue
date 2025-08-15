@@ -51,9 +51,9 @@
 
 <style scoped>
   #main {
-    height: calc(100dvh - 80px - 60px - 60px);;
+    height: calc(100dvh - 80px - 60px - 60px - 40px);
     display: grid;
-    grid-template-rows: auto auto 1fr auto; /* ヘッダー=auto / 中央=残り / フッター=auto */
+    grid-template-rows: auto auto auto 1fr auto; /* ヘッダー=auto / 中央=残り / フッター=auto */
   }
 
   #calendar {
