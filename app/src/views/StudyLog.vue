@@ -26,6 +26,7 @@
       cursor: "pointer",
       padding: "10px",
       borderRadius: "5px"
+
     };
   }
 </script>
@@ -33,10 +34,10 @@
 <template>
   <div>
     <div id="menu">
-      <div id="stopwatch" :style="getMenuStyle(stopwatch)" @click="select(stopwatch)">
+      <div id="stopwatchMenu" :style="getMenuStyle(stopwatch)" @click="select(stopwatch)">
         <a>ストップウォッチ</a>
       </div>
-      <div id="handinput" :style="getMenuStyle(handinput)" @click="select(handinput)">
+      <div id="handinputMenu" :style="getMenuStyle(handinput)" @click="select(handinput)">
         <a>手動入力</a>
       </div>
     </div>
@@ -58,11 +59,11 @@
     border-bottom: 1px solid #ccc;
     text-align: center;
   }
-  #stopwatch, #handinput{
+  #stopwatchMenu, #handinputMenu {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     font-size: 18px;
-    color: #333;
+    font-weight: bold;
   }
 </style>
