@@ -3,6 +3,7 @@
   import { selectStyle } from '@/logic/style/selectStyle';
   import startIcon from '@/assets/icons/start.svg';
   import stopIcon from '@/assets/icons/stop.svg';
+  import writeIcon from '@/assets/icons/write.svg';
   let subjectName = ref<string>('');
 
   const subjects = [
@@ -32,7 +33,7 @@
     </div>
     <div id="res">
       <span class="time">--:--</span>
-      <button class="btn"  style="margin: 0 auto;">記録</button>
+      <button class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
     </div>
   </div>
 </template>
