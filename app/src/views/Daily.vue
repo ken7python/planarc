@@ -18,6 +18,12 @@
   const letter = header.letter;
   const activeMenu = ref<string>(list);
 
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const date = ref<string>(`${yyyy}-${mm}-${dd}`); // 日本時間の今日の日付
+
   const username = ref<string | null>(null);
   async function loadData() {
     const profile = await user.profile();
@@ -29,6 +35,9 @@
 
 <template>
   <Header />
+  <div id="calendar">
+    <input type="date" v-model="date">
+  </div>
   <HeaderDaily v-model:menu="activeMenu"/>
 
   <div id="main">
@@ -44,6 +53,18 @@
   #main {
     height: calc(100dvh - 80px - 60px - 60px);;
     display: grid;
-    grid-template-rows: auto 1fr auto; /* ヘッダー=auto / 中央=残り / フッター=auto */
+    grid-template-rows: auto auto 1fr auto; /* ヘッダー=auto / 中央=残り / フッター=auto */
+  }
+
+  #calendar {
+    width: 100%;
+    height: 40px;
+    background-color: #1C409A;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: bold;
   }
 </style>

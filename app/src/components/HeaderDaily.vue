@@ -33,66 +33,70 @@
 </script>
 
 <template>
-  <div id="header_home">
-    <!-- TODOLIST -->
-    <div class="menu">
-      <div :style="header.getLinkStyle(menu, list)" @click="menu = list;" class="menuGrid">
-        <div class="iconDiv">
-          <listIcon />
+  <div>
+    <div id="header_home">
+      <!-- TODOLIST -->
+      <div class="menu">
+        <div :style="header.getLinkStyle(menu, list)" @click="menu = list;" class="menuGrid">
+          <div class="iconDiv">
+            <listIcon />
+          </div>
+          <span class="menuText">
+            TODO
+            <br>
+            LIST
+          </span>
         </div>
-        <span class="menuText">
-          TODO
-          <br>
-          LIST
-        </span>
+        <div :style="header.getUnderlineStyle(menu, list)"></div>
       </div>
-      <div :style="header.getUnderlineStyle(menu, list)"></div>
-    </div>
 
-    <!-- 勉強記録 -->
-    <div class="menu">
-      <a :style="header.getLinkStyle(menu, studylog)" @click="menu = studylog" class="menuGrid">
-        <div class="iconDiv">
-          <studylogIcon />
-        </div>
-        <span class="menuText">
-          勉強記録
-        </span>
-      </a>
-      <div :style="header.getUnderlineStyle(menu, studylog)"></div>
-    </div>
-    <!-- TIME TRACK -->
-    <div class="menu">
-      <a :style="header.getLinkStyle(menu, track)" @click="menu = track" class="menuGrid">
-        <div class="iconDiv">
-          <trackIcon />
-        </div>
-        <span class="menuText">
-          TIME<br>TRACK
-        </span>
-      </a>
-      <div :style="header.getUnderlineStyle(menu, track)"></div>
-    </div>
-    <!-- 振り返り -->
-    <div class="menu">
-      <a :style="header.getLinkStyle(menu, letter)" @click="menu = letter" class="menuGrid">
-        <div class="iconDiv">
-          <letterIcon />
-        </div>
-        <span class="menuText">
-          振り返り
-        </span>
-      </a>
-      <div :style="header.getUnderlineStyle(menu, letter)"></div>
+      <!-- 勉強記録 -->
+      <div class="menu">
+        <a :style="header.getLinkStyle(menu, studylog)" @click="menu = studylog" class="menuGrid">
+          <div class="iconDiv">
+            <studylogIcon />
+          </div>
+          <span class="menuText">
+            勉強記録
+          </span>
+        </a>
+        <div :style="header.getUnderlineStyle(menu, studylog)"></div>
+      </div>
+      <!-- TIME TRACK -->
+      <div class="menu">
+        <a :style="header.getLinkStyle(menu, track)" @click="menu = track" class="menuGrid">
+          <div class="iconDiv">
+            <trackIcon />
+          </div>
+          <span class="menuText">
+            TIME<br>TRACK
+          </span>
+        </a>
+        <div :style="header.getUnderlineStyle(menu, track)"></div>
+      </div>
+      <!-- 振り返り -->
+      <div class="menu">
+        <a :style="header.getLinkStyle(menu, letter)" @click="menu = letter" class="menuGrid">
+          <div class="iconDiv">
+            <letterIcon />
+          </div>
+          <span class="menuText">
+            振り返り
+          </span>
+        </a>
+        <div :style="header.getUnderlineStyle(menu, letter)"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
   #header_home {
+    /*
     position: absolute;
-    top: 45px;
+    top: 75px;
     left: 0;
+    */
     width: 100%;
     height: 60px;
     display: flex;

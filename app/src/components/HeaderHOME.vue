@@ -49,9 +49,11 @@
 
 <style scoped>
   #header_home {
+    /*
     position: absolute;
     top: 45px;
     left: 0;
+    */
     width: 100%;
     height: 60px;
     display: grid;
