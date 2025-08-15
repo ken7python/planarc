@@ -7,7 +7,7 @@
 <template>
   <div>
     <Header />
-    <div style="margin-top: 60px">
+    <div>
       <unfinished-list />
     </div>
     <Footer />

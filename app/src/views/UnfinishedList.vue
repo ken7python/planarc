@@ -49,7 +49,8 @@
 </template>
 
 <style scoped>
-  #page {
-    height: calc(100dvh - 80px - 60px); /* ヘッダー80px / フッター60px */
+  #List{
+    height: calc(100vh - 145px);
+    overflow-y: scroll;
   }
 </style>
