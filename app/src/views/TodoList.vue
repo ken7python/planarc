@@ -5,6 +5,7 @@
 
   import Addicon from '@/assets/icons/add.svg';
   import EditIcon from '@/assets/icons/edit.svg';
+  import MoveIcon from '@/assets/icons/move.svg';
 
   let subjectName = ref('');
   let todoText = ref('');
@@ -73,7 +74,7 @@
       </li>
       <div class="right">
         <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" />
-        <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;"></button>
+        <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;"><MoveIcon></MoveIcon></button>
       </div>
     </ul>
   </div>
