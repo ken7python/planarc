@@ -2,6 +2,8 @@
   import { ref } from 'vue';
   import Stopwatch from '@/views/Stopwatch.vue';
   import Handinput from '@/views/Handinput.vue';
+  import stopwatchIcon from "@/assets/icons/stopwatch.svg";
+  import handinputIcon from "@/assets/icons/input.svg";
   import _default from "chart.js/dist/plugins/plugin.tooltip";
   const strongGray = "#737373"
   const lightGray = "#F2F2F2"
@@ -35,10 +37,10 @@
   <div>
     <div id="menu">
       <div id="stopwatchMenu" :style="getMenuStyle(stopwatch)" @click="select(stopwatch)">
-        <a>ストップウォッチ</a>
+        <stopwatchIcon></stopwatchIcon>ストップウォッチ
       </div>
       <div id="handinputMenu" :style="getMenuStyle(handinput)" @click="select(handinput)">
-        <a>手動入力</a>
+        <handinputIcon></handinputIcon>手動入力
       </div>
     </div>
 
@@ -52,7 +54,7 @@
 <style scoped>
   #menu {
     width: 100%;
-    height: 60px;
+    height: 40px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     background-color: #f0f0f0;
@@ -65,5 +67,10 @@
     justify-content: center;
     font-size: 18px;
     font-weight: bold;
+  }
+
+  #content {
+    padding: 20px;
+    text-align: center;
   }
 </style>
