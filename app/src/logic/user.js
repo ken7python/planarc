@@ -3,8 +3,11 @@ import { CONST } from '@/logic/const.js';
 
 export const user = {
     account_url: CONST.account_url(),
+    getToken: function() {
+        return localStorage.getItem('token');
+    },
     profile: async function(){
-        const token = localStorage.getItem('token')
+        const token = user.getToken();
         try {
             const response = await fetch(this.account_url + "/profile", {
                 headers: {

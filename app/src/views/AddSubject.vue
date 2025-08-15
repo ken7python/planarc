@@ -1,24 +1,33 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import {getColorboxStyle} from "@/logic/style/colorbox";
+  import { subjectModule } from '@/logic/subject';
+
   import AddIcon from '@/assets/icons/add.svg';
   import EditIcon from '@/assets/icons/edit.svg';
 
   let subjectName = ref<string>('');
   let subjectColor = ref<string>('#000000');
 
-  const subjects = ref([
-    { name: '国語', color: '#FF5733' },
-    { name: '数学', color: '#33FF57' },
-    { name: '英語', color: '#3357FF' },
-    { name: '理科', color: '#F1C40F' },
-    { name: '社会', color: '#8E44AD' },
-    { name: '歴史', color: '#FF8C00' },
-    { name: '地理', color: '#00CED1' },
-    { name: '物理', color: '#8A2BE2' },
-    { name: '化学', color: '#FF4500' },
-    { name: '生物', color: '#2E8B57' }
-  ]);
+  // const subjects = ref([
+  //   { name: '国語', color: '#FF5733' },
+  //   { name: '数学', color: '#33FF57' },
+  //   { name: '英語', color: '#3357FF' },
+  //   { name: '理科', color: '#F1C40F' },
+  //   { name: '社会', color: '#8E44AD' },
+  //   { name: '歴史', color: '#FF8C00' },
+  //   { name: '地理', color: '#00CED1' },
+  //   { name: '物理', color: '#8A2BE2' },
+  //   { name: '化学', color: '#FF4500' },
+  //   { name: '生物', color: '#2E8B57' }
+  // ]);
+  const subjects = ref<any[]>([]);
+  async function loadData() {
+    const subject_list = await subjectModule.getList();
+    console.log(subject_list);
+    subjects.value = subject_list;
+  }
+  loadData();
 </script>
 
 <template>
@@ -33,7 +42,7 @@
       </label>
       <br>
 
-      <button class="btn" style="margin: 0 auto;">
+      <button class="btn" style="margin: 0 auto;" @click="subjectModule.add(subjectName, subjectColor)">
         <AddIcon class="icon"></AddIcon>
         追加
       </button>
@@ -42,8 +51,9 @@
   </div>
 
   <div id="List">
-    <p style="color: white;line-height: 0">科目リストのサンプル(まだ追加できません)</p>
-    <ul class="list-ul">
+<!--    <p style="color: white;line-height: 0">科目リストのサンプル(まだ追加できません)</p>-->
+    {{ subjects }}
+    <ul class="list-ul" v-if="subjects">
       <li class="list-item" v-for="(subject, index) in subjects" :key="index">
         <div>
           <span :style="getColorboxStyle(subject.color)" style="margin-right: 4px;margin-left: 4px;"></span>
@@ -56,6 +66,7 @@
         </div>
       </li>
     </ul>
+    <p style="text-align: center;color: white;" v-else>サーバとの通信に失敗しました</p>
   </div>
 </template>
 
