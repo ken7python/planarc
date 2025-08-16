@@ -123,12 +123,12 @@
       <hr>
 
       <div id="studyTime">
-        <h3>今日の勉強時間〇〇時間</h3>
+        <h3>今日の学習時間〇〇時間</h3>
         <Pie></Pie>
 
         <hr>
 
-        <h3>今日の勉強時間（科目別）：〇〇時間</h3>
+        <h3>今日の学習時間（科目別）：〇〇時間</h3>
 
         <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
           <option value="">科目を選択</option>

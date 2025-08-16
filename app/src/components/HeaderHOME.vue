@@ -28,11 +28,11 @@
 
 <template>
   <div id="header_home">
-    <!-- 勉強時間 -->
+    <!-- 学習時間 -->
     <div class="menu">
       <a :style="header.getLinkStyle(menu,log)" @click="menu = log;">
         <noteIcon :style='header.getIconStyle(log)'></noteIcon>
-        勉強時間
+        学習時間
       </a>
       <div :style="header.getUnderlineStyle(menu,log)"></div>
     </div>
