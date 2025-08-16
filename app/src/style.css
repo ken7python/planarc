@@ -154,11 +154,6 @@ input[type="time"] {
    background-color: #D9D9D9;
 }
 
-.mic {
-    width: 40px;
-    height: auto;
-    color: #AEB7BD
-}
 .micdiv {
     display: flex;
     align-items: center; /* 垂直方向の中央揃え */
@@ -170,10 +165,6 @@ input[type="time"] {
     left: 20px;
 }
 
-body {
-    font-family: 'Noto Sans JP', sans-serif;
-}
-
 #main {
     /*margin: 4px;*/
     /*margin-top: 16px;*/
@@ -183,6 +174,7 @@ body {
 
 
 body {
+    font-family: 'Noto Sans JP', sans-serif;
     background-color: #FAFAFA;
     margin: 0;
 }

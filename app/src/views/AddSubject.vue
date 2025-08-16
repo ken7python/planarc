@@ -2,6 +2,7 @@
   import { ref } from 'vue';
   import {getColorboxStyle} from "@/logic/style/colorbox";
   import { subjectModule } from '@/logic/subject';
+  import { mic } from '@/logic/mic';
 
   import AddIcon from '@/assets/icons/add.svg';
   import EditIcon from '@/assets/icons/edit.svg';
@@ -11,18 +12,6 @@
   let subjectName = ref<string>('');
   let subjectColor = ref<string>('#000000');
 
-  // const subjects = ref([
-  //   { name: '国語', color: '#FF5733' },
-  //   { name: '数学', color: '#33FF57' },
-  //   { name: '英語', color: '#3357FF' },
-  //   { name: '理科', color: '#F1C40F' },
-  //   { name: '社会', color: '#8E44AD' },
-  //   { name: '歴史', color: '#FF8C00' },
-  //   { name: '地理', color: '#00CED1' },
-  //   { name: '物理', color: '#8A2BE2' },
-  //   { name: '化学', color: '#FF4500' },
-  //   { name: '生物', color: '#2E8B57' }
-  // ]);
   const subjects = ref<any[]>([]);
   let editID = ref<number>(0);
 
@@ -38,6 +27,7 @@
   async function add() {
     await subjectModule.add(subjectName.value, subjectColor.value);
     await loadData();
+    mic.result = '';
   }
 
   async function edit() {
@@ -46,6 +36,36 @@
     editID.value = 0;
     await loadData();
   }
+
+  async function micbtn() {
+    // alert('マイクボタンが押されました。');
+    if (!mic.shouldRestart) {
+      console.log("start");
+      mic.result = '';
+      mic.micON.value = true;
+      await mic.start();
+    } else {
+      console.log("stop");
+      mic.micON.value = false;
+      await mic.stop();
+    }
+  }
+
+  mic.rec.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const transcript = e.results[i][0].transcript;
+      if (e.results[i].isFinal) {
+        mic.result += transcript;
+        mic.tmp = '';
+        subjectName.value = mic.result;
+      } else {
+        interim += transcript;
+        mic.tmp = interim;
+        subjectName.value = mic.result + mic.tmp;
+      }
+    }
+  };
 </script>
 
 <template>
@@ -53,7 +73,7 @@
     <div id="addSubject">
       <div class="micdiv">
         <input type="text" placeholder="科目名を入力" v-model="subjectName" />
-        <MicIcon class="mic"></MicIcon>
+        <MicIcon class="mic" @click="micbtn" :style="mic.micStyle()"></MicIcon>
       </div>
       <br>
 
