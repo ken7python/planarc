@@ -8,7 +8,7 @@
 
   async function micbtn() {
     // alert('マイクボタンが押されました。');
-    if (!mic.shouldRestart) {
+    if (!mic.shouldRestart.value) {
       console.log("start");
       mic.result = message.value;
       mic.micON.value = true;
