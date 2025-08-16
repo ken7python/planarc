@@ -51,7 +51,7 @@
       <!-- FLAG -->
       <router-link class="footer-item" :to="CONST.subjectLink">
         <subjectIcon :style='getIconStyle(CONST.subjectLink)'></subjectIcon>
-        <p :style="getLinkStyle(CONST.subjectLink)">科目</p>
+        <p :style="getLinkStyle(CONST.subjectLink)">科目作成</p>
       </router-link>
       <!-- DAILY -->
       <router-link class="footer-item" :to="CONST.dailyLink">
