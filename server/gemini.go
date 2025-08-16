@@ -9,7 +9,7 @@ import (
 	"google.golang.org/genai"
 )
 
-func main() {
+func askGemini() {
 	ctx := context.Background()
 
 	apiKey := os.Getenv("GEMINI_API_KEY")

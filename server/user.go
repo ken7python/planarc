@@ -179,6 +179,24 @@ func authMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+func GetProfile(c *gin.Context) *User {
+	println("GetProfile")
+	userID, exists := c.Get("userID")
+	if !exists {
+		println("!exists")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "認証されていません"})
+		return nil
+	}
+
+	var user User
+	if err := db.First(&user, userID).Error; err != nil {
+		println(err)
+		c.JSON(http.StatusNotFound, gin.H{"error": "ユーザーが見つかりません"})
+		return nil
+	}
+
+	return &user
+}
 
 func profile(c *gin.Context) {
 	println("/profile")
