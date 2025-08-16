@@ -2,6 +2,7 @@
   import { ref } from 'vue';
   import { selectStyle } from '@/logic/style/selectStyle';
   import {getColorboxStyle} from "@/logic/style/colorbox";
+  import { subjectModule } from "@/logic/subject";
 
   import Addicon from '@/assets/icons/add.svg';
   import EditIcon from '@/assets/icons/edit.svg';
@@ -11,13 +12,14 @@
   let todoText = ref('');
   let status = ref('MUST');
 
-  const subjects = [
-    { name: "国語", value :"kokugo" },
-    { name: "数学", value :"sugaku" },
-    { name: "英語", value :"eigo" },
-    { name: "理科", value :"rika" },
-    { name: "社会", value :"shakai" }
-  ]
+  let subjects = ref<any[]>([]);
+  async function loadData() {
+    const subject_list = await subjectModule.getList();
+    console.log(subject_list);
+    subjects.value = subject_list;
+  }
+
+  loadData();
 
   const TODO = ref([
     { name: '国語', color: '#FF5733' },
@@ -38,8 +40,8 @@
     <div id="AddTodo">
       <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
         <option value="">科目を選択</option>
-        <option v-for="subject in subjects" :key="subject.value" :value="subject.value">
-          {{ subject.name }}
+        <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
+          {{ subject.Name }}
         </option>
       </select>
       <br>

@@ -1,26 +1,29 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { selectStyle } from '@/logic/style/selectStyle';
+  import { subjectModule } from '@/logic/subject';
+
   import startIcon from '@/assets/icons/start.svg';
   import stopIcon from '@/assets/icons/stop.svg';
   import writeIcon from '@/assets/icons/write.svg';
   let subjectName = ref<string>('');
 
-  const subjects = [
-    { name: "国語", value :"kokugo" },
-    { name: "数学", value :"sugaku" },
-    { name: "英語", value :"eigo" },
-    { name: "理科", value :"rika" },
-    { name: "社会", value :"shakai" }
-  ]
+  let subjects = ref<any[]>([]);
+  async function loadData() {
+    const subject_list = await subjectModule.getList();
+    console.log(subject_list);
+    subjects.value = subject_list;
+  }
+
+  loadData();
 </script>
 
 <template>
   <div id="stopwatch">
     <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
       <option value="">科目を選択</option>
-      <option v-for="subject in subjects" :key="subject.value" :value="subject.value">
-        {{ subject.name }}
+      <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
+        {{ subject.Name }}
       </option>
     </select>
     <div id="start">
