@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { useRoute } from 'vue-router'
   import homeIcon from '@/assets/icons/home.svg';
+  import subjectIcon from '@/assets/icons/subject.svg';
+  import analyticsIcon from '@/assets/icons/analytics.svg';
   import dailyIcon from '@/assets/icons/calendar_today.svg';
   import flagIcon from '@/assets/icons/flag.svg';
 
@@ -11,6 +13,7 @@
 
   import { CONST } from '@/logic/const.js';
   import { user } from '@/logic/user.js';
+  import Analysis from "../views/Analysis.vue";
 
   const route = useRoute()
 
@@ -32,6 +35,43 @@
       </div>
 
       <logoutIcon class="icon logout" @click="user.logout"></logoutIcon>
+    </div>
+
+    <!-- SUBJECT -->
+    <div id="FLAG" v-if="route.path === CONST.subjectLink">
+      <div class="title">
+        <subjectIcon class="icon"></subjectIcon>
+        <h2 class="link">科目追加</h2>
+        <span class="spacer"></span>
+      </div>
+    </div>
+
+    <!-- DAILY -->
+    <div id="DAILY" v-if="route.path === CONST.dailyLink">
+
+      <div class="title">
+        <dailyIcon class="icon"></dailyIcon>
+        <h2 class="link">DAILY</h2>
+        <span class="spacer"></span>
+      </div>
+    </div>
+
+    <!-- FLAG -->
+    <div id="FLAG" v-if="route.path === CONST.flagLink">
+      <div class="title">
+        <flagIcon class="icon"></flagIcon>
+        <h2 class="link">未完了リスト</h2>
+        <span class="spacer"></span>
+      </div>
+    </div>
+
+    <!-- analytics -->
+    <div id="analytics" v-if="route.path === CONST.analysisLink">
+      <div class="title">
+        <analyticsIcon class="icon"></analyticsIcon>
+        <h2 class="link">分析</h2>
+        <span class="spacer"></span>
+      </div>
     </div>
 
     <!-- AUTH -->
@@ -59,25 +99,6 @@
       <div class="title">
         <accountIcon class="icon"></accountIcon>
         <h2 class="link">ユーザ登録</h2>
-        <span class="spacer"></span>
-      </div>
-    </div>
-
-    <!-- DAILY -->
-    <div id="DAILY" v-if="route.path === CONST.dailyLink">
-
-      <div class="title">
-        <dailyIcon class="icon"></dailyIcon>
-        <h2 class="link">DAILY</h2>
-        <span class="spacer"></span>
-      </div>
-    </div>
-
-    <!-- FLAG -->
-    <div id="FLAG" v-if="route.path === CONST.flagLink">
-      <div class="title">
-        <flagIcon class="icon"></flagIcon>
-        <h2 class="link">未完了リスト</h2>
         <span class="spacer"></span>
       </div>
     </div>

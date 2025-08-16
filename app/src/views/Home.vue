@@ -28,12 +28,12 @@
   <div>
     <header>
       <Header />
-      <HeaderHome v-model:menu="activeMenu" />
+<!--      <HeaderHome v-model:menu="activeMenu" />-->
     </header>
     <div id="main">
 <!--    {{ activeMenu }}-->
-      <study-time v-if="activeMenu === log" />
-      <add-subject v-if="activeMenu === subject" />
+<!--      <study-time v-if="activeMenu === log" />-->
+<!--      <add-subject v-if="activeMenu === subject" />-->
     </div>
     <footer>
       <Footer />
@@ -42,9 +42,5 @@
 </template>
 
 <style scoped>
-  #main {
-    height: calc(100dvh - 80px - 60px - 60px); /* ヘッダー80px / フッター60px */
-    display: grid;
-    grid-template-rows: auto 1fr auto; /* ヘッダー=auto / 中央=残り / フッター=auto */
-  }
+
 </style>

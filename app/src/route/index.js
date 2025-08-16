@@ -7,6 +7,8 @@ import Login from '../views/Login.vue'
 import { CONST } from '@/logic/const.js'
 import Daily from "@/views/Daily.vue";
 import Flag from "@/views/Flag.vue";
+import AddSubject from "../views/AddSubject.vue";
+import Analysis from "../views/Analysis.vue";
 
 const routes = [
     { path: CONST.homeLink, component: Home},
@@ -15,7 +17,8 @@ const routes = [
     { path: '/login', component: Login },
     { path: CONST.dailyLink, component: Daily },
     { path: CONST.flagLink, component: Flag },
-
+    { path: CONST.subjectLink, component: AddSubject},
+    { path: CONST.analysisLink, component: Analysis },
 ]
 
 const router = createRouter({
