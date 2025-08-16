@@ -71,10 +71,6 @@ func EditSubject(c *gin.Context) {
 		return
 	}
 
-	if res.RowsAffected == 0 {
-		c.JSON(http.StatusNotFound, gin.H{"error": "指定された科目が見つかりません"})
-		return
-	}
 	if req.AfterName == "" {
 		res = db.Model(&Subjects{}).Where("id = ? AND uuid = ?", req.ID, uuid).Delete(&Subjects{})
 	}

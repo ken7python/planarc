@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	limiter = rate.NewLimiter(1, 5) // Allow 1 request per second with a burst of 5
+	limiter = rate.NewLimiter(3, 10) // Allow 1 request per second with a burst of 5
 	mu      sync.Mutex
 )
 
@@ -23,7 +23,7 @@ func rateLimitMiddleware() gin.HandlerFunc {
 		mu.Lock()
 		defer mu.Unlock()
 		if !limiter.Allow() {
-			c.JSON(429, gin.H{"error": "Too many requests, please try again later."})
+			c.JSON(429, gin.H{"error": "たくさんのリクエストを送信しています。しばらくしてから再試行してください。"})
 			c.Abort()
 			return
 		}

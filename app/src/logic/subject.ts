@@ -7,11 +7,11 @@ export const subjectModule = {
         const subjects = await fetch(`${ subjectModule.api }/`,{headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user.getToken()}`
-        }}).then().catch(err => {console.error(err)});
+        }}).then().catch(err => {alert(err)});
         if (await subjects.ok) {
             return await subjects.json();
         }else {
-            console.error('Failed to fetch subjects:', subjects.statusText);
+            alert("サーバとの通信に失敗しました");
             return null;
         }
     },
@@ -27,7 +27,7 @@ export const subjectModule = {
                 "name": Name,
                 "color": Color
             })
-        }).catch(err => console.error(err));
+        }).catch(err => alart(err));
         console.log(await res)
         if (res.ok) {
             await subjectModule.getList()
@@ -48,12 +48,17 @@ export const subjectModule = {
                 "id": ID,
                 "aftername": AfterName,
             })
-        }).catch(err => console.log(err));
+        }).catch(err => alert(err));
         if (res.ok) {
             await subjectModule.getList();
         }else {
             console.error('Failed to fetch subjects:', res.statusText);
-            alert("サーバとの通信に失敗しました");
+            const err :string = await res.json();
+            if (err){
+                alert(err.error)
+            }else {
+                alert(`サーバとの通信に失敗しました`);
+            }
             return null;
         }
     },
