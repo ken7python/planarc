@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, onMounted, watch } from 'vue';
   import { user } from '@/logic/user.js';
 
   import Footer from "@/components/Footer.vue";
@@ -8,6 +8,8 @@
   import { selectStyle } from '@/logic/style/selectStyle';
   import { subjectModule } from '@/logic/subject';
 
+  import Pie from "@/components/Pie.vue";
+
   import mode1 from '@/assets/icons/1.svg';
   import mode2 from '@/assets/icons/2.svg';
   import mode3 from '@/assets/icons/3.svg';
@@ -15,6 +17,8 @@
 
   import { mic } from '@/logic/mic';
   import MicIcon from '@/assets/icons/mic.svg';
+
+  import { Chart } from "chart.js/auto";
 
   let subjectName = ref<string>('');
 
@@ -73,7 +77,7 @@
     <div id="main">
       <h3>今日の楽しみ</h3>
       <div class="micdiv">
-        <input type="text" placeholder="今日の楽しみを入力してください" v-model="enjoyment" style="height: 30px;" />
+        <input type="text" placeholder="今日の楽しみを入力してください" v-model="enjoyment" />
         <mic-icon :style="mic.micStyle()" @click="micbtn"></mic-icon>
       </div>
 
@@ -109,8 +113,10 @@
 
       <div id="studyTime">
         <h3>今日の勉強時間〇〇時間</h3>
+        <Pie></Pie>
 
         <h3>今日の勉強時間（科目別）：〇〇時間</h3>
+
         <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
           <option value="">科目を選択</option>
           <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
@@ -151,4 +157,17 @@ h3 {
     align-items: center;
     height: 30px;
  }
+ svg {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+ }
+
+ #pieChart {
+  width: 400px;
+  height: 400px;
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+}
 </style>
