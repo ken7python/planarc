@@ -38,15 +38,23 @@ export const subjectModule = {
         }
     },
     edit: async function(ID: number, AfterName: string){
-        fetch(`${subjectModule.api}/edit`,{
+        const res = await fetch(`${subjectModule.api}/edit`,{
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
             },
             body: JSON.stringify({
-                id: ID,
-                after_name: AfterName,
+                "id": ID,
+                "aftername": AfterName,
             })
-        }).then(res => res.json()).then(data => { alert(data.message) }).catch(err => alert(err));
+        }).catch(err => console.log(err));
+        if (res.ok) {
+            await subjectModule.getList();
+        }else {
+            console.error('Failed to fetch subjects:', res.statusText);
+            alert("サーバとの通信に失敗しました");
+            return null;
+        }
     },
 }

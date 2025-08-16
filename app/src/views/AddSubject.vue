@@ -5,6 +5,7 @@
 
   import AddIcon from '@/assets/icons/add.svg';
   import EditIcon from '@/assets/icons/edit.svg';
+  import SaveIcon from '@/assets/icons/save.svg';
 
   let subjectName = ref<string>('');
   let subjectColor = ref<string>('#000000');
@@ -22,6 +23,8 @@
   //   { name: '生物', color: '#2E8B57' }
   // ]);
   const subjects = ref<any[]>([]);
+  let editID = ref<number>(0);
+
   async function loadData() {
     const subject_list = await subjectModule.getList();
     subjectName.value = '';
@@ -33,6 +36,13 @@
 
   async function add() {
     await subjectModule.add(subjectName.value, subjectColor.value);
+    await loadData();
+  }
+
+  async function edit() {
+    let id = subjects.value.find(item => item.ID === editID.value);
+    await subjectModule.edit(editID.value, id.Name);
+    editID.value = 0;
     await loadData();
   }
 </script>
@@ -66,11 +76,15 @@
       <li class="list-item" v-for="(subject, index) in subjects" :key="index">
         <div>
           <span :style="getColorboxStyle(subject.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
-          <span>{{ subject.Name }}</span>
+          <input type="text" v-if="editID === subject.ID" v-model="subject.Name" style="width: 64vw;height: 20px;">
+          <span v-else>{{ subject.Name }}</span>
         </div>
         <div class="right">
-          <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;">
+          <button v-if="subject.ID != editID" @click="editID=subject.ID" class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;">
             <EditIcon></EditIcon>
+          </button>
+          <button v-else @click="edit" class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;">
+            <SaveIcon></SaveIcon>
           </button>
         </div>
       </li>
