@@ -81,8 +81,10 @@
         <mic-icon :style="mic.micStyle()" @click="micbtn"></mic-icon>
       </div>
 
+      <hr>
+
       <div id="feeling">
-        <h3>今日の気分</h3>
+        <h3 style="line-height: 0;margin-bottom: 0">今日の気分</h3>
         <div id="feeling-icons">
           <mode4></mode4>
           <mode3></mode3>
@@ -91,17 +93,14 @@
         </div>
       </div>
 
-      <br>
-      <br>
+      <hr>
 
       <div id="loginbonus">
         <h3>〇日連続ログイン</h3>
-        <br>
-
         <h3>累計〇日使用</h3>
       </div>
 
-      <br>
+      <hr>
       
 
       <div id="studyplan">
@@ -113,15 +112,21 @@
         </ul>
       </div>
 
+      <hr>
+
       <div id="progress">
         <h3>進捗バー</h3>
         <progress value="50" max="100"></progress>
         <p>50/100</p>
       </div>
 
+      <hr>
+
       <div id="studyTime">
         <h3>今日の勉強時間〇〇時間</h3>
         <Pie></Pie>
+
+        <hr>
 
         <h3>今日の勉強時間（科目別）：〇〇時間</h3>
 
@@ -131,6 +136,8 @@
             {{ subject.Name }}
           </option>
         </select>
+
+        <h3>〇〇時間</h3>
       </div>
 
     </div>
@@ -163,19 +170,11 @@ h3 {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 30px;
+    height: 60px;
  }
  svg {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
  }
-
- #pieChart {
-  width: 400px;
-  height: 400px;
-  max-width: 100%;
-  display: block;
-  margin: 0 auto;
-}
 </style>
