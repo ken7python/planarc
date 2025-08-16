@@ -49,5 +49,8 @@
 </template>
 
 <style scoped>
-
+  #pieChart {
+    max-width: 360px;
+    max-height: 360px;
+  }
 </style>

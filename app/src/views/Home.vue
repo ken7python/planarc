@@ -91,10 +91,18 @@
         </div>
       </div>
 
+      <br>
+      <br>
+
       <div id="loginbonus">
         <h3>〇日連続ログイン</h3>
+        <br>
+
         <h3>累計〇日使用</h3>
       </div>
+
+      <br>
+      
 
       <div id="studyplan">
         <h3>学習予定一覧</h3>
