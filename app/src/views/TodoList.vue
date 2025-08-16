@@ -7,6 +7,7 @@
   import Addicon from '@/assets/icons/add.svg';
   import EditIcon from '@/assets/icons/edit.svg';
   import MoveIcon from '@/assets/icons/move.svg';
+  import MicIcon from '@/assets/icons/mic.svg';
 
   let subjectName = ref('');
   let todoText = ref('');
@@ -44,9 +45,10 @@
           {{ subject.Name }}
         </option>
       </select>
-      <br>
-      <input type="text" placeholder="TODOを入力" v-model="todoText" />
-      <br>
+      <div class="micdiv">
+        <input type="text" placeholder="TODOを入力" v-model="todoText" />
+        <MicIcon class="mic"></MicIcon>
+      </div>
       <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
         <option value="MUST">MUST</option>
         <option value="WANt">WANT</option>

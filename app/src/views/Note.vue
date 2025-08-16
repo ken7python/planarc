@@ -1,11 +1,15 @@
 <script setup lang="ts">
   import commentIcon from '@/assets/icons/comment.svg';
+  import MicIcon from '@/assets/icons/mic.svg';
   import { ref } from 'vue';
 </script>
 
 <template>
   <div id="note">
-    <textarea placeholder="メモ"></textarea>
+    <div class="micdiv">
+      <textarea placeholder="メモ"></textarea>
+      <mic-icon class="mic"></mic-icon>
+    </div>
     <br>
     <button class="btn" style="margin: 0 auto;">
       <commentIcon style="margin-right: 8px;"></commentIcon>

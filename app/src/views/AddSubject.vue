@@ -6,6 +6,7 @@
   import AddIcon from '@/assets/icons/add.svg';
   import EditIcon from '@/assets/icons/edit.svg';
   import SaveIcon from '@/assets/icons/save.svg';
+  import MicIcon from '@/assets/icons/mic.svg';
 
   let subjectName = ref<string>('');
   let subjectColor = ref<string>('#000000');
@@ -50,7 +51,10 @@
 <template>
   <div>
     <div id="addSubject">
-      <input type="text" placeholder="科目名を入力" v-model="subjectName" />
+      <div class="micdiv">
+        <input type="text" placeholder="科目名を入力" v-model="subjectName" />
+        <MicIcon class="mic"></MicIcon>
+      </div>
       <br>
 
       <label class="color-field">
