@@ -35,29 +35,29 @@
 <template>
   <div>
     <div id="header_home">
-      <!-- TODOLIST -->
+      <!-- ToDoLIST -->
       <div class="menu">
         <div :style="header.getLinkStyle(menu, list)" @click="menu = list;" class="menuGrid">
           <div class="iconDiv">
             <listIcon />
           </div>
           <span class="menuText">
-            TODO
+            ToDo
             <br>
-            LIST
+            リスト
           </span>
         </div>
         <div :style="header.getUnderlineStyle(menu, list)"></div>
       </div>
 
-      <!-- 勉強記録 -->
+      <!-- 学習記録 -->
       <div class="menu">
         <a :style="header.getLinkStyle(menu, studylog)" @click="menu = studylog" class="menuGrid">
           <div class="iconDiv">
             <studylogIcon />
           </div>
           <span class="menuText">
-            勉強記録
+            学習記録
           </span>
         </a>
         <div :style="header.getUnderlineStyle(menu, studylog)"></div>

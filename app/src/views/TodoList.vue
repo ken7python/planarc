@@ -106,7 +106,7 @@
         </option>
       </select>
       <div class="micdiv">
-        <input type="text" placeholder="TODOを入力" v-model="todoText" />
+        <input type="text" placeholder="ToDoを入力" v-model="todoText" />
         <MicIcon class="mic" @click="micbtn" :style="mic.micStyle()"></MicIcon>
       </div>
       <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
@@ -124,7 +124,7 @@
   </div>
 
   <div id="List">
-    <p style="color: white;line-height: 0">TODOリストのサンプル(まだ追加できません)</p>
+    <p style="color: white;line-height: 0">ToDoリストのサンプル(まだ追加できません)</p>
     <ul class="list-ul" v-for="(task, index) in TODO" :key="index" style="display: flex;">
       <li class="list-item" style="width: 100%;">
         <div>
