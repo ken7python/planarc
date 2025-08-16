@@ -71,6 +71,7 @@ func main() {
 	subjects.Use(authMiddleware())
 	subjects.GET("/", getSubjectByUserID)
 	subjects.POST("/add", AddSubject)
+	subjects.POST("/edit", EditSubject)
 
 	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")
