@@ -154,8 +154,15 @@ input[type="time"] {
    background-color: #D9D9D9;
 }
 
-body {
-    font-family: 'Noto Sans JP', sans-serif;
+.micdiv {
+    display: flex;
+    align-items: center; /* 垂直方向の中央揃え */
+    justify-content: center; /* 水平方向の中央揃え */
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+    position: relative;
+    left: 20px;
 }
 
 #main {
@@ -167,6 +174,7 @@ body {
 
 
 body {
+    font-family: 'Noto Sans JP', sans-serif;
     background-color: #FAFAFA;
     margin: 0;
 }

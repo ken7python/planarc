@@ -3,10 +3,12 @@
   import { selectStyle } from '@/logic/style/selectStyle';
   import {getColorboxStyle} from "@/logic/style/colorbox";
   import { subjectModule } from "@/logic/subject";
+  import { mic } from '@/logic/mic';
 
   import Addicon from '@/assets/icons/add.svg';
   import EditIcon from '@/assets/icons/edit.svg';
   import MoveIcon from '@/assets/icons/move.svg';
+  import MicIcon from '@/assets/icons/mic.svg';
 
   let subjectName = ref('');
   let todoText = ref('');
@@ -33,6 +35,36 @@
     { name: '化学', color: '#FF4500' },
     { name: '生物', color: '#2E8B57' }
   ]);
+
+  async function micbtn() {
+    // alert('マイクボタンが押されました。');
+    if (!mic.shouldRestart) {
+      console.log("start");
+      mic.result = '';
+      mic.micON.value = true;
+      await mic.start();
+    } else {
+      console.log("stop");
+      mic.micON.value = false;
+      await mic.stop();
+    }
+  }
+
+  mic.rec.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const transcript = e.results[i][0].transcript;
+      if (e.results[i].isFinal) {
+        mic.result += transcript;
+        mic.tmp = '';
+        todoText.value = mic.result;
+      } else {
+        interim += transcript;
+        mic.tmp = interim;
+        todoText.value = mic.result + mic.tmp;
+      }
+    }
+  };
 </script>
 
 <template>
@@ -44,9 +76,10 @@
           {{ subject.Name }}
         </option>
       </select>
-      <br>
-      <input type="text" placeholder="TODOを入力" v-model="todoText" />
-      <br>
+      <div class="micdiv">
+        <input type="text" placeholder="TODOを入力" v-model="todoText" />
+        <MicIcon class="mic" @click="micbtn" :style="mic.micStyle()"></MicIcon>
+      </div>
       <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
         <option value="MUST">MUST</option>
         <option value="WANt">WANT</option>
