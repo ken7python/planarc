@@ -96,6 +96,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
+    text-decoration: none;
   }
   svg{
     margin: 0;
