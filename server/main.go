@@ -67,6 +67,11 @@ func main() {
 	accounts.POST("/login", login)
 	accounts.GET("/profile", authMiddleware(), profile)
 
+	subjects := api.Group("/subject")
+	subjects.Use(authMiddleware())
+	subjects.GET("/", getSubjectByUserID)
+	subjects.POST("/add", AddSubject)
+
 	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")
 }

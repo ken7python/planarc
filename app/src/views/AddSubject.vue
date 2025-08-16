@@ -24,10 +24,17 @@
   const subjects = ref<any[]>([]);
   async function loadData() {
     const subject_list = await subjectModule.getList();
+    subjectName.value = '';
+    subjectColor.value = '#000000';
     console.log(subject_list);
     subjects.value = subject_list;
   }
   loadData();
+
+  async function add() {
+    await subjectModule.add(subjectName.value, subjectColor.value);
+    await loadData();
+  }
 </script>
 
 <template>
@@ -42,7 +49,7 @@
       </label>
       <br>
 
-      <button class="btn" style="margin: 0 auto;" @click="subjectModule.add(subjectName, subjectColor)">
+      <button class="btn" style="margin: 0 auto;" @click="add" :disabled="!subjectName || !subjectColor">
         <AddIcon class="icon"></AddIcon>
         追加
       </button>
@@ -52,12 +59,14 @@
 
   <div id="List">
 <!--    <p style="color: white;line-height: 0">科目リストのサンプル(まだ追加できません)</p>-->
-    {{ subjects }}
+    <div v-if="subjects.length === 0" style="text-align: center; margin-top: 20px;">
+      <p style="color: white;line-height: 0">科目がまだ追加されていません</p>
+    </div>
     <ul class="list-ul" v-if="subjects">
       <li class="list-item" v-for="(subject, index) in subjects" :key="index">
         <div>
-          <span :style="getColorboxStyle(subject.color)" style="margin-right: 4px;margin-left: 4px;"></span>
-          <span>{{ subject.name }}</span>
+          <span :style="getColorboxStyle(subject.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
+          <span>{{ subject.Name }}</span>
         </div>
         <div class="right">
           <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;">
