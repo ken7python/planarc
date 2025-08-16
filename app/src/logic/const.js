@@ -8,6 +8,8 @@ export const CONST = {
     authLink: '/auth',
     signupLink: '/signup',
     loginLink: '/login',
+    subjectLink: '/subject',
+    analysisLink: '/analysis',
 
     api: function(){
         return api;
