@@ -202,7 +202,7 @@ export const studyLog = {
             return;
         }
 
-        alert(`科目ID:${subject}勉強時間: ${sHours}時${sMinutes}分〜${eHours}時${eMinutes}分`);
+        // alert(`科目ID:${subject}勉強時間: ${sHours}時${sMinutes}分〜${eHours}時${eMinutes}分`);
 
         const res = await fetch(`${this.api}/add`,{
             method: 'POST',
@@ -223,6 +223,7 @@ export const studyLog = {
         if (res.ok) {
             stopwatch.reset();
             stopwatch.init();
+            alert("勉強記録を追加しました");
         }else {
             console.error('Failed to fetch study_logs:', res.statusText);
             alert("サーバとの通信に失敗しました");
@@ -243,7 +244,7 @@ export const studyLog = {
         if (!res.ok) {
             throw new Error("Failed to fetch study logs");
         }
-        console.log(await res.json());
+        return await res.json();
     },
     writeStr(date: string,subject :number, startTime :string, endTime :string) {
         const start = this.separate(startTime);
