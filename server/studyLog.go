@@ -23,8 +23,7 @@ func getLogByUserID(c *gin.Context) {
 	uuid := GetProfile(c).UUID
 
 	date := c.Query("date")
-	Println(date)
-
+	
 	var logs []StudyLog
 
 	res := db.Model(&StudyLog{}).Where("uuid = ? and date = ?", uuid, date).Find(&logs)
