@@ -39,8 +39,6 @@
       </div>
     </div>
     <div id="res">
-      {{ startTime }}から{{ endTime }}
-      {{ subjectID }}
       <button @click="studyLog.writeStr(subjectID,startTime,endTime)" class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
     </div>
   </div>

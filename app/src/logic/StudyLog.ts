@@ -4,6 +4,7 @@ import { CONST } from "@/logic/const";
 const nullStr = "--";
 
 export const stopwatch = {
+    subject : ref<number>(null),
     startDate: ref(null),
     endDate: ref(null),
 
@@ -35,6 +36,7 @@ export const stopwatch = {
         this.update();
     },
     saveRef: function(key, refitem) {
+        console.log("saveRef", key, refitem);
         if (refitem.value != null) {
             localStorage.setItem(key, refitem.value)
         }
@@ -55,6 +57,9 @@ export const stopwatch = {
         this.saveRef("sMinutes", this.sMinutes);
         this.saveRef("eHours", this.eHours);
         this.saveRef("eMinutes", this.eMinutes);
+        this.saveRef("subject", this.subject);
+        // console.log(this.subject);
+        console.log("Saved stopwatch state to localStorage");
     },
     load: function() {
         this.sHours.value = this.getItem("sHours");
@@ -69,6 +74,9 @@ export const stopwatch = {
         if (endDate) {
             this.endDate.value = new Date(endDate);
         }
+
+        this.subject.value = this.getItem("subject") || '';
+        // console.log(this.subject.value);
 
         this.update();
     },
