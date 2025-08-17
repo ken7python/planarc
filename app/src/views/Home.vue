@@ -25,6 +25,19 @@
   let enjoyment = ref<string>('');
 
   let subjects = ref<any[]>([]);
+
+  let selectedMood = ref<number>(null);
+  function moodSelect(mood: number) {
+    selectedMood.value = mood;
+  }
+  const getMoodStyle = (mood: number) => {
+    return {
+      color: selectedMood.value === mood ? 'black' : 'gray',
+      background: selectedMood.value === mood ? 'yellow' : 'white',
+      cursor: 'pointer'
+    };
+  };
+
   const username = ref<string | null>(null);
   async function loadData() {
     const profile = await user.profile();
@@ -86,10 +99,10 @@
       <div id="feeling">
         <h3 style="line-height: 0;margin-bottom: 0">今日の気分</h3>
         <div id="feeling-icons">
-          <mode4></mode4>
-          <mode3></mode3>
-          <mode2></mode2>
-          <mode1></mode1>
+          <mode4 @click="moodSelect(4)" :style="getMoodStyle(4)"></mode4>
+          <mode3 @click="moodSelect(3)" :style="getMoodStyle(3)"></mode3>
+          <mode2 @click="moodSelect(2)" :style="getMoodStyle(2)"></mode2>
+          <mode1 @click="moodSelect(1)" :style="getMoodStyle(1)"></mode1>
         </div>
       </div>
 
