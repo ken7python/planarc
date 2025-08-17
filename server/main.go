@@ -73,6 +73,11 @@ func main() {
 	subjects.POST("/add", AddSubject)
 	subjects.POST("/edit", EditSubject)
 
+	studyLogs := api.Group("/studylog")
+	studyLogs.Use(authMiddleware())
+	studyLogs.GET("/", getLogByUserID)
+	studyLogs.POST("/add", AddLog)
+
 	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")
 }
