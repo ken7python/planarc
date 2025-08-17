@@ -71,8 +71,8 @@
 </script>
 
 <template>
+  <Header></Header>
   <div id="subjectMain">
-    <Header></Header>
     <div>
       <div id="addSubject">
         <div class="micdiv">
@@ -119,15 +119,16 @@
       </ul>
       <p style="text-align: center;color: white;" v-else>サーバとの通信に失敗しました</p>
     </div>
-    <Footer></Footer>
   </div>
+
+  <Footer></Footer>
 </template>
 
 <style scoped>
   #subjectMain {
     height: calc(100dvh - 80px); /* ヘッダー80px / フッター60px */
     display: grid;
-    grid-template-rows: auto 1fr auto; /* ヘッダー=auto / 中央=残り / フッター=auto */
+    grid-template-rows: auto 1fr; /* ヘッダー=auto / 中央=残り / フッター=auto */
   }
   #addSubject {
     text-align: center;
