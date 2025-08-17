@@ -1,6 +1,8 @@
 import { ref } from 'vue';
 import { CONST } from "@/logic/const";
 
+const nullStr = "--";
+
 export const stopwatch = {
     startDate: ref(null),
     endDate: ref(null),
@@ -46,20 +48,12 @@ export const stopwatch = {
         if (sd) {
             sMinutes.value = this.startDate.value.getMinutes();
             sHours.value = this.startDate.value.getHours();
-        }else {
-            sMinutes.value = "--";
-            sHours.value = "--";
         }
         if (ed) {
             eMinutes.value = this.endDate.value.getMinutes();
             eHours.value = this.endDate.value.getHours();
-        }else {
-            eMinutes.value = "--";
-            eHours.value = "--";
         }
         if (sd) {
-            // dMinutes.value = null;
-            // dHours.value = null;
             let diff;
             const tStart = sMinutes.value + sHours.value * 60;
             if (ed) {
@@ -95,4 +89,14 @@ export const stopwatch = {
 
         this.update();
     },
+}
+
+export const studyLog = {
+    write: function(sHours :number,sMinutes :number, eHours :number,eMinutes :number) {
+        if (!sHours || !sMinutes || !eHours || !eMinutes) {
+            alert("開始時間と終了時間を設定してください");
+            return;
+        }
+        alert(`記録を送信する機能を実装予定です。勉強記録: ${sHours}:${sMinutes} - ${eHours}:${eMinutes}`);
+    }
 }
