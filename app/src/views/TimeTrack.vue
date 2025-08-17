@@ -12,6 +12,8 @@ const subjects = ref<any[]>([]);
 
 const results = ref<any[]>([]);
 
+const sum = ref<number>(0)
+
 async function loadData() {
   log.value = await studyLog.getLog(props.date);
   subjects.value = await subjectModule.getList();
@@ -24,6 +26,8 @@ async function loadData() {
     } else {
       log.value[i].subjectName = "不明";
     }
+
+    sum.value += log.value[i].StudyTime;
 
     results.value.push({
       "name": log.value[i].subjectName,
@@ -46,6 +50,8 @@ loadData();
         <p>{{ res.name }}: {{ res.StudyTime }}分</p>
       </li>
     </ul>
+
+    <p>本日合計{{ Math.floor(sum / 60) }}時間{{sum % 60}}分</p>
 
   </div>
 </template>
