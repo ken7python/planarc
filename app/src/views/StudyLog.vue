@@ -31,10 +31,15 @@
 
     };
   }
+
+  defineProps({
+    date: String
+  })
 </script>
 
 <template>
   <div>
+<!--    {{ date }}-->
     <div id="menu">
       <div id="stopwatchMenu" :style="getMenuStyle(stopwatch)" @click="select(stopwatch)">
         <stopwatchIcon></stopwatchIcon>ストップウォッチ
@@ -45,8 +50,8 @@
     </div>
 
     <div id="content">
-      <Stopwatch v-if="selectedMenu === stopwatch" />
-      <Handinput v-if="selectedMenu === handinput" />
+      <Stopwatch v-if="selectedMenu === stopwatch" :date="date"/>
+      <Handinput v-if="selectedMenu === handinput" :date="date"/>
     </div>
   </div>
 </template>

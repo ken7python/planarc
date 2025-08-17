@@ -18,9 +18,14 @@
   }
 
   loadData();
+
+  defineProps({
+    date: String
+  })
 </script>
 
 <template>
+<!--  {{ date }}-->
   <div id="headerinput">
     <select class="selectbox" :style="selectStyle.getSelectStyle(subjectID)" v-model="subjectID">
       <option value="">科目を選択</option>
@@ -39,7 +44,7 @@
       </div>
     </div>
     <div id="res">
-      <button @click="studyLog.writeStr(subjectID,startTime,endTime)" class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
+      <button @click="studyLog.writeStr(date,subjectID,startTime,endTime)" class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
     </div>
   </div>
 </template>

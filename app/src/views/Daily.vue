@@ -42,8 +42,8 @@
 
   <div id="main">
     <TodoList v-if="activeMenu === list" />
-    <StudyLog v-if="activeMenu === studylog" />
-    <Track v-if="activeMenu === track" />
+    <StudyLog v-if="activeMenu === studylog" :date="date" />
+    <Track v-if="activeMenu === track" :date="date" />
     <Letter v-if="activeMenu === letter" />
   </div>
   <Footer />

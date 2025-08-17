@@ -13,6 +13,11 @@
 
   let subjects = ref<any[]>([]);
 
+
+  const props = defineProps({
+    date: String
+  })
+
   async function loadData() {
     const subject_list = await subjectModule.getList();
     console.log(subject_list);
@@ -20,6 +25,8 @@
 
     stopwatch.init();
     subjectName.value = stopwatch.subject.value;
+
+    await studyLog.getLog(props.date);
   }
 
   loadData();
@@ -41,6 +48,7 @@
 </script>
 
 <template>
+<!--  {{ date }}-->
   <div id="stopwatch">
     <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
       <option value="">科目を選択</option>
@@ -74,7 +82,7 @@
         <span v-if="stopwatch.dHours.value != null">{{ stopwatch.dHours }}時間</span>
         <span v-if="stopwatch.dMinutes.value != null">{{ stopwatch.dMinutes.value }}分</span>
       </span>
-      <button class="btn"  style="margin: 0 auto;" @click="studyLog.write(stopwatch.subject.value,stopwatch.sHours.value,stopwatch.sMinutes.value,stopwatch.eHours.value,stopwatch.eMinutes.value)"><writeIcon></writeIcon>記録</button>
+      <button class="btn"  style="margin: 0 auto;" @click="studyLog.write(date,stopwatch.subject.value,stopwatch.sHours.value,stopwatch.sMinutes.value,stopwatch.eHours.value,stopwatch.eMinutes.value)"><writeIcon></writeIcon>記録</button>
     </div>
   </div>
 </template>
