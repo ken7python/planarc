@@ -2,9 +2,13 @@
   import { ref } from 'vue';
   import { selectStyle } from '@/logic/style/selectStyle';
   import { subjectModule } from '@/logic/subject';
+  import { studyLog } from "@/logic/StudyLog";
 
   import writeIcon from '@/assets/icons/write.svg';
-  let subjectName = ref<string>('');
+  let subjectID = ref<string>('');
+
+  let startTime = ref<string>(null);
+  let endTime = ref<string>(null);
 
   let subjects = ref<any[]>([]);
   async function loadData() {
@@ -18,7 +22,7 @@
 
 <template>
   <div id="headerinput">
-    <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
+    <select class="selectbox" :style="selectStyle.getSelectStyle(subjectID)" v-model="subjectID">
       <option value="">科目を選択</option>
       <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
         {{ subject.Name }}
@@ -27,15 +31,17 @@
     <div id="inputbox">
       <div>
         <h2>開始時間</h2>
-        <input type="time" id="startTime" name="startTime" value="--:--">
+        <input type="time" id="startTime" name="startTime" value="--:--" v-model="startTime">
       </div>
       <div>
         <h2>終了時間</h2>
-        <input type="time" id="startTime" name="startTime" value="--:--">
+        <input type="time" id="startTime" name="startTime" value="--:--" v-model="endTime">
       </div>
     </div>
     <div id="res">
-      <button class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
+      {{ startTime }}から{{ endTime }}
+      {{ subjectID }}
+      <button @click="studyLog.writeStr(subjectID,startTime,endTime)" class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
     </div>
   </div>
 </template>

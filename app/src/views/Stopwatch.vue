@@ -61,7 +61,7 @@
         <span v-if="stopwatch.dHours.value != null">{{ stopwatch.dHours }}時間</span>
         <span v-if="stopwatch.dMinutes.value != null">{{ stopwatch.dMinutes.value }}分</span>
       </span>
-      <button class="btn"  style="margin: 0 auto;" @click="studyLog.write(stopwatch.sHours.value,stopwatch.sMinutes.value,stopwatch.eHours.value,stopwatch.eMinutes.value)"><writeIcon></writeIcon>記録</button>
+      <button class="btn"  style="margin: 0 auto;" @click="studyLog.write(subjectName,stopwatch.sHours.value,stopwatch.sMinutes.value,stopwatch.eHours.value,stopwatch.eMinutes.value)"><writeIcon></writeIcon>記録</button>
     </div>
   </div>
 </template>
