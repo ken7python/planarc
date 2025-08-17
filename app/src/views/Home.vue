@@ -123,12 +123,12 @@
       <hr>
 
       <div id="studyTime">
-        <h3>今日の学習時間〇〇時間</h3>
+        <h3>学習時間　<span class="underlined">〇〇時間</span></h3>
         <Pie></Pie>
 
         <hr>
 
-        <h3>今日の学習時間（科目別）：〇〇時間</h3>
+        <h3>学習時間（科目別）　<span class="underlined">〇〇時間</span></h3>
 
         <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
           <option value="">科目を選択</option>
@@ -136,8 +136,6 @@
             {{ subject.Name }}
           </option>
         </select>
-
-        <h3>〇〇時間</h3>
       </div>
 
     </div>
@@ -150,6 +148,9 @@
 <style scoped>
 h3 {
   line-height: 0.75;
+}
+.underlined {
+  text-decoration: underline;
 }
  progress {
     width: 100%;
