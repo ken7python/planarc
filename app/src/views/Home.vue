@@ -38,6 +38,9 @@
     };
   };
 
+  const numberOfToDO = ref<number>(10)
+  const finishedToDo = ref<number>(5);
+
   const username = ref<string | null>(null);
   async function loadData() {
     const profile = await user.profile();
@@ -129,8 +132,13 @@
 
       <div id="progress">
         <h3>進捗バー</h3>
-        <progress value="50" max="100"></progress>
-        <p>50/100</p>
+        <div v-if="numberOfToDO && finishedToDo">
+          <p style="text-align: right;line-height: 0.5;">{{ Math.round(finishedToDo * 100 / numberOfToDO) }}%</p>
+          <progress class="my-progress" :value="finishedToDo" :max="numberOfToDO"></progress>
+        </div>
+        <div v-else>
+          <p>通信中...</p>
+        </div>
       </div>
 
       <hr>
@@ -165,11 +173,10 @@ h3 {
 .underlined {
   text-decoration: underline;
 }
- progress {
-    width: 100%;
-    height: 20px;
-    margin: 0;
- }
+progress {
+  width: 100%;
+  height: 20px;
+}
 
  #main {
    overflow-y: scroll;
