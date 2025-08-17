@@ -71,7 +71,7 @@ export const stopwatch = {
         }
 
 
-        console.log(this);
+        // console.log(this);
     },
 
     start: function() {
