@@ -44,7 +44,7 @@
       </div>
     </div>
     <div id="res">
-      <button @click="studyLog.writeStr(date.value,subjectID,startTime,endTime)" class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
+      <button @click="studyLog.writeStr(date,subjectID,startTime,endTime)" class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
     </div>
   </div>
 </template>
