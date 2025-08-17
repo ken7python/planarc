@@ -195,6 +195,7 @@ func GetProfile(c *gin.Context) *User {
 		return nil
 	}
 
+	println("GetProfile success")
 	return &user
 }
 

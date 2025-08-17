@@ -4,14 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-  "dev": "vite --config vite.config.js --mode development",
+    "dev": "vite --config vite.config.js --mode development",
     "build:aws": "vite build --config vite.config.aws.js --mode aws",
-  "build": "vite build --config vite.config.js --mode development",
+    "build": "vite build --config vite.config.js --mode development",
     "preview": "vite preview"
   },
   "dependencies": {
     "@nanogiants/vue3-longpress": "^1.0.8",
     "chart.js": "^4.5.0",
+    "pinia": "^3.0.3",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
   },

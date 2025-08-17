@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import { CONST } from "@/logic/const";
+import { user } from "@/logic/user";
 
 const nullStr = "--";
 
@@ -161,6 +162,7 @@ export const stopwatch = {
 }
 
 export const studyLog = {
+    api: CONST.api() + '/studylog',
     separate: function(time :string) {
         if (!time || time === nullStr) {
             return { hours: null, minutes: null };
@@ -180,7 +182,7 @@ export const studyLog = {
         return value === null;
     },
 
-    write: function(subject :string,sHours :number,sMinutes :number, eHours :number,eMinutes :number) {
+    write: async function(date :string,subject :number,sHours :number,sMinutes :number, eHours :number,eMinutes :number) {
         console.log(subject);
         console.log(sHours);
         console.log(sMinutes);
@@ -201,15 +203,53 @@ export const studyLog = {
         }
 
         alert(`科目ID:${subject}勉強時間: ${sHours}時${sMinutes}分〜${eHours}時${eMinutes}分`);
-        alert('サーバに勉強記録を送信する機能を追加中です')
 
-        stopwatch.reset();
-        stopwatch.init();
+        const res = await fetch(`${this.api}/add`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            },
+            body: JSON.stringify({
+                "date": date,
+                "sHours": sHours,
+                "sMinutes": sMinutes,
+                "eHours": eHours,
+                "eMinutes": eMinutes,
+                "subjectID": Number(subject)
+            })
+        })
+        console.log(await res)
+        if (res.ok) {
+            stopwatch.reset();
+            stopwatch.init();
+        }else {
+            console.error('Failed to fetch study_logs:', res.statusText);
+            alert("サーバとの通信に失敗しました");
+            return null;
+        }
     },
-    writeStr(subject :string, startTime :string, endTime :string) {
+    getLog: async function(dateStr) {
+        const res = await fetch(`${this.api}/?date=${dateStr}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            },
+        }).catch(err => {
+            alert(err);
+            return null;
+        });
+        if (!res.ok) {
+            throw new Error("Failed to fetch study logs");
+        }
+        console.log(await res.json());
+    },
+    writeStr(date: string,subject :number, startTime :string, endTime :string) {
         const start = this.separate(startTime);
         const end = this.separate(endTime);
-        console.log(start, end);
-        this.write(subject, start.hours, start.minutes, end.hours, end.minutes);
+        // console.log(start, end);
+        this.write(date, subject, start.hours, start.minutes, end.hours, end.minutes);
+
     }
 }

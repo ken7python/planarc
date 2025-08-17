@@ -7,58 +7,78 @@ import (
 )
 
 type StudyLog struct {
-	ID        uint   `gorm:"primaryKey"`
-	subjectID string `gorm:"unique/not null"`
-	UUID      string `gorm:"unique/not null"`
-	sHours    int    `gorm:"unique/not null"`
-	sMinutes  int    `gorm:"unique/not null"`
-	eHours    int    `gorm:"unique/not null"`
-	eMinutes  int    `gorm:"unique/not null"`
-	studyTime int    `gorm:"unique/not null"`
+	ID           uint   `gorm:"primaryKey"`
+	Date         string `gorm:"not null"`
+	SubjectID    int    `gorm:"not null"`
+	UUID         string `gorm:"not null"`
+	StartHours   int    `gorm:"not null"`
+	StartMinutes int    `gorm:"not null"`
+	EndHours     int    `gorm:"not null"`
+	EndMinutes   int    `gorm:"not null"`
+	StudyTime    int    `gorm:"not null"`
 }
 
 func getLogByUserID(c *gin.Context) {
-	println("subject/")
+	println("studylog/")
 	uuid := GetProfile(c).UUID
-	var Logs []StudyLog
 
-	if err := db.Where("uuid = ?", uuid).Find(&Logs).Error; err != nil {
+	date := c.Query("date")
+	Println(date)
+
+	var logs []StudyLog
+
+	res := db.Model(&StudyLog{}).Where("uuid = ? and date = ?", uuid, date).Find(&logs)
+	if res.Error != nil {
+		fmt.Println("Error fetching study logs:", res.Error)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "勉強記録の取得に失敗しました"})
 		return
 	}
-	c.JSON(http.StatusOK, Logs)
+	println("Fetched study logs:", len(logs))
+	c.JSON(http.StatusOK, logs)
 }
 
 func AddLog(c *gin.Context) {
-	println("subject/add")
+	println("studylog/add")
+
+	//body, _ := ioutil.ReadAll(c.Request.Body)
+	//fmt.Println(string(body))
+	//
 	uuid := GetProfile(c).UUID
 	var req struct {
-		sHours   int `json:"sHours"`
-		sMinutes int `json:"sMintes"`
-		eHours   int `json:"eHours"`
-		eMinutes int `json:"eMinutes"`
+		Date         string `json:"date"`
+		StartHours   int    `json:"sHours"`
+		StartMinutes int    `json:"sMinutes"`
+		EndHours     int    `json:"eHours"`
+		EndMinutes   int    `json:"eMinutes"`
+		SubjectID    int    `json:"subjectID"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
+		println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "リクエストの解析に失敗しました"})
+		return
 	}
 
-	studying := (req.eHours-req.sHours)*60 + (req.eMinutes - req.sMinutes)
+	studying := (req.EndHours-req.StartHours)*60 + (req.EndMinutes - req.StartMinutes)
 	log := StudyLog{
-		sHours:    req.sHours,
-		sMinutes:  req.sMinutes,
-		eHours:    req.eHours,
-		eMinutes:  req.eMinutes,
-		studyTime: studying,
-		UUID:      uuid,
+		Date:         req.Date,
+		StartHours:   req.StartHours,
+		StartMinutes: req.StartMinutes,
+		EndHours:     req.EndHours,
+		EndMinutes:   req.EndMinutes,
+		SubjectID:    req.SubjectID,
+		StudyTime:    studying,
+		UUID:         uuid,
 	}
 	if studying < 0 {
+		println("studying < 0")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "終了時間は開始時間より後でなければなりません"})
 		return
 	}
-	if err := db.Create(&log).Error; err != nil {
+	if err := db.Model(&StudyLog{}).Create(&log).Error; err != nil {
 		fmt.Println("Error creating subject:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "勉強記録の作成に失敗しました"})
+		return
 	}
-	println("Sccuess creating subject")
+	println("Sccuess creating study log")
 	c.JSON(http.StatusOK, gin.H{"message": "勉強記録を作成しました"})
 }
