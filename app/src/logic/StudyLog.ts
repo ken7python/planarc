@@ -31,6 +31,45 @@ export const stopwatch = {
         this.dHours.value = null;
         this.dMinutes.value = null;
 
+        this.load();
+        this.update();
+    },
+    saveRef: function(key, refitem) {
+        if (refitem.value != null) {
+            localStorage.setItem(key, refitem.value)
+        }
+    },
+
+    getItem: function(key :string) {
+        return localStorage.getItem(key);
+    },
+
+    save: function() {
+        // localStorage.setItem("sHours", this.sHours.value || null);
+        // localStorage.setItem("sMinutes", this.sMinutes.value || null);
+        // localStorage.setItem("eHours", this.eHours.value || null);
+        // localStorage.setItem("eMinutes", this.eMinutes.value || null);
+        this.saveRef("startDate", this.startDate);
+        this.saveRef("endDate", this.endDate);
+        this.saveRef("sHours", this.sHours);
+        this.saveRef("sMinutes", this.sMinutes);
+        this.saveRef("eHours", this.eHours);
+        this.saveRef("eMinutes", this.eMinutes);
+    },
+    load: function() {
+        this.sHours.value = this.getItem("sHours");
+        this.sMinutes.value = this.getItem("sMinutes");
+        this.eHours.value = this.getItem("eHours");
+        this.eMinutes.value = this.getItem("eMinutes");
+        const startDate = this.getItem("startDate");
+        const endDate = this.getItem("endDate");
+        if (startDate) {
+            this.startDate.value = new Date(startDate);
+        }
+        if (endDate) {
+            this.endDate.value = new Date(endDate);
+        }
+
         this.update();
     },
 
@@ -69,17 +108,17 @@ export const stopwatch = {
             dMinutes.value = diff % 60;
             dHours.value = Math.floor(diff / 60);
         }
-
-
         // console.log(this);
     },
 
     start: function() {
+        this.reset();
         this.startDate.value = new Date();
         console.log(this.startDate.value);
         this.endDate.value = null;
 
         this.update();
+        this.save();
     },
     stop: function() {
         if (this.startDate.value === null) {
@@ -88,15 +127,81 @@ export const stopwatch = {
         this.endDate.value = new Date();
 
         this.update();
+        this.save();
     },
+    reset: function() {
+        this.startDate.value = null;
+        this.endDate.value = null;
+
+        this.DateDiff.hours.value = null;
+        this.DateDiff.minutes.value = null;
+
+        this.sHours.value = null;
+        this.sMinutes.value = null;
+        this.eHours.value = null;
+        this.eMinutes.value = null;
+        this.dHours.value = null;
+        this.dMinutes.value = null;
+
+        localStorage.removeItem("sHours");
+        localStorage.removeItem("sMinutes");
+        localStorage.removeItem("eHours");
+        localStorage.removeItem("eMinutes");
+        localStorage.removeItem("startDate");
+        localStorage.removeItem("endDate");
+    }
 }
 
 export const studyLog = {
-    write: function(sHours :number,sMinutes :number, eHours :number,eMinutes :number) {
-        if (!sHours || !sMinutes || !eHours || !eMinutes) {
-            alert("開始時間と終了時間を設定してください");
+    separate: function(time :string) {
+        if (!time || time === nullStr) {
+            return { hours: null, minutes: null };
+        }
+        const parts = time.split(':');
+        if (parts.length !== 2) {
+            throw new Error("Invalid time format. Expected format is 'HH:MM'.");
+        }
+        const hours = parseInt(parts[0], 10);
+        const minutes = parseInt(parts[1], 10);
+        if (isNaN(hours) || isNaN(minutes)) {
+            throw new Error("Invalid time format. Hours and minutes must be numbers.");
+        }
+        return { hours, minutes };
+    },
+    isNull(value :any) {
+        return value === null;
+    },
+
+    write: function(subject :string,sHours :number,sMinutes :number, eHours :number,eMinutes :number) {
+        console.log(subject);
+        console.log(sHours);
+        console.log(sMinutes);
+        console.log(eHours);
+        console.log(eMinutes);
+
+        if (this.isNull(sHours) || this.isNull(sMinutes)) {
+            alert("開始時間を入力してください");
             return;
         }
-        alert(`記録を送信する機能を実装予定です。勉強記録: ${sHours}:${sMinutes} - ${eHours}:${eMinutes}`);
+        if ( this.isNull(eHours) || this.isNull(eMinutes) ){
+            alert("終了時間を入力してください");
+            return;
+        }
+        if (!subject) {
+            alert("科目を入力してください");
+            return;
+        }
+
+        alert(`科目ID:${subject}勉強時間: ${sHours}時${sMinutes}分〜${eHours}時${eMinutes}分`);
+        alert('サーバに勉強記録を送信する機能を追加中です')
+
+        stopwatch.reset();
+        stopwatch.init();
+    },
+    writeStr(subject :string, startTime :string, endTime :string) {
+        const start = this.separate(startTime);
+        const end = this.separate(endTime);
+        console.log(start, end);
+        this.write(subject, start.hours, start.minutes, end.hours, end.minutes);
     }
 }
