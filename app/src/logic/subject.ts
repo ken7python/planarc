@@ -9,7 +9,9 @@ export const subjectModule = {
             Authorization: `Bearer ${user.getToken()}`
         }}).then().catch(err => {alert(err)});
         if (await subjects.ok) {
-            return await subjects.json();
+            const res = await subjects.json();
+            res.reverse()
+            return await res;
         }else {
             alert("サーバとの通信に失敗しました");
             return null;
