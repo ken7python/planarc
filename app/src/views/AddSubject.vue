@@ -126,7 +126,7 @@
 
 <style scoped>
   #subjectMain {
-    height: calc(100dvh - 80px); /* ヘッダー80px / フッター60px */
+    height: calc(100dvh - 80px - 60px); /* ヘッダー80px / フッター60px */
     display: grid;
     grid-template-rows: auto 1fr; /* ヘッダー=auto / 中央=残り / フッター=auto */
   }

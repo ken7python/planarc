@@ -172,13 +172,17 @@ input[type="time"] {
     /*padding-top: 120px;*/
 }
 
-
 body {
     font-family: 'Noto Sans JP', sans-serif;
-    background-color: #FAFAFA;
     margin: 0;
+    background-color: #FAFAFA;
 }
 
 svg {
     margin: auto 0;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden; /* ページ全体のスクロール禁止 */
 }
