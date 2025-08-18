@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Subjects struct {
@@ -14,7 +15,7 @@ type Subjects struct {
 }
 
 func getSubjectByUserID(c *gin.Context) {
-	println("subject/")
+	fmt.Println("subject/")
 	uuid := GetProfile(c).UUID
 	var subjectList []Subjects
 
@@ -26,7 +27,7 @@ func getSubjectByUserID(c *gin.Context) {
 }
 
 func AddSubject(c *gin.Context) {
-	println("subject/add")
+	fmt.Println("subject/add")
 	uuid := GetProfile(c).UUID
 	var req struct {
 		Name  string `json:"name"`
@@ -44,12 +45,12 @@ func AddSubject(c *gin.Context) {
 		fmt.Println("Error creating subject:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "サブジェクトの作成に失敗しました"})
 	}
-	println("Sccuess creating subject")
+	fmt.Println("Sccuess creating subject")
 	c.JSON(http.StatusOK, gin.H{"message": "科目を作成しました"})
 }
 
 func EditSubject(c *gin.Context) {
-	println("subject/edit")
+	fmt.Println("subject/edit")
 	uuid := GetProfile(c).UUID
 	var req struct {
 		ID        int    `json:"id"`
@@ -61,8 +62,8 @@ func EditSubject(c *gin.Context) {
 		return
 	}
 
-	println(req.ID)
-	println(req.AfterName)
+	fmt.Println(req.ID)
+	fmt.Println(req.AfterName)
 
 	res := db.Model(&Subjects{}).Where("id = ? AND uuid = ?", req.ID, uuid).Update("name", req.AfterName)
 
@@ -75,6 +76,6 @@ func EditSubject(c *gin.Context) {
 		res = db.Model(&Subjects{}).Where("id = ? AND uuid = ?", req.ID, uuid).Delete(&Subjects{})
 	}
 
-	println("Sccuess editing subject")
+	fmt.Println("Sccuess editing subject")
 	c.JSON(http.StatusOK, gin.H{"message": "科目を編集しました"})
 }
