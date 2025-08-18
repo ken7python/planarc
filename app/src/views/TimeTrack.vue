@@ -51,7 +51,7 @@ loadData();
       </li>
     </ul>
 
-    <p>本日合計{{ Math.floor(sum / 60) }}時間{{sum % 60}}分</p>
+    <p>本日合計：<span v-if="Math.floor(sum / 60) > 0">{{ Math.floor(sum / 60) }}時間</span><span v-if="sum % 60 > 0">{{sum % 60}}分</span></p>
 
   </div>
 </template>
