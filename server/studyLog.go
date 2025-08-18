@@ -19,11 +19,11 @@ type StudyLog struct {
 }
 
 func getLogByUserID(c *gin.Context) {
-	println("studylog/")
+	fmt.Println("studylog/")
 	uuid := GetProfile(c).UUID
 
 	date := c.Query("date")
-	
+
 	var logs []StudyLog
 
 	res := db.Model(&StudyLog{}).Where("uuid = ? and date = ?", uuid, date).Find(&logs)
@@ -32,12 +32,12 @@ func getLogByUserID(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "勉強記録の取得に失敗しました"})
 		return
 	}
-	println("Fetched study logs:", len(logs))
+	fmt.Println("Fetched study logs:", len(logs))
 	c.JSON(http.StatusOK, logs)
 }
 
 func AddLog(c *gin.Context) {
-	println("studylog/add")
+	fmt.Println("studylog/add")
 
 	//body, _ := ioutil.ReadAll(c.Request.Body)
 	//fmt.Println(string(body))
@@ -52,7 +52,7 @@ func AddLog(c *gin.Context) {
 		SubjectID    int    `json:"subjectID"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		println(err.Error())
+		fmt.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "リクエストの解析に失敗しました"})
 		return
 	}
@@ -69,7 +69,7 @@ func AddLog(c *gin.Context) {
 		UUID:         uuid,
 	}
 	if studying < 0 {
-		println("studying < 0")
+		fmt.Println("studying < 0")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "終了時間は開始時間より後でなければなりません"})
 		return
 	}
@@ -78,6 +78,6 @@ func AddLog(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "勉強記録の作成に失敗しました"})
 		return
 	}
-	println("Sccuess creating study log")
+	fmt.Println("Sccuess creating study log")
 	c.JSON(http.StatusOK, gin.H{"message": "勉強記録を作成しました"})
 }

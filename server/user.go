@@ -77,14 +77,14 @@ type Claims struct {
 }
 
 func register(c *gin.Context) {
-	println("/register")
+	fmt.Println("/register")
 	var req struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		println(err.Error())
+		fmt.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "リクエストの解析に失敗しました"})
 		return
 	}
@@ -113,7 +113,7 @@ func register(c *gin.Context) {
 }
 
 func login(c *gin.Context) {
-	println("/login")
+	fmt.Println("/login")
 	var req struct {
 		Username string `json:"username"`
 		Password string `json:"password"`
@@ -155,11 +155,11 @@ func createToken(userID uint) string {
 }
 
 func authMiddleware() gin.HandlerFunc {
-	println("authMiddleware")
+	fmt.Println("authMiddleware")
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader("Authorization")
 		if tokenString == "" {
-			println("tokenString == ''")
+			fmt.Println("tokenString == ''")
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "認証されていません"})
 			c.Abort()
 			return
@@ -169,7 +169,7 @@ func authMiddleware() gin.HandlerFunc {
 
 		claims, err := parseToken(tokenString)
 		if err != nil {
-			println(err)
+			fmt.Println(err)
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "認証に失敗しました"})
 			c.Abort()
 			return
@@ -180,37 +180,37 @@ func authMiddleware() gin.HandlerFunc {
 	}
 }
 func GetProfile(c *gin.Context) *User {
-	println("GetProfile")
+	fmt.Println("GetProfile")
 	userID, exists := c.Get("userID")
 	if !exists {
-		println("!exists")
+		fmt.Println("!exists")
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "認証されていません"})
 		return nil
 	}
 
 	var user User
 	if err := db.First(&user, userID).Error; err != nil {
-		println(err)
+		fmt.Println(err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "ユーザーが見つかりません"})
 		return nil
 	}
 
-	println("GetProfile success")
+	fmt.Println("GetProfile success")
 	return &user
 }
 
 func profile(c *gin.Context) {
-	println("/profile")
+	fmt.Println("/profile")
 	userID, exists := c.Get("userID")
 	if !exists {
-		println("!exists")
+		fmt.Println("!exists")
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "認証されていません"})
 		return
 	}
 
 	var user User
 	if err := db.First(&user, userID).Error; err != nil {
-		println(err)
+		fmt.Println(err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "ユーザーが見つかりません"})
 		return
 	}
