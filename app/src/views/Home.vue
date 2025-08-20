@@ -4,7 +4,7 @@
   import { subjectModule } from '@/logic/subject';
   import { todoModule } from "@/logic/todo";
   import { studyLog } from "@/logic/StudyLog";
-  import { CONST } from "@/logic/CONST";
+  import { CONST } from "@/logic/const";
 
   import Footer from "@/components/Footer.vue";
   import Header from "@/components/Header.vue";
