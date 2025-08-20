@@ -78,6 +78,11 @@ func main() {
 	studyLogs.GET("/", getLogByUserID)
 	studyLogs.POST("/add", AddLog)
 
+	todo := api.Group("/todo")
+	todo.Use(authMiddleware())
+	todo.GET("/", getTODOByUserID)
+	todo.POST("/add", AddToDo)
+
 	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")
 }
