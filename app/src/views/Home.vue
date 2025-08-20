@@ -1,12 +1,16 @@
 <script setup lang="ts">
   import { ref, onMounted, watch } from 'vue';
   import { user } from '@/logic/user.js';
+  import { subjectModule } from '@/logic/subject';
+  import { todoModule } from "@/logic/todo";
+  import { studyLog } from "@/logic/StudyLog";
+  import { CONST } from "@/logic/CONST";
 
   import Footer from "@/components/Footer.vue";
   import Header from "@/components/Header.vue";
 
   import { selectStyle } from '@/logic/style/selectStyle';
-  import { subjectModule } from '@/logic/subject';
+
 
   import Pie from "@/components/Pie.vue";
 
@@ -41,6 +45,32 @@
   const numberOfToDO = ref<number>(10)
   const finishedToDo = ref<number>(5);
 
+  const sumToday = ref<number>(0);
+
+  const sumTodayofSubject = ref<number>(0);
+  async function getTodayofSubject(subjectId: number) {
+    const studyLogs = await studyLog.getLog(today);
+    console.log(studyLogs);
+
+    let i :number = 0;
+    while (i < studyLogs.length) {
+      if (studyLogs[i].SubjectID === subjectId) {
+        sumTodayofSubject.value += studyLogs[i].StudyTime;
+      }
+
+      ++i;
+    }
+  }
+
+  watch (subjectName, (newVal) => {
+    if (newVal) {
+      getTodayofSubject(Number(newVal));
+    }
+  });
+
+  const today = CONST.getToday();
+  console.log(today);
+
   const username = ref<string | null>(null);
   async function loadData() {
     const profile = await user.profile();
@@ -50,6 +80,16 @@
     const subject_list = await subjectModule.getList();
     console.log(subject_list);
     subjects.value = subject_list;
+
+    const studyLogs = await studyLog.getLog(today);
+    console.log(studyLogs);
+
+    let i :number = 0;
+    while (i < studyLogs.length) {
+      sumToday.value = studyLogs[i].StudyTime;
+
+      ++i;
+    }
   }
   loadData();
 
@@ -144,12 +184,12 @@
       <hr>
 
       <div id="studyTime">
-        <h3>学習時間　<span class="underlined">〇〇時間</span></h3>
+        <h3>学習時間　<span class="underlined">{{ Math.floor(sumToday / 60) }}時間{{ sumToday % 60 }}分</span></h3>
         <Pie></Pie>
 
         <hr>
 
-        <h3>学習時間（科目別）　<span class="underlined">〇〇時間</span></h3>
+        <h3>学習時間（科目別）　<span class="underlined">{{ Math.floor(sumTodayofSubject / 60) }}時間{{ sumTodayofSubject % 60 }}分</span></h3>
 
         <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
           <option value="">科目を選択</option>
