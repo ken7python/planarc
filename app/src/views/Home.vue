@@ -97,12 +97,16 @@
     numberOfToDO.value = TODOList.length || 0;
     finishedToDo.value = finished.length || 0;
 
-    const uSubjectIDs = [...new Set(studyLogs.map(log => log.SubjectID))];
+    const uSubjectIDs = [...new Set(TODOList.map(task => {
+      if (!task.Checked) {
+        return task.SubjectID;
+      }
+    }))];
     console.log(uSubjectIDs);
     uSubjectNames.value = subject_list.filter(subject => uSubjectIDs.includes(subject.ID)).map(subject => {
       return subject.Name;
     });
-    console.log(uSubjectNames);
+    console.log(uSubjectNames.value);
   }
   loadData();
 
@@ -174,9 +178,12 @@
 
       <div id="studyplan">
         <h3>学習予定一覧</h3>
-        <ul v-for="subject in uSubjectNames" :key="subject">
+        <ul v-if="uSubjectNames.length != 0" v-for="subject in uSubjectNames" :key="subject">
           <li>{{ subject }}</li>
         </ul>
+        <div v-else>
+          <p>今日のタスクはありません</p>
+        </div>
       </div>
 
       <hr>
