@@ -1,6 +1,6 @@
 import { ref } from 'vue';
-import { CONST } from "@/logic/const";
-import { user } from "@/logic/user";
+import { CONST } from "./const";
+import { user } from "./user";
 
 const nullStr = "--";
 
