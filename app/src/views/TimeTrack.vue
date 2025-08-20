@@ -18,6 +18,8 @@ async function loadData() {
   log.value = await studyLog.getLog(props.date);
   subjects.value = await subjectModule.getList();
 
+  console.log(log.value);
+
   for (let i = 0; i < log.value.length; i++) {
     // console.log(log.value[i].SubjectID);
     const subject = subjects.value.find(s => s.ID === log.value[i].SubjectID);
@@ -27,11 +29,22 @@ async function loadData() {
       log.value[i].subjectName = "不明";
     }
 
+    const startHours = log.value[i].StartHours;
+    const startMinutes = log.value[i].StartMinutes;
+    const endHours = log.value[i].EndHours;
+    const endMinutes = log.value[i].EndMinutes;
+
+    console.log(startHours, startMinutes, endHours);
+
     sum.value += log.value[i].StudyTime;
 
     results.value.push({
       "name": log.value[i].subjectName,
       "StudyTime": log.value[i].StudyTime,
+      "sHours": startHours,
+      "sMinutes": startMinutes,
+      "eHours": endHours,
+      "eMinutes": endMinutes,
     });
   }
 }
@@ -47,7 +60,26 @@ loadData();
 
     <ul>
       <li v-for="res in results" :key="res.ID">
-        <p>{{ res.name }}: {{ res.StudyTime }}分</p>
+        <p>
+          <span>{{ res.name }}　</span>
+          <span v-if="res.sHours != null && res.sHours<10">0{{ res.sHours }}</span>
+          <span v-else>{{ res.sHours }}</span>
+          <span v-if="res.sMinutes != null">:</span>
+          <span v-if="res.sMinutes != null && res.sMinutes<10">0{{ res.sMinutes }}</span>
+          <span v-else>{{ res.sMinutes }}</span>
+
+          <span>〜</span>
+
+          <span v-if="res.eHours != null && res.sHours<10">0{{ res.eHours }}</span>
+          <span v-else>{{ res.eHours }}</span>
+          <span v-if="res.eMinutes != null">:</span>
+          <span v-if="res.eMinutes != null && res.eMinutes<10">0{{ res.eMinutes }}</span>
+          <span v-else>{{ res.eMinutes }}</span>
+
+          <span>　{{ res.StudyTime }}分</span>
+
+
+        </p>
       </li>
     </ul>
 
