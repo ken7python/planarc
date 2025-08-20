@@ -2,6 +2,8 @@
   // Chart.js円グラフ描画
   import {Chart} from "chart.js/auto";
   import { subjectModule } from '@/logic/subject';
+  import { CONST } from '@/logic/const';
+  import { studyLog } from "@/logic/StudyLog";
   import {onMounted, ref, watch} from "vue";
 
   function drawPieChart() {
@@ -13,7 +15,7 @@
         data: {
           labels: subjects.value.map(s => s.Name),
           datasets: [{
-            data: subjects.value.map(s => s.value || 1), // valueプロパティがなければ1で仮置き
+            data: studyTimeBySubject,
             backgroundColor: subjects.value.map(s => s.Color), // Colorプロパティがなければ黒で仮置き
           }]
         },
@@ -28,11 +30,25 @@
   }
 
   let subjects = ref<any[]>([]);
+  const studyTimeBySubject = [];
+  const today = CONST.getToday();
 
  async function loadData() {
    const subject_list = await subjectModule.getList();
    console.log(subject_list);
    subjects.value = subject_list;
+
+   const studyLogs = await studyLog.getLog(today);
+   console.log(studyLogs);
+
+   subjects.value.map(subject => {
+     // console.log(subject);
+     const studyTime = studyLogs.filter(log => log.SubjectID === subject.ID)
+       .reduce((total, log) => total + log.StudyTime, 0);
+     console.log(subject.ID,studyTime);
+     studyTimeBySubject.push(studyTime);
+   })
+
    watch(subjects, () => {
      drawPieChart();
    }, {immediate: true});
