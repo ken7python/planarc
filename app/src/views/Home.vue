@@ -86,7 +86,7 @@
 
     let i :number = 0;
     while (i < studyLogs.length) {
-      sumToday.value = studyLogs[i].StudyTime;
+      sumToday.value += studyLogs[i].StudyTime;
 
       ++i;
     }
