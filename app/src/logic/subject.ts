@@ -1,5 +1,5 @@
-import { CONST } from '@/logic/const';
-import { user } from '@/logic/user';
+import { CONST } from './const';
+import { user } from './user';
 
 export const subjectModule = {
     api: CONST.api() + '/subject',
@@ -7,7 +7,7 @@ export const subjectModule = {
         const subjects = await fetch(`${ subjectModule.api }/`,{headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user.getToken()}`
-        }}).then().catch(err => {alert(err)});
+        }})
         if (await subjects.ok) {
             const res = await subjects.json();
             res.reverse()
@@ -29,7 +29,7 @@ export const subjectModule = {
                 "name": Name,
                 "color": Color
             })
-        }).catch(err => alart(err));
+        })
         console.log(await res)
         if (res.ok) {
             await subjectModule.getList()
@@ -50,7 +50,7 @@ export const subjectModule = {
                 "id": ID,
                 "aftername": AfterName,
             })
-        }).catch(err => alert(err));
+        })
         if (res.ok) {
             await subjectModule.getList();
         }else {

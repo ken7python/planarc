@@ -1,0 +1,98 @@
+import { CONST } from "./const";
+import { user } from "./user";
+
+export const todoModule = {
+    api: CONST.api() + '/todo',
+    getList: async function(date :string){
+        const todos = await fetch(`${ this.api }/?date=${ date }`,{headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            }})
+        if (await todos.ok) {
+            const res = await todos.json();
+            res.reverse();
+            return await res;
+        }else {
+            alert("サーバとの通信に失敗しました");
+            return null;
+        }
+    },
+    add: async function(date: string,title :string,suject :number,status :string){
+        console.log(date, title, suject, status)
+        if( !title ) {
+            alert("タイトルを入力してください");
+            return;
+        }
+        if( !suject ) {
+            alert("科目を入力してください");
+            return;
+        }
+        if( !status ) {
+            alert("MUSTかWANTを入力してください");
+            return;
+        }
+        if ( !date ) {
+            alert("日付の入力に失敗しました");
+            return;
+        }
+        const res = await fetch(`${this.api}/add`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            },
+            body: JSON.stringify({
+                "date": date,
+                "title": title,
+                "subjectID": suject,
+                "status": status
+            })
+        })
+        console.log(await res)
+        if (await res.ok) {
+            await this.getList()
+        }else {
+            console.error('Failed to fetch ToDos:', res.statusText);
+            alert("サーバとの通信に失敗しました");
+            return null;
+        }
+    },
+    edit: async function(ID: number, newTitle: string){
+        const res = await fetch(`${this.api}/edit`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            },
+            body: JSON.stringify({
+                "id": ID,
+                "newtitle": newTitle,
+            })
+        })
+        if (res.ok) {
+            await this.getList();
+        }else {
+            console.error('Failed to fetch ToDos:', res.statusText);
+            alert(`サーバとの通信に失敗しました`);
+            return null;
+        }
+    },
+    check(ID: number) {
+        return fetch(`${this.api}/check`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            },
+            body: JSON.stringify({
+                "id": ID
+            })
+        }).then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error('Failed to check ToDo');
+            }
+        });
+    }
+}
