@@ -52,18 +52,16 @@
     const studyLogs = await studyLog.getLog(today);
     console.log(studyLogs);
 
-    let i :number = 0;
-    while (i < studyLogs.length) {
-      if (studyLogs[i].SubjectID === subjectId) {
-        sumTodayofSubject.value += studyLogs[i].StudyTime;
+    studyLogs.map( log => {
+      if (log.SubjectID === subjectId) {
+        sumTodayofSubject.value += log.StudyTime;
       }
-
-      ++i;
-    }
+    });
   }
 
   watch (subjectName, (newVal) => {
     if (newVal) {
+      sumTodayofSubject.value = 0;
       getTodayofSubject(Number(newVal));
     }
   });
@@ -84,12 +82,9 @@
     const studyLogs = await studyLog.getLog(today);
     console.log(studyLogs);
 
-    let i :number = 0;
-    while (i < studyLogs.length) {
-      sumToday.value += studyLogs[i].StudyTime;
-
-      ++i;
-    }
+    studyLogs.map(log => {
+      sumToday.value += log.StudyTime;
+    })
   }
   loadData();
 
