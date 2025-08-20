@@ -42,8 +42,8 @@
     };
   };
 
-  const numberOfToDO = ref<number>(10)
-  const finishedToDo = ref<number>(5);
+  const numberOfToDO = ref<number>(null)
+  const finishedToDo = ref<number>(null);
 
   const sumToday = ref<number>(0);
 
@@ -85,6 +85,15 @@
     studyLogs.map(log => {
       sumToday.value += log.StudyTime;
     })
+
+    const TODOList = await todoModule.getList(today);
+    console.log(TODOList);
+
+    const finished = TODOList.filter(task => task.Checked)
+    console.log(finished);
+
+    numberOfToDO.value = TODOList.length || 0;
+    finishedToDo.value = finished.length || 0;
   }
   loadData();
 
@@ -167,8 +176,8 @@
 
       <div id="progress">
         <h3>進捗バー</h3>
-        <div v-if="numberOfToDO && finishedToDo">
-          <p style="text-align: right;line-height: 0.5;">{{ Math.round(finishedToDo * 100 / numberOfToDO) }}%</p>
+        <div v-if="numberOfToDO != null && finishedToDo != null">
+          <p style="text-align: right;line-height: 0.5;">{{ ( Math.round(finishedToDo * 100 / numberOfToDO) ) || 0 }}%</p>
           <progress class="my-progress" :value="finishedToDo" :max="numberOfToDO"></progress>
         </div>
         <div v-else>
