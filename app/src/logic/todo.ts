@@ -77,4 +77,22 @@ export const todoModule = {
             return null;
         }
     },
+    check(ID: number) {
+        return fetch(`${this.api}/check`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            },
+            body: JSON.stringify({
+                "id": ID
+            })
+        }).then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error('Failed to check ToDo');
+            }
+        });
+    }
 }

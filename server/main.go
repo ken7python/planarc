@@ -82,6 +82,7 @@ func main() {
 	todo.Use(authMiddleware())
 	todo.GET("/", getTODOByUserID)
 	todo.POST("/add", AddToDo)
+	todo.POST("/check", ToDoChecked)
 
 	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")

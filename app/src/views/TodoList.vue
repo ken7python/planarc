@@ -44,7 +44,12 @@
     todoModule.add(props.date, todoText.value, subjectName.value, status.value);
     todoText.value = "";
     loadData();
-  }
+  };
+
+  function check(id :number) {
+    todoModule.check(id);
+    loadData();
+  };
 
   //
   // const TODO = ref([
@@ -132,7 +137,7 @@
           </div>
         </li>
         <div class="right">
-          <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" />
+          <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" v-model="task.Checked" @click="check(task.ID)" />
           <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;"><MoveIcon></MoveIcon></button>
         </div>
       </ul>

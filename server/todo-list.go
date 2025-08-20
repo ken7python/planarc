@@ -12,6 +12,7 @@ type TODOLIST struct {
 	SubjectID int    `gorm:"not null"`
 	UUID      string `gorm:"not null"`
 	Title     string `gorm:"not null"`
+	Checked   bool   `gorm:"not null"`
 	Status    string `gorm:"not null"`
 }
 
@@ -57,6 +58,7 @@ func AddToDo(c *gin.Context) {
 		Title:     req.Title,
 		Status:    req.Status,
 		SubjectID: req.SubjectID,
+		Checked:   false,
 		UUID:      uuid,
 	}
 
@@ -67,4 +69,33 @@ func AddToDo(c *gin.Context) {
 	}
 	fmt.Println("Sccuess creating ToDO")
 	c.JSON(http.StatusOK, gin.H{"message": "ToDoを作成しました"})
+}
+
+func ToDoChecked(c *gin.Context) {
+	fmt.Println("todo/checked")
+	var req struct {
+		ID int `json:"id"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "リクエストの解析に失敗しました"})
+		return
+	}
+
+	var todo TODOLIST
+	if err := db.Model(&TODOLIST{}).Where("id = ?", req.ID).First(&todo).Error; err != nil {
+		fmt.Println("Error fetching ToDo:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "ToDoの取得に失敗しました"})
+		return
+	}
+
+	todo.Checked = !todo.Checked
+
+	if err := db.Save(&todo).Error; err != nil {
+		fmt.Println("Error updating ToDo:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "ToDoの更新に失敗しました"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "ToDoを更新しました"})
 }
