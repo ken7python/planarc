@@ -69,6 +69,8 @@
   const today = CONST.getToday();
   console.log(today);
 
+  const uSubjectNames = ref<string[]>([]);
+
   const username = ref<string | null>(null);
   async function loadData() {
     const profile = await user.profile();
@@ -94,6 +96,13 @@
 
     numberOfToDO.value = TODOList.length || 0;
     finishedToDo.value = finished.length || 0;
+
+    const uSubjectIDs = [...new Set(studyLogs.map(log => log.SubjectID))];
+    console.log(uSubjectIDs);
+    uSubjectNames.value = subject_list.filter(subject => uSubjectIDs.includes(subject.ID)).map(subject => {
+      return subject.Name;
+    });
+    console.log(uSubjectNames);
   }
   loadData();
 
@@ -165,10 +174,8 @@
 
       <div id="studyplan">
         <h3>学習予定一覧</h3>
-        <ul>
-          <li>科目1</li>
-          <li>科目2</li>
-          <li>科目3</li>
+        <ul v-for="subject in uSubjectNames" :key="subject">
+          <li>{{ subject }}</li>
         </ul>
       </div>
 
