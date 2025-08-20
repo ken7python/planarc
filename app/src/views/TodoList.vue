@@ -36,35 +36,6 @@
     { name: '生物', color: '#2E8B57' }
   ]);
 
-  // async function micbtn() {
-  //   if (!mic.shouldRestart) {
-  //     console.log("start");
-  //     mic.result = '';
-  //     mic.micON.value = true;
-  //     await mic.start();
-  //   } else {
-  //     console.log("stop");
-  //     mic.micON.value = false;
-  //     await mic.stop();
-  //   }
-  // }
-  //
-  // mic.rec.onresult = (e) => {
-  //   let interim = '';
-  //   for (let i = e.resultIndex; i < e.results.length; i++) {
-  //     const transcript = e.results[i][0].transcript;
-  //     if (e.results[i].isFinal) {
-  //       mic.result += transcript;
-  //       mic.tmp = '';
-  //       todoText.value = mic.result;
-  //     } else {
-  //       interim += transcript;
-  //       mic.tmp = interim;
-  //       todoText.value = mic.result + mic.tmp;
-  //     }
-  //   }
-  // };
-
   const micbtn = async () => {
     if (!mic.shouldRestart.value) {        // ← .value
       console.log("start");
