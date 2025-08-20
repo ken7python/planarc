@@ -15,6 +15,10 @@
   let todoText = ref('');
   let status = ref('MUST');
 
+  const props = defineProps({
+    date: String
+  })
+
   const TODO = ref<any[]>([]);
   let subjects = ref<any[]>([]);
   async function loadData() {
@@ -22,10 +26,26 @@
     console.log(subject_list);
     subjects.value = subject_list;
 
-    TODO.value = await todoModule.getList();
+    const ToDoList = await todoModule.getList(props.date);
+
+    let i :number = 0;
+    while (i < ToDoList.length) {
+      ToDoList[i]["Color"] = subjects.value.find((subject) => subject.ID === ToDoList[i].SubjectID)?.Color || '#000000';
+      ++i;
+    }
+
+    console.log(ToDoList);
+    TODO.value = ToDoList;
   }
 
   loadData();
+
+  function add() {
+    todoModule.add(props.date, todoText.value, subjectName.value, status.value);
+    todoText.value = "";
+    loadData();
+  }
+
   //
   // const TODO = ref([
   //   { name: '国語', color: '#FF5733' },
@@ -87,11 +107,11 @@
         </div>
         <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
           <option value="MUST">MUST</option>
-          <option value="WANt">WANT</option>
+          <option value="WANT">WANT</option>
         </select>
         <br>
         <br>
-        <button class="btn" style="margin: 0 auto;">
+        <button class="btn" style="margin: 0 auto;" @click="add">
           <Addicon></Addicon>
           追加
         </button>
@@ -103,8 +123,8 @@
       <ul class="list-ul" v-for="(task, index) in TODO" :key="index" style="display: flex;">
         <li class="list-item" style="width: 100%;">
           <div>
-            <span :style="getColorboxStyle(task.color)" style="margin-right: 4px;margin-left: 4px;"></span>
-            <span>{{ task.name }}</span>
+            <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
+            <span>{{ task.Title }}</span>
           </div>
           <div class="right">
   <!--          <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;"></button>-->

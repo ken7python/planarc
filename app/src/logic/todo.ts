@@ -3,8 +3,8 @@ import { user } from "./user";
 
 export const todoModule = {
     api: CONST.api() + '/todo',
-    getList: async function(){
-        const todos = await fetch(`${ this.api }/`,{headers: {
+    getList: async function(date :string){
+        const todos = await fetch(`${ this.api }/?date=${ date }`,{headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${user.getToken()}`
             }})
@@ -19,6 +19,22 @@ export const todoModule = {
     },
     add: async function(date: string,title :string,suject :number,status :string){
         console.log(date, title, suject, status)
+        if( !title ) {
+            alert("タイトルを入力してください");
+            return;
+        }
+        if( !suject ) {
+            alert("科目を入力してください");
+            return;
+        }
+        if( !status ) {
+            alert("MUSTかWANTを入力してください");
+            return;
+        }
+        if ( !date ) {
+            alert("日付の入力に失敗しました");
+            return;
+        }
         const res = await fetch(`${this.api}/add`,{
             method: 'POST',
             headers: {

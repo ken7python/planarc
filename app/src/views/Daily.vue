@@ -41,10 +41,10 @@
   <HeaderDaily v-model:menu="activeMenu"/>
 
   <div id="main">
-    <TodoList v-if="activeMenu === list" />
+    <TodoList v-if="activeMenu === list" :date="date" />
     <StudyLog v-if="activeMenu === studylog" :date="date" />
     <Track v-if="activeMenu === track" :date="date" />
-    <Letter v-if="activeMenu === letter" />
+    <Letter v-if="activeMenu === letter" :date="date" />
   </div>
   <Footer />
 </template>
