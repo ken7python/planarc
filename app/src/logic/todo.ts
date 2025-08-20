@@ -57,7 +57,7 @@ export const todoModule = {
             return null;
         }
     },
-    edit: async function(ID: number, AfterName: string){
+    edit: async function(ID: number, newTitle: string){
         const res = await fetch(`${this.api}/edit`,{
             method: 'POST',
             headers: {
@@ -66,7 +66,7 @@ export const todoModule = {
             },
             body: JSON.stringify({
                 "id": ID,
-                "aftername": AfterName,
+                "newtitle": newTitle,
             })
         })
         if (res.ok) {

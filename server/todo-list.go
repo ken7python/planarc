@@ -97,5 +97,44 @@ func ToDoChecked(c *gin.Context) {
 		return
 	}
 
+	fmt.Println("Sccuess updating ToDO")
+	c.JSON(http.StatusOK, gin.H{"message": "ToDoを更新しました"})
+}
+
+func ToDoEdit(c *gin.Context) {
+	fmt.Println("todo/edit")
+	var req struct {
+		ID       int    `json:"id"`
+		NewTitle string `json:"newtitle"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "リクエストの解析に失敗しました"})
+		return
+	}
+	var todo TODOLIST
+	if err := db.Model(&TODOLIST{}).Where("id = ?", req.ID).
+		First(&todo).Error; err != nil {
+		fmt.Println("Error fetching ToDo:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "ToDoの取得に失敗しました"})
+		return
+	}
+	todo.Title = req.NewTitle
+
+	if todo.Title == "" {
+		if err := db.Model(&TODOLIST{}).Where("id = ?", req.ID).Delete(&TODOLIST{}).Error; err != nil {
+			fmt.Println("Error deleting ToDo:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "ToDoの削除に失敗しました"})
+			return
+		}
+		fmt.Println("ToDo deleted successfully")
+	} else {
+		if err := db.Save(&todo).Error; err != nil {
+			fmt.Println("Error updating ToDo:", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "ToDoの更新に失敗しました"})
+			return
+		}
+		fmt.Println("Sccuess updating ToDO")
+	}
 	c.JSON(http.StatusOK, gin.H{"message": "ToDoを更新しました"})
 }

@@ -8,6 +8,7 @@
 
   import Addicon from '@/assets/icons/add.svg';
   import EditIcon from '@/assets/icons/edit.svg';
+  import SaveIcon from '@/assets/icons/save.svg';
   import MoveIcon from '@/assets/icons/move.svg';
   import MicIcon from '@/assets/icons/mic.svg';
 
@@ -51,19 +52,20 @@
     loadData();
   };
 
-  //
-  // const TODO = ref([
-  //   { name: '国語', color: '#FF5733' },
-  //   { name: '数学', color: '#33FF57' },
-  //   { name: '英語', color: '#3357FF' },
-  //   { name: '理科', color: '#F1C40F' },
-  //   { name: '社会', color: '#8E44AD' },
-  //   { name: '歴史', color: '#FF8C00' },
-  //   { name: '地理', color: '#00CED1' },
-  //   { name: '物理', color: '#8A2BE2' },
-  //   { name: '化学', color: '#FF4500' },
-  //   { name: '生物', color: '#2E8B57' }
-  // ]);
+  let editId = ref<number>(0);
+  let editedText = ref<string>('');
+
+  function editing(id :number, title :string) {
+    editId.value = id;
+    editedText.value = title;
+  }
+
+  function edit() {
+    todoModule.edit(editId.value, editedText.value);
+    editId.value = 0;
+    editedText.value = '';
+    loadData();
+  }
 
   const micbtn = async () => {
     if (!mic.shouldRestart.value) {        // ← .value
@@ -129,11 +131,21 @@
         <li class="list-item" style="width: 100%;">
           <div>
             <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
-            <span>{{ task.Title }}</span>
+            <span v-if="editId != task.ID">
+              {{ task.Title }}
+            </span>
+            <span v-else style="float: right;">
+              <input type="text" v-model="editedText" style="width: 100%;" />
+            </span>
           </div>
           <div class="right">
   <!--          <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;"></button>-->
-            <button class="squareBtn btnEdit" @click=""><EditIcon></EditIcon></button>
+            <span v-if="editId != task.ID">
+              <button class="squareBtn btnEdit" @click="editing(task.ID,task.Title)"><EditIcon></EditIcon></button>
+            </span>
+            <span v-else>
+              <button class="squareBtn btnTrash" @click="edit()"><SaveIcon></SaveIcon></button>
+            </span>
           </div>
         </li>
         <div class="right">
