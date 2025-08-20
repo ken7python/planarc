@@ -42,8 +42,8 @@
     };
   };
 
-  const numberOfToDO = ref<number>(10)
-  const finishedToDo = ref<number>(5);
+  const numberOfToDO = ref<number>(null)
+  const finishedToDo = ref<number>(null);
 
   const sumToday = ref<number>(0);
 
@@ -69,6 +69,8 @@
   const today = CONST.getToday();
   console.log(today);
 
+  const uSubjectNames = ref<string[]>([]);
+
   const username = ref<string | null>(null);
   async function loadData() {
     const profile = await user.profile();
@@ -85,6 +87,22 @@
     studyLogs.map(log => {
       sumToday.value += log.StudyTime;
     })
+
+    const TODOList = await todoModule.getList(today);
+    console.log(TODOList);
+
+    const finished = TODOList.filter(task => task.Checked)
+    console.log(finished);
+
+    numberOfToDO.value = TODOList.length || 0;
+    finishedToDo.value = finished.length || 0;
+
+    const uSubjectIDs = [...new Set(studyLogs.map(log => log.SubjectID))];
+    console.log(uSubjectIDs);
+    uSubjectNames.value = subject_list.filter(subject => uSubjectIDs.includes(subject.ID)).map(subject => {
+      return subject.Name;
+    });
+    console.log(uSubjectNames);
   }
   loadData();
 
@@ -156,10 +174,8 @@
 
       <div id="studyplan">
         <h3>学習予定一覧</h3>
-        <ul>
-          <li>科目1</li>
-          <li>科目2</li>
-          <li>科目3</li>
+        <ul v-for="subject in uSubjectNames" :key="subject">
+          <li>{{ subject }}</li>
         </ul>
       </div>
 
@@ -167,8 +183,8 @@
 
       <div id="progress">
         <h3>進捗バー</h3>
-        <div v-if="numberOfToDO && finishedToDo">
-          <p style="text-align: right;line-height: 0.5;">{{ Math.round(finishedToDo * 100 / numberOfToDO) }}%</p>
+        <div v-if="numberOfToDO != null && finishedToDo != null">
+          <p style="text-align: right;line-height: 0.5;">{{ ( Math.round(finishedToDo * 100 / numberOfToDO) ) || 0 }}%</p>
           <progress class="my-progress" :value="finishedToDo" :max="numberOfToDO"></progress>
         </div>
         <div v-else>
