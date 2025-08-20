@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { selectStyle } from '@/logic/style/selectStyle';
-  import {getColorboxStyle} from "@/logic/style/colorbox";
+  import { getColorboxStyle } from "@/logic/style/colorbox";
   import { subjectModule } from "@/logic/subject";
+  import { todoModule } from "../logic/todo";
   import { mic } from '@/logic/mic';
 
   import Addicon from '@/assets/icons/add.svg';
@@ -14,27 +15,30 @@
   let todoText = ref('');
   let status = ref('MUST');
 
+  const TODO = ref<any[]>([]);
   let subjects = ref<any[]>([]);
   async function loadData() {
     const subject_list = await subjectModule.getList();
     console.log(subject_list);
     subjects.value = subject_list;
+
+    TODO.value = await todoModule.getList();
   }
 
   loadData();
-
-  const TODO = ref([
-    { name: '国語', color: '#FF5733' },
-    { name: '数学', color: '#33FF57' },
-    { name: '英語', color: '#3357FF' },
-    { name: '理科', color: '#F1C40F' },
-    { name: '社会', color: '#8E44AD' },
-    { name: '歴史', color: '#FF8C00' },
-    { name: '地理', color: '#00CED1' },
-    { name: '物理', color: '#8A2BE2' },
-    { name: '化学', color: '#FF4500' },
-    { name: '生物', color: '#2E8B57' }
-  ]);
+  //
+  // const TODO = ref([
+  //   { name: '国語', color: '#FF5733' },
+  //   { name: '数学', color: '#33FF57' },
+  //   { name: '英語', color: '#3357FF' },
+  //   { name: '理科', color: '#F1C40F' },
+  //   { name: '社会', color: '#8E44AD' },
+  //   { name: '歴史', color: '#FF8C00' },
+  //   { name: '地理', color: '#00CED1' },
+  //   { name: '物理', color: '#8A2BE2' },
+  //   { name: '化学', color: '#FF4500' },
+  //   { name: '生物', color: '#2E8B57' }
+  // ]);
 
   const micbtn = async () => {
     if (!mic.shouldRestart.value) {        // ← .value
@@ -68,50 +72,58 @@
 </script>
 
 <template>
-  <div>
-    <div id="AddTodo">
-      <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
-        <option value="">科目を選択</option>
-        <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
-          {{ subject.Name }}
-        </option>
-      </select>
-      <div class="micdiv">
-        <input type="text" placeholder="ToDoを入力" v-model="todoText" />
-        <MicIcon class="mic" @click="micbtn" :style="mic.micStyle()"></MicIcon>
+  <div id="ToDoPage">
+    <div>
+      <div id="AddTodo">
+        <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
+          <option value="">科目を選択</option>
+          <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
+            {{ subject.Name }}
+          </option>
+        </select>
+        <div class="micdiv">
+          <input type="text" placeholder="ToDoを入力" v-model="todoText" />
+          <MicIcon class="mic" @click="micbtn" :style="mic.micStyle()"></MicIcon>
+        </div>
+        <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
+          <option value="MUST">MUST</option>
+          <option value="WANt">WANT</option>
+        </select>
+        <br>
+        <br>
+        <button class="btn" style="margin: 0 auto;">
+          <Addicon></Addicon>
+          追加
+        </button>
       </div>
-      <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
-        <option value="MUST">MUST</option>
-        <option value="WANt">WANT</option>
-      </select>
       <br>
-      <br>
-      <button class="btn" style="margin: 0 auto;">
-        <Addicon></Addicon>
-        追加
-      </button>
     </div>
-    <br>
-  </div>
 
-  <div id="List">
-    <p style="color: white;line-height: 0">ToDoリストのサンプル(まだ追加できません)</p>
-    <ul class="list-ul" v-for="(task, index) in TODO" :key="index" style="display: flex;">
-      <li class="list-item" style="width: 100%;">
-        <div>
-          <span :style="getColorboxStyle(task.color)" style="margin-right: 4px;margin-left: 4px;"></span>
-          <span>{{ task.name }}</span>
-        </div>
+    <div id="List">
+      <ul class="list-ul" v-for="(task, index) in TODO" :key="index" style="display: flex;">
+        <li class="list-item" style="width: 100%;">
+          <div>
+            <span :style="getColorboxStyle(task.color)" style="margin-right: 4px;margin-left: 4px;"></span>
+            <span>{{ task.name }}</span>
+          </div>
+          <div class="right">
+  <!--          <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;"></button>-->
+            <button class="squareBtn btnEdit" @click=""><EditIcon></EditIcon></button>
+          </div>
+        </li>
         <div class="right">
-<!--          <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;"></button>-->
-          <button class="squareBtn btnEdit" @click=""><EditIcon></EditIcon></button>
+          <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" />
+          <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;"><MoveIcon></MoveIcon></button>
         </div>
-      </li>
-      <div class="right">
-        <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" />
-        <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;"><MoveIcon></MoveIcon></button>
-      </div>
-    </ul>
+      </ul>
+      <ul v-if="TODO.length === 0" class="list-ul">
+        <li style="width: 100%;text-align: center;">
+          <div>
+            <span style="color: white;">タスクがありません</span>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -121,5 +133,16 @@
   }
   #TODOList {
     text-align: center;
+  }
+  #ToDoPage {
+    height: calc(100dvh - 80px - 60px - 60px - 40px);
+    display: grid;
+    grid-template-rows: auto 1fr
+  }
+
+  .selectbox,input[type="text"] {
+    padding-bottom: 4px;
+    margin-bottom: 0px;
+    margin-top: 0px;
   }
 </style>
