@@ -130,8 +130,8 @@
     </div>
 
     <div id="List">
-      <ul class="list-ul" v-for="(task, index) in TODO" :key="index" style="display: flex;">
-        <li class="list-item" style="width: 100%;">
+      <ul class="list-ul" v-for="(task, index) in TODO" :key="index">
+        <li class="list-item" style="width: calc(100dvw - 10px);">
           <div>
             <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
             <span v-if="editId != task.ID">
@@ -149,12 +149,11 @@
             <span v-else>
               <button class="squareBtn btnTrash" @click="edit()"><SaveIcon></SaveIcon></button>
             </span>
+
+            <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" v-model="task.Checked" @click="check(task.ID)" />
+            <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;"><MoveIcon></MoveIcon></button>
           </div>
         </li>
-        <div class="right">
-          <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" v-model="task.Checked" @click="check(task.ID)" />
-          <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;"><MoveIcon></MoveIcon></button>
-        </div>
       </ul>
       <ul v-if="TODO.length === 0" class="list-ul">
         <li style="width: 100%;text-align: center;">
@@ -184,5 +183,10 @@
     padding-bottom: 4px;
     margin-bottom: 0px;
     margin-top: 0px;
+  }
+
+  #List {
+    margin-right: -5px;
+    margin-left: -5px;
   }
 </style>

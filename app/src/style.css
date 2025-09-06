@@ -94,12 +94,9 @@ input[type="time"] {
 
 #List {
     background-color: #1C409A;
-    padding-top: 4px;
-    padding-left: 2vw;
-    padding-right: 2vw;
 
-    margin-right: -5px;
-    margin-left: -5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
 
     flex: 1 1 auto;
     overflow-y: auto; /* 縦方向のスクロールを有効に */
@@ -118,12 +115,8 @@ input[type="time"] {
     background-color: #FFFFFF;
     border: 2px solid white; /* 白い枠 */
 
-    margin-top: 8px;
-    margin-bottom: 8px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-left: 8px;
-    border-radius: 8px; /* 角を丸く */
+    margin: 4px 4px;
+    border-radius: 4px; /* 角を丸く */
     font-size: 1rem;
 }
 .right {

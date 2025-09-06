@@ -100,8 +100,8 @@
       <div v-if="subjects.length === 0" style="text-align: center; margin-top: 20px;">
         <p style="color: white;line-height: 0">科目がまだ追加されていません</p>
       </div>
-      <ul class="list-ul" v-if="subjects">
-        <li class="list-item" v-for="(subject, index) in subjects" :key="index">
+      <ul class="list-ul" v-if="subjects" v-for="(subject, index) in subjects" :key="index">
+        <li class="list-item">
           <div>
             <span :style="getColorboxStyle(subject.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
             <input type="text" v-if="editID === subject.ID" v-model="subject.Name" style="width: 64vw;height: 20px;">
