@@ -36,5 +36,25 @@ export const unfinishedModule = {
             alert("サーバとの通信に失敗しました");
             return null;
         }
+    },
+    delete: async function(id :number){
+        const res = await fetch(`${this.api}/delete`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            },
+            body: JSON.stringify({
+                "id": id
+            })
+        })
+        console.log(await res)
+        if (res.ok) {
+            return true;
+        }else {
+            console.error('Failed to fetch unfinished:', res.statusText);
+            alert("サーバとの通信に失敗しました");
+            return null;
+        }
     }
 }

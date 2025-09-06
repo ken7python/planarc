@@ -28,12 +28,17 @@
       unfinished[i]["Color"] = subjects.value.find((subject) => subject.ID === unfinished[i].SubjectID)?.Color || '#000000';
       ++i;
     }
-    
+
     unfinishedTask.value = unfinished;
     console.log(unfinished);
     username.value = profile.username;
   }
   loadData();
+
+  function deleteList(id :number) {
+    unfinishedModule.delete(id);
+    loadData();
+  };
 </script>
 
 <template>
@@ -47,7 +52,7 @@
           </div>
           <div class="right">
             <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;"><moveIcon></moveIcon></button>
-            <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;"><deleteIcon></deleteIcon></button>
+            <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;" @click="deleteList(task.ID)"><deleteIcon></deleteIcon></button>
           </div>
         </li>
       </ul>

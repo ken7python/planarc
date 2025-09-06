@@ -89,6 +89,7 @@ func main() {
 	unfinished.Use(authMiddleware())
 	unfinished.GET("/", getUnfinishedByUserID)
 	unfinished.POST("/move", moveToUnfinished)
+	unfinished.POST("/delete", deleteUnfinished)
 
 	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")

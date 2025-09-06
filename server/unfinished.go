@@ -72,3 +72,21 @@ func moveToUnfinished(c *gin.Context) {
 	fmt.Println("Sccuess creating Unfinished List")
 	c.JSON(http.StatusOK, gin.H{"message": "Unfinished Listを作成しました"})
 }
+
+func deleteUnfinished(c *gin.Context) {
+	fmt.Println("unfinished/delete")
+	var req struct {
+		ID uint `json:"id"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "リクエストの解析に失敗しました"})
+		return
+	}
+
+	db.Model(&unfinishedLIST{}).Where("id = ?", req.ID).Delete(&unfinishedLIST{})
+
+	fmt.Println("Sccuess deleting Unfinished List")
+	c.JSON(http.StatusOK, gin.H{"message": "Unfinished Listを削除しました"})
+}
