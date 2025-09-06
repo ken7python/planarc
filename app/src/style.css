@@ -112,6 +112,7 @@ input[type="time"] {
 .list-item {
     display: flex;
     justify-content: space-between; /* 左右に配置 */
+    align-items: center;
     background-color: #FFFFFF;
     border: 2px solid white; /* 白い枠 */
 
@@ -182,4 +183,18 @@ html, body {
 
 summary {
     font-size: 1.2rem;
+}
+
+.task-title {
+    flex: 1;                  /* 残りの幅を全部使う */
+    min-width: 0;             /* ←これ超重要！ */
+    white-space: nowrap;       /* 折り返さない */
+    overflow: hidden;          /* はみ出した部分を隠す */
+    text-overflow: ellipsis;   /* 省略記号「...」を付ける */
+}
+
+.task-input {
+    flex: 1;          /* ←余った幅ぜんぶ取る */
+    min-width: 0;     /* ←必須 */
+    box-sizing: border-box; /* padding含めて幅を計算 */
 }
