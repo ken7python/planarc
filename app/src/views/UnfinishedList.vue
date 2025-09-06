@@ -51,9 +51,9 @@
     <div id="List">
       <ul class="list-ul" v-if="unfinishedTask.length > 0">
         <li class="list-item" v-for="(task, index) in unfinishedTask" :key="index">
-          <div>
+          <div class="left-group">
             <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
-            <span>{{ task.Title }}</span>
+            <span class="task-title">{{ task.Title }}</span>
           </div>
           <div class="right">
             <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;" @click="back(task.ID)"><moveIcon></moveIcon></button>
