@@ -185,3 +185,7 @@ html, body {
     height: 100%;
     overflow: hidden; /* ページ全体のスクロール禁止 */
 }
+
+summary {
+    font-size: 1.2rem;
+}
