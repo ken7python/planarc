@@ -31,7 +31,7 @@ input[type="text"], input[type="password"],.selectbox {
 input[type="date"] {
     width: 80vw;
     background-color: #FFFFFF;
-    padding: 10px 12px;
+    padding: 4px 12px;
     font-size: 16px;
     margin: 4px 0;
     border: 1px solid #E2E8F8;
@@ -65,7 +65,7 @@ input[type="date"]::placeholder {
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(0.4) sepia(1) saturate(5) hue-rotate(190deg);
     cursor: pointer;
-    height: 22px;
+    height: 18px;
     width: 22px;
 }
 
@@ -94,7 +94,6 @@ input[type="time"] {
 #List {
     background-color: #1C409A;
     padding-top: 4px;
-    padding-bottom: 4px;
     padding-left: 2vw;
     padding-right: 2vw;
 

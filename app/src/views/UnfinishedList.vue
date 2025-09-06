@@ -50,7 +50,7 @@
 
 <style scoped>
   #List{
-    height: calc(100vh - 145px);
+    height: calc(100vh - 114px);
     overflow-y: scroll;
   }
 </style>

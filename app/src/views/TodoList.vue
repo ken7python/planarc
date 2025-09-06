@@ -172,7 +172,7 @@
     text-align: center;
   }
   #ToDoPage {
-    height: calc(100dvh - 80px - 60px - 60px - 40px);
+    height: calc(100dvh - 80px - 34px - 40px - 40px);
     display: grid;
     grid-template-rows: auto 1fr
   }
