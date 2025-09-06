@@ -102,8 +102,8 @@
         mic.tmp = interim;
       }
     }
-    // Vueのrefを使ってるなら todoText はどこかで ref('') しておいてね
-    todoText.value = mic.result + mic.tmp;
+
+    todoText.value = mic.result;
   });
 </script>
 

@@ -135,7 +135,7 @@
       } else {
         interim += transcript;
         mic.tmp = interim;
-        enjoyment.value = mic.result + mic.tmp;
+        enjoyment.value = mic.result;
       }
     }
   };

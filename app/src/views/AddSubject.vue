@@ -64,7 +64,7 @@
       } else {
         interim += transcript;
         mic.tmp = interim;
-        subjectName.value = mic.result + mic.tmp;
+        subjectName.value = mic.result;
       }
     }
   };

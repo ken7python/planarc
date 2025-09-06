@@ -31,7 +31,7 @@
       } else {
         interim += transcript;
         mic.tmp = interim;
-        message.value = mic.result + mic.tmp;
+        message.value = mic.result;
       }
     }
   };
