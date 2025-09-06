@@ -133,6 +133,8 @@
       <ul class="list-ul" v-for="(task, index) in TODO" :key="index">
         <li class="list-item" style="width: calc(100dvw - 10px);">
           <div>
+            <span v-if="task.Status === 'MUST'">M</span>
+            <span v-if="task.Status === 'WANT'">W</span>
             <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
             <span v-if="editId != task.ID">
               {{ task.Title }}
