@@ -102,10 +102,10 @@
       </div>
       <ul class="list-ul" v-if="subjects" v-for="(subject, index) in subjects" :key="index">
         <li class="list-item">
-          <div>
+          <div class="left-group">
             <span :style="getColorboxStyle(subject.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
-            <input type="text" v-if="editID === subject.ID" v-model="subject.Name" style="width: 64vw;height: 20px;">
-            <span v-else>{{ subject.Name }}</span>
+            <input type="text" v-if="editID === subject.ID" v-model="subject.Name" class="task-input" style="height: 20px;">
+            <span class="task-title" v-else>{{ subject.Name }}</span>
           </div>
           <div class="right">
             <button v-if="subject.ID != editID" @click="editID=subject.ID" class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;">

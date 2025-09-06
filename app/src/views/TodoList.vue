@@ -189,11 +189,4 @@
     margin-right: -5px;
     margin-left: -5px;
   }
-
-  .left-group {
-    display: flex;          /* 左グループを横並び */
-    align-items: center;
-    flex: 1;                /* 幅を伸ばす */
-    min-width: 0;           /* ←これが省略効かせるキモ */
-  }
 </style>
