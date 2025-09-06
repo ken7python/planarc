@@ -85,6 +85,11 @@ func main() {
 	todo.POST("/check", ToDoChecked)
 	todo.POST("/edit", ToDoEdit)
 
+	unfinished := api.Group("/unfinished")
+	unfinished.Use(authMiddleware())
+	unfinished.GET("/", getUnfinishedByUserID)
+	unfinished.POST("/move", moveToUnfinished)
+
 	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")
 }

@@ -5,6 +5,7 @@
   import { subjectModule } from "@/logic/subject";
   import { todoModule } from "../logic/todo";
   import { mic } from '@/logic/mic';
+  import { unfinishedModule } from "../logic/unfinished";
 
   import Addicon from '@/assets/icons/add.svg';
   import EditIcon from '@/assets/icons/edit.svg';
@@ -45,6 +46,14 @@
     todoModule.add(props.date, todoText.value, subjectName.value, status.value);
     todoText.value = "";
     loadData();
+  };
+
+  async function move(id :number) {
+    const res :boolean = await unfinishedModule.move(id);
+    if (res) {
+      todoText.value = "";
+      loadData();
+    }
   };
 
   function check(id :number) {
@@ -151,7 +160,7 @@
             </span>
 
             <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" v-model="task.Checked" @click="check(task.ID)" />
-            <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;"><MoveIcon></MoveIcon></button>
+            <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;" @click="move(task.ID)"><MoveIcon></MoveIcon></button>
           </div>
         </li>
       </ul>
