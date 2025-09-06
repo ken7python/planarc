@@ -132,16 +132,14 @@
     <div id="List">
       <ul class="list-ul" v-for="(task, index) in TODO" :key="index">
         <li class="list-item" style="width: calc(100dvw - 10px);">
-          <div>
+          <div class="left-group">
             <span v-if="task.Status === 'MUST'">M</span>
             <span v-if="task.Status === 'WANT'">W</span>
             <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
-            <span v-if="editId != task.ID">
+            <span v-if="editId != task.ID" class="task-title">
               {{ task.Title }}
             </span>
-            <span v-else style="float: right;">
-              <input type="text" v-model="editedText" style="width: 100%;" />
-            </span>
+            <input v-else type="text" v-model="editedText" class="task-input"/>
           </div>
           <div class="right">
   <!--          <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;"></button>-->
