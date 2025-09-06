@@ -61,8 +61,4 @@
     margin: 10px 0;
     margin-bottom: 80px;
   }
-
-  .btn{
-    width: 200px;
-  }
 </style>

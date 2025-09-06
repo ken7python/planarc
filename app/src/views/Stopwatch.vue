@@ -58,23 +58,29 @@
     </select>
 
     <div id="start">
-      <button class="btn" @click="stopwatch.start()"><startIcon></startIcon>開始</button>
+      <button class="btn sbtn" @click="stopwatch.start()"><startIcon></startIcon>開始</button>
       <span class="time">
-        <span v-if="stopwatch.sHours.value != null && stopwatch.sHours.value<10">0{{ stopwatch.sHours.value }}</span>
-        <span v-else>{{ stopwatch.sHours.value }}</span>
-        <span v-if="stopwatch.sMinutes.value != null">:</span>
-        <span v-if="stopwatch.sMinutes.value != null && stopwatch.sMinutes.value<10">0{{ stopwatch.sMinutes.value }}</span>
-        <span v-else>{{ stopwatch.sMinutes }}</span>
+        <span v-if="stopwatch.sHours.value != null && stopwatch.sMinutes.value != null">
+          <span v-if="stopwatch.sHours.value != null && stopwatch.sHours.value<10">0{{ stopwatch.sHours.value }}</span>
+          <span v-else>{{ stopwatch.sHours.value }}</span>
+          <span v-if="stopwatch.sMinutes.value != null">:</span>
+          <span v-if="stopwatch.sMinutes.value != null && stopwatch.sMinutes.value<10">0{{ stopwatch.sMinutes.value }}</span>
+          <span v-else>{{ stopwatch.sMinutes }}</span>
+        </span>
+        <span v-else>--:--</span>
       </span>
     </div>
     <div id="end">
-      <button class="btn" @click="stopwatch.stop()"><stopIcon></stopIcon>終了</button>
+      <button class="btn sbtn" @click="stopwatch.stop()"><stopIcon></stopIcon>終了</button>
       <span class="time">
-        <span v-if="stopwatch.eHours.value != null && stopwatch.eHours.value<10">0{{ stopwatch.eHours.value }}</span>
-        <span v-else>{{ stopwatch.eHours.value }}</span>
-        <span v-if="stopwatch.eMinutes.value != null">:</span>
-        <span v-if="stopwatch.eMinutes.value != null && stopwatch.eMinutes.value<10">0{{ stopwatch.eMinutes.value }}</span>
-        <span v-else>{{ stopwatch.eMinutes }}</span>
+        <span v-if="stopwatch.eHours.value != null && stopwatch.eMinutes.value != null">
+          <span v-if="stopwatch.eHours.value != null && stopwatch.eHours.value<10">0{{ stopwatch.eHours.value }}</span>
+          <span v-else>{{ stopwatch.eHours.value }}</span>
+          <span v-if="stopwatch.eMinutes.value != null">:</span>
+          <span v-if="stopwatch.eMinutes.value != null && stopwatch.eMinutes.value<10">0{{ stopwatch.eMinutes.value }}</span>
+          <span v-else>{{ stopwatch.eMinutes }}</span>
+        </span>
+        <span v-else>--:--</span>
       </span>
     </div>
     <div id="res">
@@ -98,11 +104,13 @@
     margin: 10px 0;
   }
 
-  .btn{
-    width: 200px;
-  }
   .time {
     font-size: 42px;
     margin-left: 10px;
+    width: 120px;
+  }
+
+  .sbtn {
+    width: 100px;
   }
 </style>

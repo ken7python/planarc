@@ -161,8 +161,4 @@
     border-radius: 4px;
   }
 
-  .btn {
-    width: 45vw;
-    height: 60px;
-  }
 </style>
