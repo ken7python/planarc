@@ -40,7 +40,7 @@
   </div>
   <HeaderDaily v-model:menu="activeMenu"/>
 
-  <div id="main">
+  <div id="main" :key="date">
     <TodoList v-if="activeMenu === list" :date="date" />
     <StudyLog v-if="activeMenu === studylog" :date="date" />
     <Track v-if="activeMenu === track" :date="date" />
