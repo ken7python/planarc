@@ -90,6 +90,7 @@ func main() {
 	unfinished.GET("/", getUnfinishedByUserID)
 	unfinished.POST("/move", moveToUnfinished)
 	unfinished.POST("/delete", deleteUnfinished)
+	unfinished.POST("/back", backUnfinished)
 
 	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")

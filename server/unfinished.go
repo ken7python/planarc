@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 type unfinishedLIST struct {
@@ -89,4 +90,50 @@ func deleteUnfinished(c *gin.Context) {
 
 	fmt.Println("Sccuess deleting Unfinished List")
 	c.JSON(http.StatusOK, gin.H{"message": "Unfinished Listを削除しました"})
+}
+
+func backUnfinished(c *gin.Context) {
+	fmt.Println("unfinished/back")
+	var req struct {
+		ID uint `json:"id"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "リクエストの解析に失敗しました"})
+		return
+	}
+
+	var unfinished unfinishedLIST
+
+	res := db.Model(&unfinishedLIST{}).Where("id = ?", req.ID).First(&unfinished)
+	if res.Error != nil {
+		fmt.Println("Error fetching Unfinished List:", res.Error)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "UnfinishedLISTの取得に失敗しました"})
+		return
+	}
+	fmt.Println("Fetched Unfinished List:", unfinished)
+
+	loc, _ := time.LoadLocation("Asia/Tokyo")
+	now := time.Now().In(loc)
+
+	var todo = TODOLIST{
+		Date:      now.Format("2006-01-02"),
+		Title:     unfinished.Title,
+		Status:    unfinished.Status,
+		SubjectID: unfinished.SubjectID,
+		UUID:      unfinished.UUID,
+		Checked:   false,
+	}
+
+	if err := db.Model(&TODOLIST{}).Create(&todo).Error; err != nil {
+		fmt.Println("Error creating ToDo List:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "ToDo Listの作成に失敗しました"})
+		return
+	}
+
+	db.Model(&unfinishedLIST{}).Where("id = ?", req.ID).Delete(&unfinishedLIST{})
+
+	fmt.Println("Sccuess creating ToDo List")
+	c.JSON(http.StatusOK, gin.H{"message": "ToDo Listを作成しました"})
 }

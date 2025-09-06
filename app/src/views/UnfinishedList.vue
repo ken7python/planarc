@@ -39,6 +39,11 @@
     unfinishedModule.delete(id);
     loadData();
   };
+
+  function back(id :number) {
+    unfinishedModule.back(id);
+    loadData();
+  }
 </script>
 
 <template>
@@ -51,7 +56,7 @@
             <span>{{ task.Title }}</span>
           </div>
           <div class="right">
-            <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;"><moveIcon></moveIcon></button>
+            <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;" @click="back(task.ID)"><moveIcon></moveIcon></button>
             <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;" @click="deleteList(task.ID)"><deleteIcon></deleteIcon></button>
           </div>
         </li>
