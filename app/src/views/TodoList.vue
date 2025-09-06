@@ -95,7 +95,7 @@
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const transcript = e.results[i][0].transcript;
       if (e.results[i].isFinal) {
-        mic.result += transcript;
+        mic.result = transcript;
         mic.tmp = '';
       } else {
         interim += transcript;
@@ -103,7 +103,7 @@
       }
     }
 
-    todoText.value = mic.result;
+    todoText.value = mic.result || mic.tmp;
   });
 </script>
 
