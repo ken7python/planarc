@@ -101,29 +101,32 @@
 <template>
   <div id="ToDoPage">
     <div>
-      <div id="AddTodo">
-        <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
-          <option value="">科目を選択</option>
-          <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
-            {{ subject.Name }}
-          </option>
-        </select>
-        <div class="micdiv">
-          <input type="text" placeholder="ToDoを入力" v-model="todoText" />
-          <MicIcon class="mic" @click="micbtn" :style="mic.micStyle()"></MicIcon>
+      <details>
+        <summary>リスト作成</summary>
+        <div id="AddTodo">
+          <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
+            <option value="">科目を選択</option>
+            <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
+              {{ subject.Name }}
+            </option>
+          </select>
+          <div class="micdiv">
+            <input type="text" placeholder="ToDoを入力" v-model="todoText" />
+            <MicIcon class="mic" @click="micbtn" :style="mic.micStyle()"></MicIcon>
+          </div>
+          <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
+            <option value="MUST">MUST</option>
+            <option value="WANT">WANT</option>
+          </select>
+          <br>
+          <br>
+          <button class="btn" style="margin: 0 auto;" @click="add">
+            <Addicon></Addicon>
+            追加
+          </button>
         </div>
-        <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
-          <option value="MUST">MUST</option>
-          <option value="WANT">WANT</option>
-        </select>
         <br>
-        <br>
-        <button class="btn" style="margin: 0 auto;" @click="add">
-          <Addicon></Addicon>
-          追加
-        </button>
-      </div>
-      <br>
+      </details>
     </div>
 
     <div id="List">
@@ -172,7 +175,7 @@
     text-align: center;
   }
   #ToDoPage {
-    height: calc(100dvh - 80px - 60px - 60px - 40px);
+    height: calc(100dvh - 80px - 34px - 40px - 40px);
     display: grid;
     grid-template-rows: auto 1fr
   }

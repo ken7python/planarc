@@ -114,7 +114,7 @@
     left: 0;
     */
     width: 100%;
-    height: 60px;
+    height: 30px;
     background-color: #1C409A;
     display: flex;
     justify-content: center;
@@ -124,43 +124,43 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    height: 80px;
+    height: 40px;
     /* 横方向中央寄せは親のflexで制御 */
     padding-left: 0;
   }
   .icon {
     color: #FFFFFF;
-    width: 35px;
-    height: 35px;
+    width: 24px;
+    height: auto;
     display: inline-block;
   }
   .link {
     color: #FFFFFF;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: bold;
     margin: 0;
-    line-height: 1;
+    line-height: 0;
     display: flex;
     align-items: center;
-    height: 80px;
+    height: 40px;
   }
 
   .logout {
     position: absolute;
     right: 20px;
-    top: 10px;
-    width: 40px;
-    height: 40px;
+    top: 5px;
+    width: 20px;
+    height: auto;
     cursor: pointer;
   }
 
   .back {
     position: absolute;
     left: 20px;
-    top: 15px;
+    top: 5px;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
   }
 
 </style>

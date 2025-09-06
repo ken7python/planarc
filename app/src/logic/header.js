@@ -7,13 +7,13 @@ export const header = {
         }
     },
 
-    fontsize: '24px',
+    // fontsize: '8px',
     getLinkStyle: function(menu, trueMenu){
         const weight = menu === trueMenu ? 'bold' : 'normal';
         return {
             color: header.getColor(menu,trueMenu),
             fontWeight: weight,
-            fontSize: header.fontsize
+            fontSize: '12px',
         }
     },
 

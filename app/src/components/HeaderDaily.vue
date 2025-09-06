@@ -98,7 +98,7 @@
     left: 0;
     */
     width: 100%;
-    height: 60px;
+    height: 44px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
