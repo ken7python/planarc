@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	limiter = rate.NewLimiter(3, 10) // Allow 1 request per second with a burst of 5
+	limiter = rate.NewLimiter(4, 16) // 3 requests per second with a burst of 10
 	mu      sync.Mutex
 )
 
@@ -60,12 +60,13 @@ func main() {
 	//})
 
 	api := r.Group("/api")
-	api.Use(rateLimitMiddleware())
+	//api.Use(rateLimitMiddleware())
 
 	accounts := api.Group("/accounts")
 	accounts.POST("/register", register)
 	accounts.POST("/login", login)
 	accounts.GET("/profile", authMiddleware(), profile)
+	accounts.Use(rateLimitMiddleware())
 
 	subjects := api.Group("/subject")
 	subjects.Use(authMiddleware())
@@ -97,7 +98,7 @@ func main() {
 	status.GET("/", getStatus)
 	status.POST("/enjoyment", setEnjoyment)
 	status.POST("/mood", setMood)
-	
+
 	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")
 }
