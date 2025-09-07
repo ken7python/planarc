@@ -29,7 +29,7 @@ func statusInit(c *gin.Context) *Status {
 			Enjoyment: "",
 			mood:      0,
 		}
-		if err := db.Model(&statusToday).Create(&statusToday); err != nil {
+		if err := db.Model(&Status{}).Create(&statusToday).Error; err != nil {
 			fmt.Println("Error creating status:", err)
 			return nil
 		} else {
@@ -60,13 +60,13 @@ func setEnjoyment(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "ステータスを更新しました"})
 }
 
-func getEnjoyment(c *gin.Context) {
-	fmt.Println("status/enjoyment")
+func getStatus(c *gin.Context) {
+	fmt.Println("status")
 	statusToday := statusInit(c)
 	if statusToday == nil {
 		c.JSON(500, gin.H{"error": "ステータスの初期化に失敗しました"})
 		return
 	}
 
-	c.JSON(200, gin.H{"enjoyment": statusToday.Enjoyment})
+	c.JSON(200, gin.H{"status": statusToday})
 }
