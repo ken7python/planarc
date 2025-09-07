@@ -156,7 +156,7 @@
               <button class="squareBtn btnEdit" @click="editing(task.ID,task.Title)"><EditIcon></EditIcon></button>
             </span>
             <span v-else>
-              <button class="squareBtn btnTrash" @click="edit()"><SaveIcon></SaveIcon></button>
+              <button class="squareBtn btnSave" @click="edit()"><SaveIcon></SaveIcon></button>
             </span>
 
             <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" v-model="task.Checked" @click="check(task.ID)" />
