@@ -42,8 +42,8 @@
 
   loadData();
 
-  function add() {
-    todoModule.add(props.date, todoText.value, subjectName.value, status.value);
+  async function add() {
+    await todoModule.add(props.date, todoText.value, subjectName.value, status.value);
     todoText.value = "";
     loadData();
   };
@@ -56,8 +56,8 @@
     }
   };
 
-  function check(id :number) {
-    todoModule.check(id);
+  async function check(id :number) {
+    await todoModule.check(id);
     loadData();
   };
 
@@ -69,8 +69,8 @@
     editedText.value = title;
   }
 
-  function edit() {
-    todoModule.edit(editId.value, editedText.value);
+  async function edit() {
+    await todoModule.edit(editId.value, editedText.value);
     editId.value = 0;
     editedText.value = '';
     loadData();
