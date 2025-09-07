@@ -5,6 +5,7 @@
   import { todoModule } from "@/logic/todo";
   import { studyLog } from "@/logic/StudyLog";
   import { CONST } from "@/logic/const";
+  import { statusModule } from "@/logic/status";
 
   import Footer from "@/components/Footer.vue";
   import Header from "@/components/Header.vue";
@@ -109,6 +110,9 @@
       return subject.Name;
     });
     console.log(uSubjectNames.value);
+
+    const status = await statusModule.get(today);
+    console.log(status);
   }
   loadData();
 
