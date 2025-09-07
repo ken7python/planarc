@@ -14,7 +14,6 @@ type Status struct {
 }
 
 func statusInit(c *gin.Context) *Status {
-	fmt.Println("todo/")
 	uuid := GetProfile(c).UUID
 
 	date := c.Query("date")
@@ -37,4 +36,37 @@ func statusInit(c *gin.Context) *Status {
 			return &statusToday
 		}
 	}
+}
+
+func setEnjoyment(c *gin.Context) {
+	fmt.Println("status/enjoyment")
+	statusToday := statusInit(c)
+	if statusToday == nil {
+		c.JSON(500, gin.H{"error": "ステータスの初期化に失敗しました"})
+		return
+	}
+	var req struct {
+		Enjoyment string `json:"enjoyment"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(400, gin.H{"error": "リクエストの解析に失敗しました"})
+		return
+	}
+	statusToday.Enjoyment = req.Enjoyment
+	if err := db.Model(&statusToday).Updates(statusToday).Error; err == nil {
+		c.JSON(500, gin.H{"error": "ステータスの更新に失敗しました"})
+		return
+	}
+	c.JSON(200, gin.H{"message": "ステータスを更新しました"})
+}
+
+func getEnjoyment(c *gin.Context) {
+	fmt.Println("status/enjoyment")
+	statusToday := statusInit(c)
+	if statusToday == nil {
+		c.JSON(500, gin.H{"error": "ステータスの初期化に失敗しました"})
+		return
+	}
+
+	c.JSON(200, gin.H{"enjoyment": statusToday.Enjoyment})
 }
