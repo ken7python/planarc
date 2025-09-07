@@ -92,6 +92,12 @@ func main() {
 	unfinished.POST("/delete", deleteUnfinished)
 	unfinished.POST("/back", backUnfinished)
 
+	status := api.Group("/status")
+	status.Use(authMiddleware())
+	status.GET("/", getStatus)
+	status.POST("/enjoyment", setEnjoyment)
+	status.POST("/mood", setMood)
+	
 	fmt.Println("Starting server")
 	r.Run("0.0.0.0:8080")
 }
