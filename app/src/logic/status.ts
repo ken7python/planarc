@@ -16,7 +16,6 @@ export const statusModule = {
         }
     },
     setEnjoyment: async function(date :string,enjoyment :string) {
-        console.log(enjoyment);
         const res = await fetch(`${this.api}/enjoyment?date=${date}`, {
             method: 'POST',
             headers: {
@@ -34,5 +33,24 @@ export const statusModule = {
             alert("サーバとの通信に失敗しました");
             return null;
         }
-    }
+    },
+    setMood: async function(date :string,mood :number) {
+        const res = await fetch(`${this.api}/mood?date=${date}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            },
+            body: JSON.stringify({
+                "mood": mood
+            })
+        })
+        if (res.ok) {
+            return true;
+        } else {
+            console.error('Failed to fetch status:', res.statusText);
+            alert("サーバとの通信に失敗しました");
+            return null;
+        }
+    },
 }

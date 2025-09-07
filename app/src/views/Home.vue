@@ -35,7 +35,8 @@
 
   let selectedMood = ref<number>(null);
   function moodSelect(mood: number) {
-    selectedMood.value = mood;
+    // selectedMood.value = mood;
+    setMood(mood);
   }
   const getMoodStyle = (mood: number) => {
     return {
@@ -115,10 +116,10 @@
     console.log(status);
     if (status) {
       enjoyment.value = status.Enjoyment || '';
-      // selectedMood.value = status.Mood || null;
+      selectedMood.value = status.Mood || null;
     } else {
       enjoyment.value = '';
-      // selectedMood.value = null;
+      selectedMood.value = null;
     }
   }
   loadData();
@@ -126,6 +127,12 @@
   function setEnjoyment(enjoy: string) {
     console.log(enjoy);
     statusModule.setEnjoyment(today,enjoy);
+    loadData();
+  }
+
+  function setMood(mood: number) {
+    // console.log(mood);
+    statusModule.setMood(today,mood);
     loadData();
   }
 
