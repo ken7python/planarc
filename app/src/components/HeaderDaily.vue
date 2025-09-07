@@ -68,8 +68,8 @@
           <div class="iconDiv">
             <trackIcon />
           </div>
-          <span class="menuText">
-            TIME<br>TRACK
+          <span class="menuText" style="font-size: 10px;">
+            タイム<br>トラッキング
           </span>
         </a>
         <div :style="header.getUnderlineStyle(menu, track)"></div>
