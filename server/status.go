@@ -50,10 +50,12 @@ func setEnjoyment(c *gin.Context) {
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(400, gin.H{"error": "リクエストの解析に失敗しました"})
+		fmt.Println(err)
 		return
 	}
 	statusToday.Enjoyment = req.Enjoyment
-	if err := db.Model(&statusToday).Updates(statusToday).Error; err == nil {
+	fmt.Println(req.Enjoyment)
+	if err := db.Model(&statusToday).Updates(&statusToday).Error; err != nil {
 		c.JSON(500, gin.H{"error": "ステータスの更新に失敗しました"})
 		return
 	}
@@ -68,5 +70,5 @@ func getStatus(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{"status": statusToday})
+	c.JSON(200, statusToday)
 }

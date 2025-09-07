@@ -113,8 +113,21 @@
 
     const status = await statusModule.get(today);
     console.log(status);
+    if (status) {
+      enjoyment.value = status.Enjoyment || '';
+      // selectedMood.value = status.Mood || null;
+    } else {
+      enjoyment.value = '';
+      // selectedMood.value = null;
+    }
   }
   loadData();
+
+  function setEnjoyment(enjoy: string) {
+    console.log(enjoy);
+    statusModule.setEnjoyment(today,enjoy);
+    loadData();
+  }
 
   async function micbtn() {
     // alert('マイクボタンが押されました。');
@@ -160,7 +173,7 @@
           <input type="text" placeholder="今日の楽しみを入力してください" style="width: 70vw" v-model="enjoyment" />
           <mic-icon :style="mic.micStyle()" @click="micbtn"></mic-icon>
         </div>
-        <button class="squareBtn btnSave" style="margin-left: 20px;"><saveicon></saveicon></button>
+        <button class="squareBtn btnSave" style="margin-left: 20px;" @click="setEnjoyment(enjoyment)"><saveicon></saveicon></button>
       </div>
 
 

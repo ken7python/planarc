@@ -15,15 +15,16 @@ export const statusModule = {
             return null;
         }
     },
-    set: async function(status :string) {
-        const res = await fetch(`${this.api}/set`, {
+    setEnjoyment: async function(date :string,enjoyment :string) {
+        console.log(enjoyment);
+        const res = await fetch(`${this.api}/enjoyment?date=${date}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${user.getToken()}`
             },
             body: JSON.stringify({
-                "status": status
+                "enjoyment": enjoyment
             })
         })
         if (res.ok) {
