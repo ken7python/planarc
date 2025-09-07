@@ -29,6 +29,7 @@ export const CommentModule = {
                 this.refComment.value += decodedValue;
                 console.log(decodedValue);
             }
+            return true;
         }
         else {
             alert("サーバとの通信に失敗しました");
