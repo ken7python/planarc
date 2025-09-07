@@ -14,15 +14,24 @@ type Subjects struct {
 	Color string `gorm:"unique/not null"`
 }
 
-func getSubjectByUserID(c *gin.Context) {
-	fmt.Println("subject/")
-	uuid := GetProfile(c).UUID
+func retGetSubjectByUserID(uuid string) []Subjects {
 	var subjectList []Subjects
 
 	if err := db.Where("uuid = ?", uuid).Find(&subjectList).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "科目の取得に失敗しました"})
-		return
+		return nil
 	}
+	return subjectList
+}
+
+func getSubjectByUserID(c *gin.Context) {
+	fmt.Println("subject/")
+	uuid := GetProfile(c).UUID
+
+	subjectList := retGetSubjectByUserID(uuid)
+	if subjectList == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "科目の取得に失敗しました"})
+	}
+	
 	c.JSON(http.StatusOK, subjectList)
 }
 
