@@ -147,6 +147,10 @@ input[type="time"] {
 .btnEdit {
    background-color: #D9D9D9;
 }
+.btnSave {
+    background-color: #4CAF50;
+    color: #FFFFFF;
+}
 
 .micdiv {
     display: flex;

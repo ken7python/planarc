@@ -111,7 +111,7 @@
             <button v-if="subject.ID != editID" @click="editID=subject.ID" class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;">
               <EditIcon></EditIcon>
             </button>
-            <button v-else @click="edit" class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;">
+            <button v-else @click="edit" class="squareBtn btnSave" style="margin-right: 4px;margin-left: 4px;">
               <SaveIcon></SaveIcon>
             </button>
           </div>
