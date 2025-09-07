@@ -10,6 +10,13 @@ import (
 	"os"
 )
 
+type Comment struct {
+	ID   uint   `gorm:"primaryKey"`
+	Date string `gorm:"not null"`
+	UUID string `gorm:"not null"`
+	Note string `gorm:"not null"`
+}
+
 func getPrompt(uuid string, date string, name string, note string) string {
 	// Status取得
 	status := retGetStatus(uuid, date)
@@ -149,7 +156,32 @@ func reqComment(c *gin.Context) {
 		chunk := resp.Text()
 		//fmt.Println(chunk)
 		response += chunk
-		fmt.Fprintf(c.Writer, "%s\n\n", chunk)
+		fmt.Fprintf(c.Writer, "%s", chunk)
 		flusher.Flush()
 	}
+
+	saveComment(uuid, req.Date, response)
+
+	fmt.Println("Success generating content")
+}
+
+func saveComment(uuid string, date string, note string) {
+	comment := Comment{
+		Date: date,
+		UUID: uuid,
+		Note: note,
+	}
+
+	if err := db.Where("date = ? AND uuid = ?", date, uuid).First(&Comment{}).Error; err == nil {
+		// レコードが存在する場合、更新を行う
+		if err := db.Model(&Comment{}).Where("date = ? AND uuid = ?", date, uuid).Updates(comment).Error; err != nil {
+			fmt.Println("Error updating comment:", err)
+			return
+		}
+	} else if err := db.Create(&comment).Error; err != nil {
+		fmt.Println("Error creating comment:", err)
+		return
+	}
+
+	fmt.Println("Success creating comment")
 }
