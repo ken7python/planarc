@@ -18,20 +18,29 @@ type StudyLog struct {
 	StudyTime    int    `gorm:"not null"`
 }
 
-func getLogByUserID(c *gin.Context) {
-	fmt.Println("studylog/")
-	uuid := GetProfile(c).UUID
-
-	date := c.Query("date")
-
+func retGetLogByUserID(uuid string, date string) []StudyLog {
 	var logs []StudyLog
 
 	res := db.Model(&StudyLog{}).Where("uuid = ? and date = ?", uuid, date).Find(&logs)
 	if res.Error != nil {
 		fmt.Println("Error fetching study logs:", res.Error)
+		return nil
+	}
+
+	return logs
+}
+
+func getLogByUserID(c *gin.Context) {
+	fmt.Println("studylog/")
+	uuid := GetProfile(c).UUID
+	date := c.Query("date")
+
+	logs := retGetLogByUserID(uuid, date)
+	if logs == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "勉強記録の取得に失敗しました"})
 		return
 	}
+
 	fmt.Println("Fetched study logs:", len(logs))
 	c.JSON(http.StatusOK, logs)
 }
