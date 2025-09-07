@@ -35,4 +35,23 @@ export const CommentModule = {
             return null;
         }
     },
+    get: async function(date :string, note :string){
+        const res = await fetch(`${ this.api }/?date=${date}`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            }
+        })
+
+        if (await res.ok) {
+            const json = await res.json();
+            if (json) {
+                this.refComment.value = json.Note;
+                return json.comment;
+            }else {
+                this.refComment.value = "";
+            }
+        }
+    }
 }

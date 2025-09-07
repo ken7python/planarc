@@ -51,6 +51,12 @@
     console.log(comment);
     // ここでcommentを表示する処理を追加
   }
+
+  async function loadData() {
+    const comment = await CommentModule.get(props.date);
+    console.log(comment);
+  }
+  loadData();
 </script>
 
 <template>
