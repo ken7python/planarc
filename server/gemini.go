@@ -10,6 +10,13 @@ import (
 	"os"
 )
 
+type Comment struct {
+	ID   uint   `gorm:"primaryKey"`
+	Date string `gorm:"not null"`
+	UUID string `gorm:"not null"`
+	Note string `gorm:"not null"`
+}
+
 func getPrompt(uuid string, date string, name string, note string) string {
 	// Status取得
 	status := retGetStatus(uuid, date)
@@ -149,7 +156,56 @@ func reqComment(c *gin.Context) {
 		chunk := resp.Text()
 		//fmt.Println(chunk)
 		response += chunk
-		fmt.Fprintf(c.Writer, "%s\n\n", chunk)
+		fmt.Fprintf(c.Writer, "%s", chunk)
 		flusher.Flush()
+	}
+
+	saveComment(uuid, req.Date, response)
+
+	fmt.Println("Success generating content")
+}
+
+func retGetComment(uuid string, date string) *Comment {
+	var comment Comment
+	err := db.Model(&Comment{}).Where("date = ? AND uuid = ?", date, uuid).First(&comment).Error
+	//fmt.Println(comment)
+	if err != nil {
+		fmt.Println("Error fetching comment:", err)
+		return nil
+	}
+
+	return &comment
+}
+
+func getComment(c *gin.Context) {
+	fmt.Println("comment/")
+	uuid := GetProfile(c).UUID
+	date := c.Query("date")
+
+	comment := retGetComment(uuid, date)
+	fmt.Println(comment)
+
+	c.JSON(http.StatusOK, comment)
+}
+
+func saveComment(uuid string, date string, note string) {
+	comment := Comment{
+		Date: date,
+		UUID: uuid,
+		Note: note,
+	}
+	if retGetComment(uuid, date) == nil {
+		fmt.Println("No existing comment, creating new one.")
+		if err := db.Create(&comment).Error; err != nil {
+			fmt.Println("Error creating comment:", err)
+			return
+		}
+		fmt.Println("Success creating comment")
+	} else {
+		if err := db.Model(&Comment{}).Where("date = ? AND uuid = ?", date, uuid).Updates(comment).Error; err != nil {
+			fmt.Println("Error updating comment:", err)
+			return
+		}
+		fmt.Println("Success updating comment")
 	}
 }

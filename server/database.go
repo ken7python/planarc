@@ -20,6 +20,7 @@ func Migrate(database *gorm.DB) {
 	db.AutoMigrate(&TODOLIST{})
 	db.AutoMigrate(&unfinishedLIST{})
 	db.AutoMigrate(&Status{})
+	db.AutoMigrate(&Comment{})
 	log.Println("✅ データベース接続成功")
 }
 

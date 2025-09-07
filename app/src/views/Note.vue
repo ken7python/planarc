@@ -49,8 +49,20 @@
     disabled.value = true;
     const comment = await CommentModule.ask(props.date,message.value);
     console.log(comment);
+    if (await comment) {
+      message.value = '';
+    }else {
+      disabled.value = false;
+    }
+    console.log(comment);
     // ここでcommentを表示する処理を追加
   }
+
+  async function loadData() {
+    const comment = await CommentModule.get(props.date);
+    console.log(comment);
+  }
+  loadData();
 </script>
 
 <template>
@@ -59,19 +71,21 @@
       <textarea placeholder="メモ" v-model="message"></textarea>
       <mic-icon class="mic" :style="mic.micStyle()" @click="micbtn"></mic-icon>
     </div>
-    <br>
-    <button class="btn" style="margin: 0 auto;" @click="ask" :disabled="disabled">
-      <commentIcon style="margin-right: 8px;"></commentIcon>
-      <span v-if="!disabled">AIからのコメント</span>
-      <span v-else>通信中...</span>
-    </button>
-    <br>
+    <div v-if="!CommentModule.refComment.value">
+      <br>
+      <button class="btn" style="margin: 0 auto;" @click="ask" :disabled="disabled">
+        <commentIcon style="margin-right: 8px;"></commentIcon>
+        <span v-if="!disabled">AIからのコメント</span>
+        <span v-else>通信中...</span>
+      </button>
+      <br>
+    </div>
     <div id="comment">
       <div v-if="CommentModule.refComment.value">
-        <p>{{ CommentModule.refComment }}</p>
+        <span>{{ CommentModule.refComment }}</span>
       </div>
       <div v-else>
-        <p>コメントはまだありません。</p>
+        <span>コメントはまだありません。</span>
       </div>
     </div>
   </div>
@@ -81,7 +95,7 @@
   #note {
     text-align: center;
     overflow-y: auto;
-    height: calc(100vh - 60px - 60px - 60px);
+    height: calc(100vh - 75px - 60px - 60px);
   }
 
   textarea {

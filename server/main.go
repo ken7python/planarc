@@ -102,6 +102,7 @@ func main() {
 	gemini := api.Group("/comment")
 	gemini.Use(authMiddleware())
 	gemini.POST("/ask", reqComment)
+	gemini.GET("/", getComment)
 
 	fmt.Println("Starting server")
 
