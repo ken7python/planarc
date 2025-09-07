@@ -89,11 +89,8 @@ func setMood(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "ステータスを更新しました"})
 }
 
-func retGetStatus(c *gin.Context) *Status {
+func retGetStatus(uuid string, date string) *Status {
 	fmt.Println("status")
-
-	uuid := GetProfile(c).UUID
-	date := c.Query("date")
 
 	statusToday := statusInit(uuid, date)
 	if statusToday == nil {
@@ -103,7 +100,10 @@ func retGetStatus(c *gin.Context) *Status {
 }
 
 func getStatus(c *gin.Context) {
-	res := retGetStatus(c)
+	uuid := GetProfile(c).UUID
+	date := c.Query("date")
+
+	res := retGetStatus(uuid, date)
 	if res == nil {
 		c.JSON(500, gin.H{"error": "ステータスの初期化に失敗しました"})
 		return
