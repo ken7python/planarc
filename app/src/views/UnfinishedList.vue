@@ -35,13 +35,13 @@
   }
   loadData();
 
-  function deleteList(id :number) {
-    unfinishedModule.delete(id);
+  async function deleteList(id :number) {
+    await unfinishedModule.delete(id);
     loadData();
   };
 
-  function back(id :number) {
-    unfinishedModule.back(id);
+  async function back(id :number) {
+    await unfinishedModule.back(id);
     loadData();
   }
 </script>
