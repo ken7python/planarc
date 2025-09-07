@@ -16,20 +16,29 @@ type TODOLIST struct {
 	Status    string `gorm:"not null"`
 }
 
+func retGetTODOByUserID(uuid string, date string) []TODOLIST {
+	var todos []TODOLIST
+
+	res := db.Model(&TODOLIST{}).Where("uuid = ? and date = ?", uuid, date).Find(&todos)
+	if res.Error != nil {
+		fmt.Println("Error fetching ToDo List:", res.Error)
+		return nil
+	}
+	return todos
+}
+
 func getTODOByUserID(c *gin.Context) {
 	fmt.Println("todo/")
 	uuid := GetProfile(c).UUID
 
 	date := c.Query("date")
 
-	var todos []TODOLIST
-
-	res := db.Model(&TODOLIST{}).Where("uuid = ? and date = ?", uuid, date).Find(&todos)
-	if res.Error != nil {
-		fmt.Println("Error fetching ToDo List:", res.Error)
+	todos := retGetTODOByUserID(uuid, date)
+	if todos == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "TODOLISTの取得に失敗しました"})
 		return
 	}
+
 	fmt.Println("Fetched ToDo:", len(todos))
 	c.JSON(http.StatusOK, todos)
 }

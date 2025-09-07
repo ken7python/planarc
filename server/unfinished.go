@@ -16,18 +16,27 @@ type unfinishedLIST struct {
 	Status    string `gorm:"not null"`
 }
 
-func getUnfinishedByUserID(c *gin.Context) {
-	fmt.Println("unfinished/")
-	uuid := GetProfile(c).UUID
-
+func retGetUnfinishedByUserID(uuid string) []unfinishedLIST {
 	var unfinishedLists []unfinishedLIST
 
 	res := db.Model(&unfinishedLIST{}).Where("uuid = ?", uuid).Find(&unfinishedLists)
 	if res.Error != nil {
 		fmt.Println("Error fetching Unfinished List:", res.Error)
+		return nil
+	}
+	return unfinishedLists
+}
+
+func getUnfinishedByUserID(c *gin.Context) {
+	fmt.Println("unfinished/")
+	uuid := GetProfile(c).UUID
+
+	unfinishedLists := retGetUnfinishedByUserID(uuid)
+	if unfinishedLists == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "UnfinishedLISTの取得に失敗しました"})
 		return
 	}
+
 	fmt.Println("Fetched Unfinished List:", len(unfinishedLists))
 	c.JSON(http.StatusOK, unfinishedLists)
 }

@@ -1,0 +1,38 @@
+import { CONST } from "./const";
+import { user } from "./user";
+import { ref } from "vue";
+
+export const CommentModule = {
+    api: CONST.api() + '/comment',
+    refComment: ref(""),
+    ask: async function(date :string, note :string){
+        const res = await fetch(`${ this.api }/ask`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            },
+            body: JSON.stringify({
+                "date": date,
+                "note": note
+            })
+        })
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+
+        if (await res.ok) {
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                const decodedValue = decoder.decode(value);
+                this.refComment.value += decodedValue;
+                console.log(decodedValue);
+            }
+        }
+        else {
+            alert("サーバとの通信に失敗しました");
+            return null;
+        }
+    },
+}

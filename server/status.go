@@ -13,10 +13,7 @@ type Status struct {
 	Mood      uint   `gorm:"not null"`
 }
 
-func statusInit(c *gin.Context) *Status {
-	uuid := GetProfile(c).UUID
-
-	date := c.Query("date")
+func statusInit(uuid string, date string) *Status {
 
 	var statusToday Status
 	db.Model(&statusToday).Where("UUID = ? AND Date = ? ", uuid, date).Find(&statusToday)
@@ -39,8 +36,11 @@ func statusInit(c *gin.Context) *Status {
 }
 
 func setEnjoyment(c *gin.Context) {
+	uuid := GetProfile(c).UUID
+	date := c.Query("date")
+
 	fmt.Println("status/enjoyment")
-	statusToday := statusInit(c)
+	statusToday := statusInit(uuid, date)
 	if statusToday == nil {
 		c.JSON(500, gin.H{"error": "ステータスの初期化に失敗しました"})
 		return
@@ -64,7 +64,10 @@ func setEnjoyment(c *gin.Context) {
 
 func setMood(c *gin.Context) {
 	fmt.Println("status/mood")
-	statusToday := statusInit(c)
+
+	uuid := GetProfile(c).UUID
+	date := c.Query("date")
+	statusToday := statusInit(uuid, date)
 	if statusToday == nil {
 		c.JSON(500, gin.H{"error": "ステータスの初期化に失敗しました"})
 		return
@@ -86,13 +89,25 @@ func setMood(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "ステータスを更新しました"})
 }
 
-func getStatus(c *gin.Context) {
+func retGetStatus(uuid string, date string) *Status {
 	fmt.Println("status")
-	statusToday := statusInit(c)
+
+	statusToday := statusInit(uuid, date)
 	if statusToday == nil {
+		return nil
+	}
+	return statusToday
+}
+
+func getStatus(c *gin.Context) {
+	uuid := GetProfile(c).UUID
+	date := c.Query("date")
+
+	res := retGetStatus(uuid, date)
+	if res == nil {
 		c.JSON(500, gin.H{"error": "ステータスの初期化に失敗しました"})
 		return
 	}
 
-	c.JSON(200, statusToday)
+	c.JSON(200, res)
 }

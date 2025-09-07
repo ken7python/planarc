@@ -4,6 +4,8 @@
   import { ref } from 'vue';
   import { mic } from '@/logic/mic';
 
+  import { CommentModule } from "../logic/comment";
+
   const message = ref<string>('');
 
   async function micbtn() {
@@ -35,6 +37,20 @@
       }
     }
   };
+
+  const props = defineProps({
+    date: String
+  })
+
+  const disabled = ref(false);
+  CommentModule.refComment.value = "";
+
+  async function ask() {
+    disabled.value = true;
+    const comment = await CommentModule.ask(props.date,message.value);
+    console.log(comment);
+    // ここでcommentを表示する処理を追加
+  }
 </script>
 
 <template>
@@ -44,13 +60,19 @@
       <mic-icon class="mic" :style="mic.micStyle()" @click="micbtn"></mic-icon>
     </div>
     <br>
-    <button class="btn" style="margin: 0 auto;">
+    <button class="btn" style="margin: 0 auto;" @click="ask" :disabled="disabled">
       <commentIcon style="margin-right: 8px;"></commentIcon>
-      AIからのコメント
+      <span v-if="!disabled">AIからのコメント</span>
+      <span v-else>通信中...</span>
     </button>
     <br>
     <div id="comment">
-      <p>AIからのコメントがここに表示されます。</p>
+      <div v-if="CommentModule.refComment.value">
+        <p>{{ CommentModule.refComment }}</p>
+      </div>
+      <div v-else>
+        <p>コメントはまだありません。</p>
+      </div>
     </div>
   </div>
 </template>
@@ -58,6 +80,8 @@
 <style scoped>
   #note {
     text-align: center;
+    overflow-y: auto;
+    height: calc(100vh - 60px - 60px - 60px);
   }
 
   textarea {
