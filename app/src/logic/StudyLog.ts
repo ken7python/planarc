@@ -191,15 +191,15 @@ export const studyLog = {
 
         if (this.isNull(sHours) || this.isNull(sMinutes)) {
             alert("開始時間を入力してください");
-            return;
+            return false;
         }
         if ( this.isNull(eHours) || this.isNull(eMinutes) ){
             alert("終了時間を入力してください");
-            return;
+            return false;
         }
         if (!subject) {
             alert("科目を入力してください");
-            return;
+            return false;
         }
 
         // alert(`科目ID:${subject}勉強時間: ${sHours}時${sMinutes}分〜${eHours}時${eMinutes}分`);
@@ -224,10 +224,11 @@ export const studyLog = {
             stopwatch.reset();
             stopwatch.init();
             alert("勉強記録を追加しました");
+            return true;
         }else {
             console.error('Failed to fetch study_logs:', res.statusText);
             alert("サーバとの通信に失敗しました");
-            return null;
+            return false;
         }
     },
     getLog: async function(dateStr) {
@@ -246,11 +247,13 @@ export const studyLog = {
         }
         return await res.json();
     },
-    writeStr(date: string,subject :number, startTime :string, endTime :string) {
+    writeStr: async function(date: string,subject :number, startTime :string, endTime :string) {
+        // console.log(startTime, endTime);
         const start = this.separate(startTime);
         const end = this.separate(endTime);
         // console.log(start, end);
-        this.write(date, subject, start.hours, start.minutes, end.hours, end.minutes);
-
+        const ok = await this.write(date, subject, start.hours, start.minutes, end.hours, end.minutes);
+        // console.log(res);
+        return ok;
     }
 }
