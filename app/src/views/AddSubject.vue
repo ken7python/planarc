@@ -17,8 +17,14 @@
   const subjects = ref<any[]>([]);
   let editID = ref<number>(0);
 
+  const communication_loading = ref<boolean>(false);
+  const communication_saving = ref<boolean>(false);
+
   async function loadData() {
+    communication_loading.value = true;
     const subject_list = await subjectModule.getList();
+    communication_loading.value = false;
+
     subjectName.value = '';
     subjectColor.value = '#000000';
     console.log(subject_list);
@@ -27,7 +33,9 @@
   loadData();
 
   async function add() {
+    communication_saving.value = true;
     await subjectModule.add(subjectName.value, subjectColor.value);
+    communication_saving.value = false;
     await loadData();
     mic.result = '';
   }
@@ -87,15 +95,17 @@
         </label>
         <br>
 
-        <button class="btn" style="margin: 0 auto;" @click="add" :disabled="!subjectName || !subjectColor">
-          <AddIcon class="icon"></AddIcon>
-          追加
+        <button class="btn" style="margin: 0 auto;" @click="add" :disabled="!subjectName || !subjectColor || communication_saving">
+          <span v-if="communication_saving">通信中</span>
+
+          <AddIcon v-if="!communication_saving" class="icon"></AddIcon>
+          <span v-if="!communication_saving">追加</span>
         </button>
       </div>
       <br>
     </div>
 
-    <div id="List">
+    <div id="List" v-if="communication_loading === false">
   <!--    <p style="color: white;line-height: 0">科目リストのサンプル(まだ追加できません)</p>-->
       <div v-if="subjects.length === 0" style="text-align: center; margin-top: 20px;">
         <p style="color: white;line-height: 0">科目がまだ追加されていません</p>
@@ -118,6 +128,9 @@
         </li>
       </ul>
       <p style="text-align: center;color: white;" v-else>サーバとの通信に失敗しました</p>
+    </div>
+    <div v-else style="text-align: center; margin-top: 20px;">
+      <p>通信中...</p>
     </div>
   </div>
 
