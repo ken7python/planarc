@@ -10,6 +10,8 @@
     date: String
   })
 
+  const communication_saving = ref<boolean>(false);
+
   let subjectID = ref<string>('');
 
   let startTime = ref<string>(null);
@@ -25,6 +27,7 @@
   loadData();
 
   async function record() {
+    communication_saving.value = true;
     console.log(props.date);
     const ok = await studyLog.writeStr(props.date,subjectID.value,startTime.value,endTime.value)
     console.log(ok);
@@ -33,6 +36,7 @@
       endTime.value = null;
       subjectID.value = '';
     }
+    communication_saving.value = false;
   }
 </script>
 
@@ -56,7 +60,12 @@
       </div>
     </div>
     <div id="res">
-      <button @click="record" class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
+      <button @click="record" class="btn"  style="margin: 0 auto;" :disabled="communication_saving">
+        <writeIcon v-if="!communication_saving"></writeIcon>
+        <span v-if="!communication_saving">記録</span>
+
+        <span v-if="communication_saving">通信中...</span>
+      </button>
     </div>
   </div>
 </template>
