@@ -16,6 +16,10 @@ export const statusModule = {
         }
     },
     setEnjoyment: async function(date :string,enjoyment :string) {
+        if (enjoyment === "") {
+            alert("楽しみを入力してください");
+            return null;
+        }
         const res = await fetch(`${this.api}/enjoyment?date=${date}`, {
             method: 'POST',
             headers: {
@@ -27,6 +31,7 @@ export const statusModule = {
             })
         })
         if (res.ok) {
+            alert("今日の楽しみを保存しました");
             return true;
         } else {
             console.error('Failed to fetch status:', res.statusText);
