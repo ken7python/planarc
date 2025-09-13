@@ -5,6 +5,11 @@
   import { studyLog } from "@/logic/StudyLog";
 
   import writeIcon from '@/assets/icons/write.svg';
+
+  const props = defineProps({
+    date: String
+  })
+
   let subjectID = ref<string>('');
 
   let startTime = ref<string>(null);
@@ -19,9 +24,16 @@
 
   loadData();
 
-  defineProps({
-    date: String
-  })
+  async function record() {
+    console.log(props.date);
+    const ok = await studyLog.writeStr(props.date,subjectID.value,startTime.value,endTime.value)
+    console.log(ok);
+    if (await ok) {
+      startTime.value = null;
+      endTime.value = null;
+      subjectID.value = '';
+    }
+  }
 </script>
 
 <template>
@@ -44,7 +56,7 @@
       </div>
     </div>
     <div id="res">
-      <button @click="studyLog.writeStr(date,subjectID,startTime,endTime)" class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
+      <button @click="record" class="btn"  style="margin: 0 auto;"><writeIcon></writeIcon>記録</button>
     </div>
   </div>
 </template>
