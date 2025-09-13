@@ -21,9 +21,13 @@
     date: String
   })
 
+  const communication_loading = ref<boolean>(false);
+  const communication_saving = ref<boolean>(false);
+
   const TODO = ref<any[]>([]);
   let subjects = ref<any[]>([]);
   async function loadData() {
+    communication_loading.value = true;
     const subject_list = await subjectModule.getList();
     console.log(subject_list);
     subjects.value = subject_list;
@@ -38,13 +42,17 @@
 
     console.log(ToDoList);
     TODO.value = ToDoList;
+
+    communication_loading.value = false;
   }
 
   loadData();
 
   async function add() {
+    communication_saving.value = true;
     await todoModule.add(props.date, todoText.value, subjectName.value, status.value);
     todoText.value = "";
+    communication_saving.value = false;
     loadData();
   };
 
@@ -129,16 +137,18 @@
           </select>
           <br>
           <br>
-          <button class="btn" style="margin: 0 auto;" @click="add">
-            <Addicon></Addicon>
-            追加
+          <button class="btn" style="margin: 0 auto;" @click="add" :disabled="communication_loading">
+            <Addicon v-if="!communication_loading"></Addicon>
+            <span v-if="!communication_loading">追加</span>
+
+            <span v-if="communication_saving">通信中</span>
           </button>
         </div>
         <br>
       </details>
     </div>
 
-    <div id="List">
+    <div id="List" v-if="!communication_loading">
       <ul class="list-ul" v-for="(task, index) in TODO" :key="index">
         <li class="list-item" style="width: calc(100dvw - 10px);">
           <div class="left-group">
@@ -171,6 +181,9 @@
           </div>
         </li>
       </ul>
+    </div>
+    <div v-else style="text-align: center; margin-top: 20px;">
+      <p>通信中...</p>
     </div>
   </div>
 </template>
