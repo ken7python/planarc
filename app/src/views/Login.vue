@@ -8,13 +8,19 @@
   const errorMessage = ref('');
   let res;
 
+  const communication_sending = ref<boolean>(false);
+
   async function login_() {
-    res = await user.login(username.value, password.value);
-    console.log(res.error);
-    if (res.ok) {
-      location.href = '/';
-    } else {
-      errorMessage.value = res.error;
+    if (!communication_sending.value) {
+      communication_sending.value = true;
+      res = await user.login(username.value, password.value);
+      console.log(res.error);
+      if (await res.ok) {
+        location.href = '/';
+      } else {
+        errorMessage.value = res.error;
+        communication_sending.value = false;
+      }
     }
   }
 </script>
@@ -26,13 +32,16 @@
       <form @submit.prevent="login_">
         <div class="mb-3">
 <!--          <label for="username" class="form-label">ユーザ名</label>-->
-          <input type="text" id="username" v-model="username" placeholder="ユーザ名">
+          <input type="text" id="username" v-model="username" placeholder="ユーザ名" required />
         </div>
         <div class="mb-3">
 <!--          <label for="password" class="form-label">パスワード</label>-->
-          <input type="password" id="password" v-model="password" placeholder="パスワード">
+          <input type="password" id="password" v-model="password" placeholder="パスワード" required />
         </div>
-        <button type="submit" class="btn">ログイン</button>
+        <button class="btn" :disabled="communication_sending">
+          <span v-if="!communication_sending">ログイン</span>
+          <span v-if="communication_sending">通信中...</span>
+        </button>
       </form>
 
       <div v-if="errorMessage != ''" class="alert">

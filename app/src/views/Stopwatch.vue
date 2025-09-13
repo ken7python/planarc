@@ -18,6 +18,8 @@
     date: String
   })
 
+  const communication_saving = ref<boolean>(false);
+
   async function loadData() {
     const subject_list = await subjectModule.getList();
     console.log(subject_list);
@@ -45,6 +47,12 @@
   setInterval(function() {
     stopwatch.update();
   }, 1000);
+
+  async function save() {
+    communication_saving.value = true;
+    studyLog.write(props.date,stopwatch.subject.value,stopwatch.sHours.value,stopwatch.sMinutes.value,stopwatch.eHours.value,stopwatch.eMinutes.value)
+    communication_saving.value = false;
+  }
 </script>
 
 <template>
@@ -88,7 +96,12 @@
         <span v-if="stopwatch.dHours.value != null">{{ stopwatch.dHours }}時間</span>
         <span v-if="stopwatch.dMinutes.value != null">{{ stopwatch.dMinutes.value }}分</span>
       </span>
-      <button class="btn"  style="margin: 0 auto;" @click="studyLog.write(date,stopwatch.subject.value,stopwatch.sHours.value,stopwatch.sMinutes.value,stopwatch.eHours.value,stopwatch.eMinutes.value)"><writeIcon></writeIcon>記録</button>
+      <button class="btn" @click="save" style="margin: 0 auto;" :disabled="communication_saving">
+        <writeIcon v-if="!communication_saving"></writeIcon>
+        <span v-if="!communication_saving">記録</span>
+
+        <span v-if="communication_saving">通信中...</span>
+      </button>
     </div>
   </div>
 </template>

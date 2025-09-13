@@ -9,11 +9,15 @@ let confirmPassword = ref('');
 let errorMessage = ref('');
 let res;
 
+const communication_sending = ref<boolean>(false);
+
 async function handleSubmit() {
   if (password.value !== confirmPassword.value) {
     errorMessage.value = "パスワードが一致しません。";
     return;
   }
+
+  communication_sending.value = true;
   res = await user.register(username.value, password.value);
   console.log(res);
   if (res.ok) {
@@ -21,6 +25,8 @@ async function handleSubmit() {
   }else{
     errorMessage.value = res.error;
   }
+
+  communication_sending.value = false;
 }
 </script>
 
@@ -42,7 +48,10 @@ async function handleSubmit() {
         <input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="パスワード確認:" required />
       </div>
       <div class="mb-3">
-        <button type="submit" class="btn">ユーザ登録</button>
+        <button type="submit" class="btn" :disabled="communication_sending">
+          <span v-if="!communication_sending">ユーザ登録</span>
+          <span v-if="communication_sending">通信中...</span>
+        </button>
       </div>
       <div v-if="errorMessage" class="alert">
         {{ errorMessage }}

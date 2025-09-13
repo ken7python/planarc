@@ -50,7 +50,7 @@ export const user = {
             return {"ok": response.ok,"data":data};
         }else{
             console.error(data.error);
-            alert(data.error);
+            // alert(data.error);
             return {"ok": response.ok,"error":data.error};
         }
     },
@@ -76,6 +76,7 @@ export const user = {
         }else{
             error_message = data.error;
             console.error(error_message);
+            // alert(data.error);
             return {"ok":false, "error":error_message};
         }
     },

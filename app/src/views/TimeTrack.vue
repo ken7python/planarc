@@ -14,7 +14,11 @@ const results = ref<any[]>([]);
 
 const sum = ref<number>(0)
 
+const communication_loading = ref<boolean>(false)
+
 async function loadData() {
+  communication_loading.value = true;
+
   log.value = await studyLog.getLog(props.date);
   subjects.value = await subjectModule.getList();
 
@@ -46,6 +50,8 @@ async function loadData() {
       "eHours": endHours,
       "eMinutes": endMinutes,
     });
+
+    communication_loading.value = false;
   }
 }
 
@@ -53,7 +59,7 @@ loadData();
 </script>
 
 <template>
-  <div>
+  <div v-if="!communication_loading">
     <p>TIMETRACKを作成予定</p>
     <p>今は本日の勉強記録を掲載</p>
 <!--    {{ log }}-->
@@ -85,6 +91,10 @@ loadData();
 
     <p>本日合計：<span v-if="Math.floor(sum / 60) > 0">{{ Math.floor(sum / 60) }}時間</span><span v-if="sum % 60 > 0">{{sum % 60}}分</span></p>
 
+  </div>
+
+  <div v-else style="text-align: center; margin-top: 20px;">
+    <p>通信中...</p>
   </div>
 </template>
 
