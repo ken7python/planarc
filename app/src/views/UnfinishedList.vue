@@ -13,7 +13,10 @@
   let subjects = ref<any[]>([]);
   const unfinishedTask = ref([]);
 
+  const communication_loading = ref<boolean>(false);
+
   async function loadData() {
+    communication_loading.value = true;
     const profile = await user.profile();
     // console.log(profile);
 
@@ -32,6 +35,8 @@
     unfinishedTask.value = unfinished;
     console.log(unfinished);
     username.value = profile.username;
+
+    communication_loading.value = false;
   }
   loadData();
 
@@ -48,7 +53,7 @@
 
 <template>
   <div id="page">
-    <div id="List">
+    <div id="List" v-if="!communication_loading">
       <ul class="list-ul" v-if="unfinishedTask.length > 0">
         <li class="list-item" v-for="(task, index) in unfinishedTask" :key="index">
           <div class="left-group">
@@ -64,6 +69,9 @@
       <div v-else>
         <p style="color: white;text-align: center">未完了リストは空です</p>
       </div>
+    </div>
+    <div v-else>
+      <p style="text-align: center; margin-top: 20px;">通信中...</p>
     </div>
   </div>
 </template>
