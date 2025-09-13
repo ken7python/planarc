@@ -30,7 +30,7 @@
     <div id="HOME" v-if="route.path === CONST.homeLink">
       <div class="title">
         <homeIcon class="icon"></homeIcon>
-        <h2 class="link">HOME</h2>
+        <h2 class="link">ホーム</h2>
         <span class="spacer"></span>
       </div>
 
@@ -41,7 +41,7 @@
     <div id="FLAG" v-if="route.path === CONST.subjectLink">
       <div class="title">
         <subjectIcon class="icon"></subjectIcon>
-        <h2 class="link">科目追加</h2>
+        <h2 class="link">科目作成</h2>
         <span class="spacer"></span>
       </div>
     </div>
@@ -51,7 +51,7 @@
 
       <div class="title">
         <dailyIcon class="icon"></dailyIcon>
-        <h2 class="link">DAILY</h2>
+        <h2 class="link">日</h2>
         <span class="spacer"></span>
       </div>
     </div>
