@@ -59,7 +59,6 @@
 
 <template>
   <div>
-    <h4>円グラフ（仮に全て１時間としている）</h4>
     <canvas id="pieChart"></canvas>
   </div>
 </template>
