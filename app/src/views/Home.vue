@@ -286,4 +286,9 @@ progress {
     height: 30px;
     cursor: pointer;
  }
+
+#main {
+  height: calc(100dvh - 80px);
+  overflow-y: scroll;
+}
 </style>

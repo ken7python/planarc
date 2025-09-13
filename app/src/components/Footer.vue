@@ -22,8 +22,8 @@
   function getIconStyle(truePath: string,filename: string){
     return {
       color: getColor(truePath),
-      width: '40px',
-      height: '40px',
+      width: '30px',
+      height: '30px',
       display: 'inline-block',
     }
   }
@@ -79,7 +79,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 80px;
+    height: 50px;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     background-color: #265DC5;
@@ -87,7 +87,7 @@
   }
   #footer p {
     margin: 0;
-    font-size: 14px;
+    font-size: 12px;
     color: #FFFFFF;
   }
   .footer-item {
