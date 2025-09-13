@@ -59,7 +59,7 @@ loadData();
 </script>
 
 <template>
-  <div v-if="!communication_loading">
+  <div v-if="!communication_loading" id="trackpage">
     <p>TIMETRACKを作成予定</p>
     <p>今は本日の勉強記録を掲載</p>
 <!--    {{ log }}-->
@@ -99,5 +99,8 @@ loadData();
 </template>
 
 <style scoped>
-
+#trackpage {
+  height: calc(100dvh - 80px - 34px - 40px - 10px);
+  overflow-y: scroll;
+}
 </style>

@@ -95,7 +95,7 @@
   #note {
     text-align: center;
     overflow-y: auto;
-    height: calc(100vh - 75px - 60px - 60px);
+    height: calc(100vh - 70px - 60px - 30px);
   }
 
   textarea {
