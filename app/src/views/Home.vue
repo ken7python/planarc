@@ -177,7 +177,7 @@
       <h3>今日の楽しみ</h3>
       <div style="display: flex; align-items: center; justify-content: center;">
         <div class="micdiv">
-          <input type="text" placeholder="今日の楽しみを入力してください" style="width: 70vw" v-model="enjoyment" />
+          <input type="text" placeholder="今日の楽しみを入力" style="width: 70vw" v-model="enjoyment" />
           <mic-icon :style="mic.micStyle()" @click="micbtn"></mic-icon>
         </div>
         <button class="squareBtn btnSave" style="margin-left: 20px;" @click="setEnjoyment(enjoyment)"><saveicon></saveicon></button>
