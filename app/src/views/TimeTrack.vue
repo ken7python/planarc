@@ -18,7 +18,23 @@ const results = ref<any[]>([]);
 
 const sum = ref<number>(0)
 
-const communication_loading = ref<boolean>(false)
+const communication_loading = ref<boolean>(false);
+
+function getContrastColor(hex) {
+  // 先頭の # を削除
+  hex = hex.replace("#", "");
+
+  // RGBに分解
+  let r = parseInt(hex.substring(0, 2), 16);
+  let g = parseInt(hex.substring(2, 4), 16);
+  let b = parseInt(hex.substring(4, 6), 16);
+
+  // 明度(YIQ計算式)
+  let yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+  // 明度が128未満なら濃い色とみなして白を返す
+  return yiq < 128 ? "#FFFFFF" : "#000000";
+}
 
 async function loadData() {
   communication_loading.value = true;
@@ -72,6 +88,8 @@ async function loadData() {
         headerToolbar: false,
         allDaySlot: false,
         date: props.date,
+        slotDuration: '00:15',
+
         dayHeaderFormat: function(date) {
           return '';  // 空文字を返して見出しを非表示風にする
         },
@@ -87,6 +105,7 @@ async function loadData() {
             start: props.date + 'T' + String(item.sHours).padStart(2, '0') + ':' + String(item.sMinutes).padStart(2, '0') + ':00',
             end: props.date + 'T' + String(item.eHours).padStart(2, '0') + ':' + String(item.eMinutes).padStart(2, '0') + ':00',
             color: item.color,
+            textColor: getContrastColor(item.color)
           }))
         ]
       }
