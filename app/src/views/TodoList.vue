@@ -4,7 +4,7 @@
   import { todoModule } from "../logic/todo";
   import { mic } from '@/logic/mic';
   import { subjectModule } from "@/logic/subject";
-  import { unfinishedModule } from "../logic/unfinished";
+  import { statusModule } from "@/logic/status";
   import ToDoCard from "../components/ToDoCard.vue";
 
   import Addicon from '@/assets/icons/add.svg';
@@ -13,6 +13,13 @@
   let subjectName = ref('');
   let todoText = ref('');
   let status = ref('MUST');
+
+  import mode1 from '@/assets/icons/1.svg';
+  import mode2 from '@/assets/icons/2.svg';
+  import mode3 from '@/assets/icons/3.svg';
+  import mode4 from '@/assets/icons/4.svg';
+
+  import saveicon from '@/assets/icons/save.svg';
 
   const props = defineProps({
     date: String
@@ -47,8 +54,6 @@
     communication_loading.value = false;
   }
 
-  loadData();
-
   async function add() {
     communication_saving.value = true;
     await todoModule.add(props.date, todoText.value, subjectName.value, status.value);
@@ -57,6 +62,9 @@
     loadData();
   };
 
+
+  const tempStr = ref<string>('');
+  const tempmode =ref<string>('');
 
   const micbtn = async () => {
     if (!mic.shouldRestart.value) {        // ← .value
@@ -85,12 +93,95 @@
       }
     }
 
-    todoText.value = mic.result || mic.tmp;
+    tempStr.value = mic.result || mic.tmp;
+    if (tempmode.value === 'todo') {
+      todoText.value = tempStr.value;
+    } else if (tempmode.value === 'enjoyment') {
+      enjoyment.value = tempStr.value;
+    }
   });
+
+  function micTodo() {
+    tempmode.value = 'todo';
+    micbtn();
+  }
+  function micEnjoyment() {
+    tempmode.value = 'enjoyment';
+    micbtn();
+  }
+
+  let enjoyment = ref<string>('');
+
+  async function setEnjoyment(enjoy: string) {
+    console.log(enjoy);
+    await statusModule.setEnjoyment(props.date,enjoy);
+    loadStatus();
+  }
+
+  let selectedMood = ref<number>(null);
+  async function moodSelect(mood: number) {
+    // selectedMood.value = mood;
+    await statusModule.setMood(props.date,mood);
+    loadStatus();
+  }
+  const getMoodStyle = (mood: number) => {
+    return {
+      color: selectedMood.value === mood ? 'black' : 'gray',
+      background: selectedMood.value === mood ? 'yellow' : 'white',
+      cursor: 'pointer'
+    };
+  };
+
+
+  async function loadStatus() {
+    const status = await statusModule.get(props.date);
+    console.log(status);
+    if (status) {
+      enjoyment.value = status.Enjoyment || '';
+      selectedMood.value = status.Mood || null;
+    } else {
+      enjoyment.value = '';
+      selectedMood.value = null;
+    }
+  }
+
+  loadData();
+  loadStatus();
 </script>
 
 <template>
   <div id="ToDoPage">
+    <div>
+        <details>
+          <summary>今日の楽しみ</summary>
+          <div>
+            <div>
+              <!--        <h3 style="line-height: 0;margin-bottom: 0">今日の楽しみ</h3>-->
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <div class="micdiv">
+                  <input type="text" placeholder="今日の楽しみを入力" style="width: 70vw" v-model="enjoyment" />
+                  <mic-icon :style="mic.micStyle(tempmode === 'enjoyment')" @click="micEnjoyment"></mic-icon>
+                </div>
+                <button class="squareBtn btnSave" style="margin-left: 20px;" @click="setEnjoyment(enjoyment)"><saveicon></saveicon></button>
+              </div>
+            </div>
+          </div>
+        </details>
+        <details>
+          <summary>今日の気分</summary>
+          <div>
+            <div id="feeling">
+              <!--          <h3 style="line-height: 0;margin-bottom: 0">今日の気分</h3>-->
+              <div id="feeling-icons">
+                <mode4 @click="moodSelect(4)" :style="getMoodStyle(4)"></mode4>
+                <mode3 @click="moodSelect(3)" :style="getMoodStyle(3)"></mode3>
+                <mode2 @click="moodSelect(2)" :style="getMoodStyle(2)"></mode2>
+                <mode1 @click="moodSelect(1)" :style="getMoodStyle(1)"></mode1>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
     <div>
       <details>
         <summary>リスト作成</summary>
@@ -103,7 +194,7 @@
           </select>
           <div class="micdiv">
             <input type="text" placeholder="ToDoを入力" v-model="todoText" />
-            <MicIcon class="mic" @click="micbtn" :style="mic.micStyle()"></MicIcon>
+            <MicIcon class="mic" @click="micTodo" :style="mic.micStyle(tempmode === 'todo')"></MicIcon>
           </div>
           <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
             <option value="MUST">MUST</option>
@@ -123,7 +214,6 @@
     </div>
 
     <div id="List" v-if="!communication_loading">
-
       <div>
         <div id="MUST" class="frame">
           <span>MUST</span>
@@ -159,7 +249,7 @@
   #ToDoPage {
     height: calc(100dvh - 80px - 34px - 40px - 10px);
     display: grid;
-    grid-template-rows: auto 1fr
+    grid-template-rows: auto auto 1fr
   }
 
   .selectbox,input[type="text"] {
@@ -174,10 +264,21 @@
   }
 
   .frame {
-    border: 1px solid ##e4f2ff;
+    border: 1px solid #e4f2ff;
     background-color: #e4f2ff;
     border-radius: 8px;
     margin: 5px;
     padding: 5px;
+  }
+
+  #feeling-icons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+  }
+
+  h3 {
+    line-height: 0.75;
   }
 </style>
