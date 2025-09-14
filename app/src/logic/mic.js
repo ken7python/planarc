@@ -64,12 +64,12 @@ export const mic = {
         try { this.rec.stop(); } catch (_) {}
     },
 
-    micStyle() {
+    micStyle(wantRed) {
         return {
             width: '40px',
             height: '40px',
             cursor: 'pointer',
-            fill: this.micON.value ? '#FF0000' : '#AEB7BD'
+            fill: this.micON.value && wantRed ? '#FF0000' : '#AEB7BD'
         };
     }
 };

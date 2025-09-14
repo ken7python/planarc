@@ -1,5 +1,7 @@
 import { CONST } from "./const";
 import { user } from "./user";
+import {ref} from "vue";
+import { subjectModule } from "@/logic/subject";
 
 export const todoModule = {
     api: CONST.api() + '/todo',
@@ -11,6 +13,51 @@ export const todoModule = {
         if (await todos.ok) {
             const res = await todos.json();
             res.reverse();
+            return await res;
+        }else {
+            alert("サーバとの通信に失敗しました");
+            return null;
+        }
+    },
+    getListGroup: async function(date :string){
+        const todos = await fetch(`${ this.api }/group?date=${ date }`,{headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            }})
+        if (await todos.ok) {
+            const res = await todos.json();
+
+            if (!res.MUST) {
+                res.MUST = [];
+            }
+            if (!res.WANT) {
+                res.WANT = [];
+            }
+            if (!res.checked) {
+                res.checked = [];
+            }
+
+            res.MUST.reverse();
+            res.WANT.reverse();
+            res.checked.reverse();
+
+            let subjects = ref<any[]>([]);
+
+            const subject_list = await subjectModule.getList();
+            console.log(subject_list);
+            subjects.value = subject_list;
+
+            res.MUST.forEach((item) => {
+                item["Color"] = subjects.value.find((subject) => subject.ID === item.SubjectID)?.Color || '#000000';
+            })
+
+            res.WANT.forEach((item) => {
+                item["Color"] = subjects.value.find((subject) => subject.ID === item.SubjectID)?.Color || '#000000';
+            })
+
+            res.checked.forEach((item) => {
+                item["Color"] = subjects.value.find((subject) => subject.ID === item.SubjectID)?.Color || '#000000';
+            })
             return await res;
         }else {
             alert("サーバとの通信に失敗しました");

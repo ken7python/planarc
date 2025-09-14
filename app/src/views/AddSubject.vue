@@ -85,7 +85,7 @@
       <div id="addSubject">
         <div class="micdiv">
           <input type="text" placeholder="科目名を入力" v-model="subjectName" />
-          <MicIcon class="mic" @click="micbtn" :style="mic.micStyle()"></MicIcon>
+          <MicIcon class="mic" @click="micbtn" :style="mic.micStyle(true)"></MicIcon>
         </div>
         <br>
 
