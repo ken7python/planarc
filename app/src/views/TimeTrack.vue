@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {  onMounted ,ref } from 'vue';
 import {studyLog} from "@/logic/StudyLog";
 import {subjectModule} from "@/logic/subject";
+
+import {createCalendar, TimeGrid} from '@event-calendar/core';
+
+const calendar = ref(null)
 
 const props = defineProps({
     date: String
@@ -29,8 +33,10 @@ async function loadData() {
     const subject = subjects.value.find(s => s.ID === log.value[i].SubjectID);
     if (subject) {
       log.value[i].subjectName = subject.Name;
+      log.value[i].subjectColor = subject.Color;
     } else {
       log.value[i].subjectName = "不明";
+      log.value[i].subjectColor = "#000000";
     }
 
     const startHours = log.value[i].StartHours;
@@ -49,58 +55,71 @@ async function loadData() {
       "sMinutes": startMinutes,
       "eHours": endHours,
       "eMinutes": endMinutes,
+      "color": log.value[i].subjectColor
     });
-
-    communication_loading.value = false;
   }
+
+  console.log(...results.value);
+
+  let ec = createCalendar(
+      // HTML element the calendar will be mounted to
+      document.getElementById('ec'),
+      // Array of plugins
+      [TimeGrid],
+      // Options object
+      {
+        view: 'timeGridDay',
+        headerToolbar: false,
+        allDaySlot: false,
+        dayHeaderFormat: function(date) {
+          return '';  // 空文字を返して見出しを非表示風にする
+        },
+        eventContent: function(arg) {
+          return {
+            html: `<div class="my-event-title">${arg.event.title}</div>`
+            // `arg.timeText` を使わないことで「10:00～11:30」の部分を表示しない
+          };
+        },
+        events: [
+          ...results.value.map(item => ({
+            title: item.name,
+            start: props.date + 'T' + String(item.sHours).padStart(2, '0') + ':' + String(item.sMinutes).padStart(2, '0') + ':00',
+            end: props.date + 'T' + String(item.eHours).padStart(2, '0') + ':' + String(item.eMinutes).padStart(2, '0') + ':00',
+            color: item.color,
+          }))
+        ]
+      }
+  );
+
+  communication_loading.value = false;
 }
 
-loadData();
+onMounted(() => {
+  loadData();
+})
 </script>
 
 <template>
-  <div v-if="!communication_loading" id="trackpage">
-    <p>TIMETRACKを作成予定</p>
-    <p>今は本日の勉強記録を掲載</p>
-<!--    {{ log }}-->
-
-    <ul>
-      <li v-for="res in results" :key="res.ID">
-        <p>
-          <span>{{ res.name }}　</span>
-          <span v-if="res.sHours != null && res.sHours<10">0{{ res.sHours }}</span>
-          <span v-else>{{ res.sHours }}</span>
-          <span v-if="res.sMinutes != null">:</span>
-          <span v-if="res.sMinutes != null && res.sMinutes<10">0{{ res.sMinutes }}</span>
-          <span v-else>{{ res.sMinutes }}</span>
-
-          <span>〜</span>
-
-          <span v-if="res.eHours != null && res.sHours<10">0{{ res.eHours }}</span>
-          <span v-else>{{ res.eHours }}</span>
-          <span v-if="res.eMinutes != null">:</span>
-          <span v-if="res.eMinutes != null && res.eMinutes<10">0{{ res.eMinutes }}</span>
-          <span v-else>{{ res.eMinutes }}</span>
-
-          <span>　{{ res.StudyTime }}分</span>
-
-
-        </p>
-      </li>
-    </ul>
-
+  <div v-show="!communication_loading" id="trackpage">
+    <div id="ec" class="calendar"></div>
     <p>本日合計：<span v-if="Math.floor(sum / 60) > 0">{{ Math.floor(sum / 60) }}時間</span><span v-if="sum % 60 > 0">{{sum % 60}}分</span></p>
 
   </div>
 
-  <div v-else style="text-align: center; margin-top: 20px;">
+  <div v-if="communication_loading" style="text-align: center; margin-top: 20px;">
     <p>通信中...</p>
   </div>
 </template>
 
 <style scoped>
-#trackpage {
+#trackpage{
   height: calc(100dvh - 80px - 34px - 40px - 10px);
   overflow-y: scroll;
 }
+
+.calendar {
+  height: calc(100dvh - 220px);
+  overflow-y: auto;   /* 縦スクロールを有効に */
+}
+
 </style>
