@@ -82,6 +82,7 @@ func main() {
 	todo := api.Group("/todo")
 	todo.Use(authMiddleware())
 	todo.GET("/", getTODOByUserID)
+	todo.GET("/group", getToDOByGroup)
 	todo.POST("/add", AddToDo)
 	todo.POST("/check", ToDoChecked)
 	todo.POST("/edit", ToDoEdit)

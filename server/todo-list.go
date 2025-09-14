@@ -27,6 +27,28 @@ func retGetTODOByUserID(uuid string, date string) []TODOLIST {
 	return todos
 }
 
+func retGetTODO_Checked(uuid string, date string) []TODOLIST {
+	var todos []TODOLIST
+
+	res := db.Model(&TODOLIST{}).Where("uuid = ? and date = ? and checked = 1", uuid, date).Find(&todos)
+	if res.Error != nil {
+		fmt.Println("Error fetching ToDo List:", res.Error)
+		return nil
+	}
+	return todos
+}
+
+func retGetTODObyStatusUnfinished(uuid string, date string, status string) []TODOLIST {
+	var todos []TODOLIST
+
+	res := db.Model(&TODOLIST{}).Where(`uuid = ? and date = ? and checked = 0 and status = '`+status+`'`, uuid, date).Find(&todos)
+	if res.Error != nil {
+		fmt.Println("Error fetching ToDo List:", res.Error)
+		return nil
+	}
+	return todos
+}
+
 func getTODOByUserID(c *gin.Context) {
 	fmt.Println("todo/")
 	uuid := GetProfile(c).UUID
@@ -41,6 +63,36 @@ func getTODOByUserID(c *gin.Context) {
 
 	fmt.Println("Fetched ToDo:", len(todos))
 	c.JSON(http.StatusOK, todos)
+}
+
+func getToDOByGroup(c *gin.Context) {
+	fmt.Println("todo/group")
+	uuid := GetProfile(c).UUID
+
+	date := c.Query("date")
+
+	checked := retGetTODO_Checked(uuid, date)
+	if checked == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "TODOLISTの取得に失敗しました"})
+		return
+	}
+	fmt.Println("Fetched ToDo:", len(checked))
+
+	MUST := retGetTODObyStatusUnfinished(uuid, date, "MUST")
+	if MUST == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "TODOLISTの取得に失敗しました"})
+		return
+	}
+	fmt.Println("Fetched ToDo:", len(MUST))
+
+	WANT := retGetTODObyStatusUnfinished(uuid, date, "WANT")
+	if WANT == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "TODOLISTの取得に失敗しました"})
+		return
+	}
+	fmt.Println("Fetched ToDo:", len(WANT))
+
+	c.JSON(http.StatusOK, gin.H{"checked": checked, "MUST": MUST, "WANT": WANT})
 }
 
 func AddToDo(c *gin.Context) {

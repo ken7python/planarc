@@ -1,5 +1,6 @@
 import { CONST } from "./const";
 import { user } from "./user";
+import { subjectModule } from "@/logic/subject";
 
 export const unfinishedModule = {
     api: CONST.api() + '/unfinished',

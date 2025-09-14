@@ -1,16 +1,13 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { selectStyle } from '@/logic/style/selectStyle';
-  import { getColorboxStyle } from "@/logic/style/colorbox";
-  import { subjectModule } from "@/logic/subject";
   import { todoModule } from "../logic/todo";
   import { mic } from '@/logic/mic';
+  import { subjectModule } from "@/logic/subject";
   import { unfinishedModule } from "../logic/unfinished";
+  import ToDoCard from "../components/ToDoCard.vue";
 
   import Addicon from '@/assets/icons/add.svg';
-  import EditIcon from '@/assets/icons/edit.svg';
-  import SaveIcon from '@/assets/icons/save.svg';
-  import MoveIcon from '@/assets/icons/move.svg';
   import MicIcon from '@/assets/icons/mic.svg';
 
   let subjectName = ref('');
@@ -24,24 +21,28 @@
   const communication_loading = ref<boolean>(false);
   const communication_saving = ref<boolean>(false);
 
-  const TODO = ref<any[]>([]);
+  const TODO_MUST = ref<any[]>([]);
+  const TODO_WANT = ref<any[]>([]);
+  const TODO_checked = ref<any[]>([]);
+
   let subjects = ref<any[]>([]);
+
   async function loadData() {
     communication_loading.value = true;
+
     const subject_list = await subjectModule.getList();
     console.log(subject_list);
     subjects.value = subject_list;
 
-    const ToDoList = await todoModule.getList(props.date);
+    const ToDoList = await todoModule.getListGroup(props.date);
+    console.log(await ToDoList);
 
-    let i :number = 0;
-    while (i < ToDoList.length) {
-      ToDoList[i]["Color"] = subjects.value.find((subject) => subject.ID === ToDoList[i].SubjectID)?.Color || '#000000';
-      ++i;
-    }
+    TODO_MUST.value = await ToDoList.MUST;
+    TODO_WANT.value = await ToDoList.WANT;
+    TODO_checked.value = await ToDoList.checked;
 
-    console.log(ToDoList);
-    TODO.value = ToDoList;
+    console.log("MUST---");
+    console.log(TODO_MUST.value);
 
     communication_loading.value = false;
   }
@@ -56,33 +57,6 @@
     loadData();
   };
 
-  async function move(id :number) {
-    const res :boolean = await unfinishedModule.move(id);
-    if (res) {
-      todoText.value = "";
-      loadData();
-    }
-  };
-
-  async function check(id :number) {
-    await todoModule.check(id);
-    loadData();
-  };
-
-  let editId = ref<number>(0);
-  let editedText = ref<string>('');
-
-  function editing(id :number, title :string) {
-    editId.value = id;
-    editedText.value = title;
-  }
-
-  async function edit() {
-    await todoModule.edit(editId.value, editedText.value);
-    editId.value = 0;
-    editedText.value = '';
-    loadData();
-  }
 
   const micbtn = async () => {
     if (!mic.shouldRestart.value) {        // ← .value
@@ -149,38 +123,25 @@
     </div>
 
     <div id="List" v-if="!communication_loading">
-      <ul class="list-ul" v-for="(task, index) in TODO" :key="index">
-        <li class="list-item" style="width: calc(100dvw - 10px);">
-          <div class="left-group">
-            <span v-if="task.Status === 'MUST'">M</span>
-            <span v-if="task.Status === 'WANT'">W</span>
-            <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
-            <span v-if="editId != task.ID" class="task-title">
-              {{ task.Title }}
-            </span>
-            <input v-else type="text" v-model="editedText" class="task-input"/>
-          </div>
-          <div class="right">
-  <!--          <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;"></button>-->
-            <span v-if="editId != task.ID">
-              <button class="squareBtn btnEdit" @click="editing(task.ID,task.Title)"><EditIcon></EditIcon></button>
-            </span>
-            <span v-else>
-              <button class="squareBtn btnSave" @click="edit()"><SaveIcon></SaveIcon></button>
-            </span>
 
-            <input type="checkbox" class="squareBtn btnCheck" style="margin-right: 4px;margin-left: 4px;" v-model="task.Checked" @click="check(task.ID)" />
-            <button class="squareBtn btnUnfinished" style="margin-right: 4px;margin-left: 4px;" @click="move(task.ID)"><MoveIcon></MoveIcon></button>
-          </div>
-        </li>
-      </ul>
-      <ul v-if="TODO.length === 0" class="list-ul">
-        <li style="width: 100%;text-align: center;">
-          <div>
-            <span style="color: white;">タスクがありません</span>
-          </div>
-        </li>
-      </ul>
+      <div>
+        <div id="MUST" class="frame">
+          <span>MUST</span>
+          <ToDoCard :LIST="TODO_MUST" @reload="loadData" />
+        </div>
+
+
+        <div id="WANT" class="frame">
+          <span>WANT</span>
+          <ToDoCard :LIST="TODO_WANT" @reload="loadData" />
+        </div>
+
+
+        <div id="Checked" class="frame">
+          <span>完了</span>
+          <ToDoCard :LIST="TODO_checked" @reload="loadData" />
+        </div>
+      </div>
     </div>
     <div v-else style="text-align: center; margin-top: 20px;">
       <p>通信中...</p>
@@ -210,5 +171,13 @@
   #List {
     margin-right: -5px;
     margin-left: -5px;
+  }
+
+  .frame {
+    border: 1px solid ##e4f2ff;
+    background-color: #e4f2ff;
+    border-radius: 8px;
+    margin: 5px;
+    padding: 5px;
   }
 </style>
