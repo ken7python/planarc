@@ -20,6 +20,21 @@ const sum = ref<number>(0)
 
 const communication_loading = ref<boolean>(false);
 
+function getTimeRange(events) {
+  let start = Infinity;
+  let end = -Infinity;
+
+  events.forEach(e => {
+    let s = new Date(e.start).getHours();
+    let t = new Date(e.end).getHours();
+    if (s < start) start = s;
+    if (t > end) end = t;
+  });
+
+  return { start, end };
+}
+
+
 function getContrastColor(hex) {
   // 先頭の # を削除
   hex = hex.replace("#", "");
@@ -77,6 +92,21 @@ async function loadData() {
 
   console.log(...results.value);
 
+  const events = [
+    ...results.value.map(item => ({
+      title: item.name,
+      start: props.date + 'T' + String(item.sHours).padStart(2, '0') + ':' + String(item.sMinutes).padStart(2, '0') + ':00',
+      end: props.date + 'T' + String(item.eHours).padStart(2, '0') + ':' + String(item.eMinutes).padStart(2, '0') + ':00',
+      color: item.color,
+      textColor: getContrastColor(item.color)
+    }))
+  ]
+
+  const { start, end } = getTimeRange(events);
+  console.log(start, end);
+
+  console.log(`${String(start).padStart(2, '0')}:00:00`)
+
   let ec = createCalendar(
       // HTML element the calendar will be mounted to
       document.getElementById('ec'),
@@ -99,15 +129,9 @@ async function loadData() {
             // `arg.timeText` を使わないことで「10:00～11:30」の部分を表示しない
           };
         },
-        events: [
-          ...results.value.map(item => ({
-            title: item.name,
-            start: props.date + 'T' + String(item.sHours).padStart(2, '0') + ':' + String(item.sMinutes).padStart(2, '0') + ':00',
-            end: props.date + 'T' + String(item.eHours).padStart(2, '0') + ':' + String(item.eMinutes).padStart(2, '0') + ':00',
-            color: item.color,
-            textColor: getContrastColor(item.color)
-          }))
-        ]
+        events: events,
+        slotMinTime: `${start - 1}:30:00`, // 最初の予定より前は非表示
+        slotMaxTime: `${end}:30:00`    // 最後の予定より後は非表示
       }
   );
 
