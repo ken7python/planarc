@@ -71,6 +71,7 @@ async function loadData() {
         view: 'timeGridDay',
         headerToolbar: false,
         allDaySlot: false,
+        date: props.date,
         dayHeaderFormat: function(date) {
           return '';  // 空文字を返して見出しを非表示風にする
         },
