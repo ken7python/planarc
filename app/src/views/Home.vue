@@ -57,7 +57,6 @@
 
     const subject_list = await subjectModule.getList();
     console.log(subject_list);
-    subjects.value = subject_list;
 
     const studyLogs = await studyLog.getLog(today);
     console.log(studyLogs);
@@ -65,6 +64,21 @@
     studyLogs.map(log => {
       sumToday.value += log.StudyTime;
     })
+
+    const subjectSet = new Set();
+    // console.log(studyLogs);
+    studyLogs.map(log => {
+      // console.log(log.ID);
+      console.log(log.SubjectID);
+      subjectSet.add(log.SubjectID);
+    })
+
+    subject_list.map(subject => {
+      if (subjectSet.has(subject.ID)) {
+        subjects.value.push(subject);
+      }
+    })
+    console.log(subjectSet);
 
     const TODOList = await todoModule.getList(today);
     console.log(TODOList);
