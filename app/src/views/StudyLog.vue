@@ -4,7 +4,6 @@
   import Handinput from '@/views/Handinput.vue';
   import stopwatchIcon from "@/assets/icons/stopwatch.svg";
   import handinputIcon from "@/assets/icons/input.svg";
-  import _default from "chart.js/dist/plugins/plugin.tooltip";
   const strongGray = "#737373"
   const lightGray = "#F2F2F2"
 
