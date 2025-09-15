@@ -64,12 +64,14 @@
      studyTimeBySubject.push(studyTime);
    })
 
-   watch(subjects, () => {
-     drawPieChart();
-   }, {immediate: true});
+   drawPieChart();
  }
 
  loadData();
+
+  watch(subjects, () => {
+    drawPieChart();
+  }, {immediate: true});
 </script>
 
 <template>
