@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { useRoute } from 'vue-router'
-  import homeIcon from '@/assets/icons/home.svg';
+  import progressIcon from '@/assets/icons/progress-page.svg';
   import subjectIcon from '@/assets/icons/subject.svg';
   import analyticsIcon from '@/assets/icons/analytics.svg';
   import dailyIcon from '@/assets/icons/calendar_today.svg';
@@ -27,10 +27,10 @@
 <template>
   <div id="header">
     <!-- HOME -->
-    <div id="HOME" v-if="route.path === CONST.homeLink">
+    <div id="HOME" v-if="route.path === CONST.progressLink">
       <div class="title">
-        <homeIcon class="icon"></homeIcon>
-        <h2 class="link">ホーム</h2>
+        <progressIcon class="icon"></progressIcon>
+        <h2 class="link">進捗</h2>
         <span class="spacer"></span>
       </div>
 

@@ -11,7 +11,7 @@ import AddSubject from "../views/AddSubject.vue";
 import Analysis from "../views/Analysis.vue";
 
 const routes = [
-    { path: CONST.homeLink, component: Home},
+    { path: CONST.progressLink, component: Home},
     { path: '/auth', component: Auth },
     { path: '/signup', component: Signup },
     { path: '/login', component: Login },
