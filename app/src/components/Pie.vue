@@ -43,7 +43,8 @@
    // console.log(studyLogs);
    studyLogs.map(log => {
      // console.log(log.ID);
-     subjectSet.add(log.ID);
+     console.log(log.SubjectID);
+     subjectSet.add(log.SubjectID);
    })
 
    subject_list.map(subject => {
