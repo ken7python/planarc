@@ -13,7 +13,7 @@
 
 
   import Pie from "@/components/Pie.vue";
-  import { Line } from 'progressbar.js';
+  import ProgressBar from "progressbar.js";
 
   import goalIcon from '@/assets/icons/goal.svg';
 
@@ -76,7 +76,7 @@
     numberOfToDO.value = TODOList.length || 0;
     finishedToDo.value = finished.length || 0;
 
-    const bar = new Line('#progress-bar', {
+    const bar = new ProgressBar.Line('#progress-bar', {
       strokeWidth: 3,
       color: '#1C409A',
       trailColor: '#eee',
