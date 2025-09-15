@@ -39,9 +39,9 @@
     <input type="date" v-model="date">
   </div>
   <HeaderDaily v-model:menu="activeMenu"/>
-
+  <TodoList v-if="activeMenu === list" :date="date" />
   <div id="main" :key="date">
-    <TodoList v-if="activeMenu === list" :date="date" />
+
     <StudyLog v-if="activeMenu === studylog" :date="date" />
     <Track v-if="activeMenu === track" :date="date" />
     <Letter v-if="activeMenu === letter" :date="date" />

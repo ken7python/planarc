@@ -153,7 +153,7 @@
   <div id="ToDoPage">
     <div id="top-menu">
     <div id="statusMenu">
-        <details>
+        <details class="frame">
           <summary>今日の楽しみ</summary>
           <div>
             <div>
@@ -168,7 +168,7 @@
             </div>
           </div>
         </details>
-        <details>
+        <details class="frame">
           <summary>今日の気分</summary>
           <div>
             <div id="feeling">
@@ -184,7 +184,7 @@
         </details>
       </div>
     <div>
-      <details>
+      <details class="frame">
         <summary>リスト作成</summary>
         <div id="AddTodo">
           <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
@@ -247,25 +247,23 @@
     text-align: center;
   }
   #ToDoPage {
+    background-color: #3d7fe0;
     height: calc(100dvh - 80px - 34px - 40px - 10px);
     display: grid;
-    grid-template-rows: auto 1fr
+    grid-template-rows: auto 1fr;
   }
 
   #top-menu {
     margin-top: 10px;
     margin-bottom: 10px;
+    margin-right: 0px;
+    margin-left: 0px;
   }
 
   .selectbox,input[type="text"] {
     padding-bottom: 4px;
     margin-bottom: 0px;
     margin-top: 0px;
-  }
-
-  #List {
-    margin-right: -20px;
-    margin-left: -20px;
   }
 
   .frame {
