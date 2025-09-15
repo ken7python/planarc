@@ -59,7 +59,7 @@ function getTitleStyle(checked :boolean) {
   } else {
     return {
       textDecoration: 'none',
-      color: '#000000'
+      color: '#4d5161'
     }
   }
 }
