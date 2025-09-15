@@ -37,17 +37,30 @@
 
  async function loadData() {
    const subject_list = await subjectModule.getList();
-   console.log(subject_list);
-   subjects.value = subject_list;
+   // console.log(subject_list);
+   // subjects.value = subject_list;
 
+   const subjectSet = new Set()
    const studyLogs = await studyLog.getLog(today);
-   console.log(studyLogs);
+   // console.log(studyLogs);
+   studyLogs.map(log => {
+     // console.log(log.ID);
+     subjectSet.add(log.ID);
+   })
+
+   subject_list.map(subject => {
+      if (subjectSet.has(subject.ID)) {
+        subjects.value.push(subject);
+      }
+   })
+
+   console.log(subjectSet);
 
    subjects.value.map(subject => {
      // console.log(subject);
      const studyTime = studyLogs.filter(log => log.SubjectID === subject.ID)
        .reduce((total, log) => total + log.StudyTime, 0);
-     console.log(subject.ID,studyTime);
+     // console.log(subject.ID,studyTime);
      studyTimeBySubject.push(studyTime);
    })
 
