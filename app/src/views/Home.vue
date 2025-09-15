@@ -118,7 +118,7 @@
               <div style="text-align: center;">
                 <b>
                   <span v-if="finishedToDo === 0 || numberOfToDO === 0">0%</span>
-                  <span v-else>{{ finishedToDo / numberOfToDO * 100 }}%</span>
+                  <span v-else>{{ Math.round(finishedToDo / numberOfToDO * 100) }}%</span>
                 </b>
               </div>
               <div id="progress-bar"></div>
