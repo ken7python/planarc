@@ -26,15 +26,25 @@
 
 <template>
   <div id="header">
-    <!-- HOME -->
+    <!-- DAILY -->
+    <div id="DAILY" v-if="route.path === CONST.dailyLink">
+
+      <div class="title">
+        <dailyIcon class="icon"></dailyIcon>
+        <h2 class="link">日</h2>
+        <span class="spacer"></span>
+      </div>
+
+      <logoutIcon class="icon logout" @click="user.logout"></logoutIcon>
+    </div>
+
+    <!-- Progress -->
     <div id="HOME" v-if="route.path === CONST.progressLink">
       <div class="title">
         <progressIcon class="icon"></progressIcon>
         <h2 class="link">進捗</h2>
         <span class="spacer"></span>
       </div>
-
-      <logoutIcon class="icon logout" @click="user.logout"></logoutIcon>
     </div>
 
     <!-- SUBJECT -->
@@ -42,16 +52,6 @@
       <div class="title">
         <subjectIcon class="icon"></subjectIcon>
         <h2 class="link">科目作成</h2>
-        <span class="spacer"></span>
-      </div>
-    </div>
-
-    <!-- DAILY -->
-    <div id="DAILY" v-if="route.path === CONST.dailyLink">
-
-      <div class="title">
-        <dailyIcon class="icon"></dailyIcon>
-        <h2 class="link">日</h2>
         <span class="spacer"></span>
       </div>
     </div>
