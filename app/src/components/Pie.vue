@@ -21,8 +21,10 @@
         },
         options: {
           responsive: true,
+          rotation: -90,
+          circumference: 180,
           plugins: {
-            legend: { position: 'bottom' }
+            legend: { position: 'right' }
           }
         }
       });
@@ -66,6 +68,6 @@
 <style scoped>
   #pieChart {
     max-width: 360px;
-    max-height: 360px;
+    max-height: 100px;
   }
 </style>
