@@ -2,8 +2,8 @@
 import { api } from '@/logic/api.js';
 
 export const CONST = {
-    homeLink: '/',
-    dailyLink: '/daily',
+    progressLink: '/progress',
+    dailyLink: '/',
     flagLink: '/flag',
     authLink: '/auth',
     signupLink: '/signup',
