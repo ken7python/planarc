@@ -92,7 +92,7 @@
     const bar = new ProgressBar.Line('#progress-bar', {
       strokeWidth: 3,
       color: '#1C409A',
-      trailColor: '#eee',
+      trailColor: '#E3F2FD',
       trailWidth: 10,
       svgStyle: { width: '80vw', height: '100%' }, // ← 横幅を90%にして左右に余白
     });
@@ -147,13 +147,9 @@
         </div>
       </div>
 
-      <hr>
-
       <div id="studyTime">
         <h3>学習時間　<span class="underlined">{{ Math.floor(sumToday / 60) }}時間{{ sumToday % 60 }}分</span></h3>
         <Pie></Pie>
-
-        <hr>
 
         <h3>学習時間（科目別）　<span class="underlined">{{ Math.floor(sumTodayofSubject / 60) }}時間{{ sumTodayofSubject % 60 }}分</span></h3>
 

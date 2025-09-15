@@ -151,7 +151,8 @@
 
 <template>
   <div id="ToDoPage">
-    <div>
+    <div id="top-menu">
+    <div id="statusMenu">
         <details>
           <summary>今日の楽しみ</summary>
           <div>
@@ -213,6 +214,8 @@
       </details>
     </div>
 
+    </div>
+
     <div id="List" v-if="!communication_loading">
       <div>
         <div id="MUST" class="frame">
@@ -243,13 +246,15 @@
   #AddTodo {
     text-align: center;
   }
-  #TODOList {
-    text-align: center;
-  }
   #ToDoPage {
     height: calc(100dvh - 80px - 34px - 40px - 10px);
     display: grid;
-    grid-template-rows: auto auto 1fr
+    grid-template-rows: auto 1fr
+  }
+
+  #top-menu {
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   .selectbox,input[type="text"] {
@@ -259,8 +264,8 @@
   }
 
   #List {
-    margin-right: -5px;
-    margin-left: -5px;
+    margin-right: -20px;
+    margin-left: -20px;
   }
 
   .frame {
