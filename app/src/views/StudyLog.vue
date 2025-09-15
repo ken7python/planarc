@@ -23,7 +23,7 @@
  function getMenuStyle(menu: string): object {
     return {
       backgroundColor: selected(menu) ? strongGray : lightGray,
-      color: selected(menu) ? "#FFFFFF" : "#000000",
+      color: selected(menu) ? "#FFFFFF" : "#4d5161",
       cursor: "pointer",
       padding: "10px",
       borderRadius: "5px"
