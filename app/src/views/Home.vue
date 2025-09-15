@@ -115,7 +115,12 @@
         <div v-show="numberOfToDO != null && finishedToDo != null">
           <div style="display: flex; align-items: center; justify-content: center;">
             <span>
-              <div style="text-align: center;"><b>{{ finishedToDo / numberOfToDO * 100 }}%</b></div>
+              <div style="text-align: center;">
+                <b>
+                  <span v-if="finishedToDo === 0 || numberOfToDO === 0">0%</span>
+                  <span v-else>{{ finishedToDo / numberOfToDO * 100 }}%</span>
+                </b>
+              </div>
               <div id="progress-bar"></div>
             </span>
             <span>
