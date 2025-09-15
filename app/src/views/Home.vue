@@ -13,10 +13,9 @@
 
 
   import Pie from "@/components/Pie.vue";
+  import { Line } from 'progressbar.js';
 
-
-
-  import { mic } from '@/logic/mic';
+  import goalIcon from '@/assets/icons/goal.svg';
 
   let subjectName = ref<string>('');
 
@@ -77,6 +76,17 @@
     numberOfToDO.value = TODOList.length || 0;
     finishedToDo.value = finished.length || 0;
 
+    const bar = new Line('#progress-bar', {
+      strokeWidth: 3,
+      color: '#1C409A',
+      trailColor: '#eee',
+      trailWidth: 10,
+      svgStyle: { width: '80vw', height: '100%' }, // ← 横幅を90%にして左右に余白
+    });
+
+// 0% → 100% にアニメーション
+    bar.animate((finishedToDo.value / numberOfToDO.value) || 0);  // 1.0 までの値を指定
+
     const uSubjectIDs = [...new Set(TODOList.map(task => {
       if (!task.Checked) {
         return task.SubjectID;
@@ -88,7 +98,10 @@
     });
     console.log(uSubjectNames.value);
   }
-  loadData();
+
+  onMounted(() => {
+    loadData();
+  });
 </script>
 
 <template>
@@ -98,25 +111,20 @@
 <!--      <HeaderHome v-model:menu="activeMenu" />-->
     </header>
     <div id="main">
-      <div id="studyplan">
-        <h3>学習予定一覧</h3>
-        <ul v-if="uSubjectNames.length != 0" v-for="subject in uSubjectNames" :key="subject">
-          <li>{{ subject }}</li>
-        </ul>
-        <div v-else>
-          <p>今日のタスクはありません</p>
-        </div>
-      </div>
-
-      <hr>
-
       <div id="progress">
         <h3>進捗バー</h3>
-        <div v-if="numberOfToDO != null && finishedToDo != null">
-          <p style="text-align: right;line-height: 0.5;">{{ ( Math.round(finishedToDo * 100 / numberOfToDO) ) || 0 }}%</p>
-          <progress class="my-progress" :value="finishedToDo" :max="numberOfToDO"></progress>
+        <div v-show="numberOfToDO != null && finishedToDo != null">
+          <div style="display: flex; align-items: center; justify-content: center;">
+            <span>
+              <div style="text-align: center;"><b>{{ finishedToDo / numberOfToDO * 100 }}%</b></div>
+              <div id="progress-bar"></div>
+            </span>
+            <span>
+              <goalIcon style="width: 30px;height: 30px;vertical-align: middle;margin-right: 8px;color: #007AFF;"></goalIcon>
+            </span>
+          </div>
         </div>
-        <div v-else>
+        <div v-if="numberOfToDO == null || finishedToDo == null">
           <p>通信中...</p>
         </div>
       </div>
@@ -153,10 +161,6 @@ h3 {
 .underlined {
   text-decoration: underline;
 }
-progress {
-  width: 100%;
-  height: 20px;
-}
 
  #main {
    overflow-y: scroll;
@@ -176,5 +180,9 @@ progress {
 #main {
   height: calc(100dvh - 80px);
   overflow-y: scroll;
+}
+
+#progress-bar {
+  text-align: center;
 }
 </style>
