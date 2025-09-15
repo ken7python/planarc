@@ -94,7 +94,7 @@
       color: '#1C409A',
       trailColor: '#E3F2FD',
       trailWidth: 10,
-      svgStyle: { width: '80vw', height: '100%' }, // ← 横幅を90%にして左右に余白
+      svgStyle: { width: '70vw', height: '10px' },
     });
 
 // 0% → 100% にアニメーション
@@ -124,7 +124,7 @@
 <!--      <HeaderHome v-model:menu="activeMenu" />-->
     </header>
     <div id="main">
-      <div id="progress">
+      <div id="progress" class="frame">
         <h3>進捗バー</h3>
         <div v-show="numberOfToDO != null && finishedToDo != null">
           <div style="display: flex; align-items: center; justify-content: center;">
@@ -148,17 +148,20 @@
       </div>
 
       <div id="studyTime">
-        <h3>学習時間　<span class="underlined">{{ Math.floor(sumToday / 60) }}時間{{ sumToday % 60 }}分</span></h3>
-        <Pie></Pie>
+        <div class="frame">
+          <h3>学習時間　<span class="underlined">{{ Math.floor(sumToday / 60) }}時間{{ sumToday % 60 }}分</span></h3>
+          <Pie></Pie>
+        </div>
+        <div class="frame">
+          <h3>学習時間（科目別）　<span class="underlined">{{ Math.floor(sumTodayofSubject / 60) }}時間{{ sumTodayofSubject % 60 }}分</span></h3>
 
-        <h3>学習時間（科目別）　<span class="underlined">{{ Math.floor(sumTodayofSubject / 60) }}時間{{ sumTodayofSubject % 60 }}分</span></h3>
-
-        <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
-          <option value="">科目を選択</option>
-          <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
-            {{ subject.Name }}
-          </option>
-        </select>
+          <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
+            <option value="">科目を選択</option>
+            <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
+              {{ subject.Name }}
+            </option>
+          </select>
+        </div>
       </div>
 
     </div>
@@ -178,6 +181,7 @@ h3 {
 
  #main {
    overflow-y: scroll;
+   background-color: #3d7fe0;
  }
  #tmp {
    height: calc(100dvh - 80px);
@@ -198,5 +202,16 @@ h3 {
 
 #progress-bar {
   text-align: center;
+}
+
+.frame {
+  border: 1px solid #FFFFFF;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  margin: 5px;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-bottom: 15px;
+  margin-top: 24px;
 }
 </style>
