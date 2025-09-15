@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  // Chart.js円グラフ描画
-  import {Chart} from "chart.js/auto";
   import { subjectModule } from '@/logic/subject';
   import { CONST } from '@/logic/const';
   import { studyLog } from "@/logic/StudyLog";
