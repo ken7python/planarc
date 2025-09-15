@@ -22,7 +22,7 @@
           rotation: -90,
           circumference: 180,
           plugins: {
-            legend: { position: 'right' }
+            legend: { position: 'bottom' }
           }
         }
       });
@@ -82,6 +82,6 @@
 <style scoped>
   #pieChart {
     max-width: 360px;
-    max-height: 100px;
+    max-height: 150px;
   }
 </style>

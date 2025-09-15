@@ -211,7 +211,7 @@ h3 {
   margin: 5px;
   padding-right: 5px;
   padding-left: 5px;
-  padding-bottom: 15px;
+  padding-bottom: 20px;
   margin-top: 24px;
 }
 </style>
