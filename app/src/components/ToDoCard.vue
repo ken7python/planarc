@@ -12,7 +12,7 @@ const props = defineProps({
   LIST: Array
 })
 
-console.log(props.LIST);
+//console.log(props.LIST);
 
 const LIST = ref<any[]>(props.LIST);
 

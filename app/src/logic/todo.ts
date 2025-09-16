@@ -44,7 +44,7 @@ export const todoModule = {
             let subjects = ref<any[]>([]);
 
             const subject_list = await subjectModule.getList();
-            console.log(subject_list);
+            //console.log(subject_list);
             subjects.value = subject_list;
 
             res.MUST.forEach((item) => {

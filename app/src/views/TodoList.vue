@@ -38,18 +38,18 @@
     communication_loading.value = true;
 
     const subject_list = await subjectModule.getList();
-    console.log(subject_list);
+    //console.log(subject_list);
     subjects.value = subject_list;
 
     const ToDoList = await todoModule.getListGroup(props.date);
-    console.log(await ToDoList);
+    //console.log(await ToDoList);
 
     TODO_MUST.value = await ToDoList.MUST;
     TODO_WANT.value = await ToDoList.WANT;
     TODO_checked.value = await ToDoList.checked;
 
-    console.log("MUST---");
-    console.log(TODO_MUST.value);
+    //console.log("MUST---");
+    //console.log(TODO_MUST.value);
 
     communication_loading.value = false;
   }
@@ -113,7 +113,7 @@
   let enjoyment = ref<string>('');
 
   async function setEnjoyment(enjoy: string) {
-    console.log(enjoy);
+    //console.log(enjoy);
     await statusModule.setEnjoyment(props.date,enjoy);
     loadStatus();
   }
@@ -135,7 +135,7 @@
 
   async function loadStatus() {
     const status = await statusModule.get(props.date);
-    console.log(status);
+    //console.log(status);
     if (status) {
       enjoyment.value = status.Enjoyment || '';
       selectedMood.value = status.Mood || null;

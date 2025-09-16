@@ -22,7 +22,7 @@
 
   async function loadData() {
     const subject_list = await subjectModule.getList();
-    console.log(subject_list);
+    //console.log(subject_list);
     subjects.value = subject_list;
 
     stopwatch.init();
@@ -35,8 +35,8 @@
 
   watch(subjectName, (newVal, oldVal) => {
     if (newVal != undefined) {
-      console.log(newVal);
-      console.log(stopwatch);
+      //console.log(newVal);
+      //console.log(stopwatch);
       stopwatch.subject.value = newVal;
       stopwatch.save();
       stopwatch.init();

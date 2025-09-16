@@ -37,7 +37,7 @@ export const stopwatch = {
         this.update();
     },
     saveRef: function(key, refitem) {
-        console.log("saveRef", key, refitem);
+        //console.log("saveRef", key, refitem);
         if (refitem.value != null) {
             localStorage.setItem(key, refitem.value)
         }
