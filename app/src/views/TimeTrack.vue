@@ -21,7 +21,7 @@ const sum = ref<number>(0)
 const communication_loading = ref<boolean>(false);
 
 function getTimeRange(events) {
-  console.log('-getTimeRange-')
+  //console.log('-getTimeRange-')
   let sHours = Infinity;
   let sMinutes = 0;
   let eHours = -Infinity;
@@ -30,14 +30,28 @@ function getTimeRange(events) {
   events.forEach(e => {
     let sD = new Date(new Date(e.start).getTime() - 15 * 60 * 1000);
     let eD = new Date(new Date(e.end).getTime() + 15 * 60 * 1000);
+    //console.log("StartDate");
+    //console.log(sD);
+    //console.log("EndDate");
+    //console.log(eD);
     let sH = sD.getHours();
     let sM = sD.getMinutes();
     let eH = eD.getHours();
     let eM = eD.getMinutes();
-    if (sH * 60 + sM < sHours * 60 + sMinutes) sHours = sH;sMinutes = sM;
-    if (eH * 60 + eM > eHours * 60 + eMinutes) eHours = eH;eMinutes = eM;
+    if (sH * 60 + sM < sHours * 60 + sMinutes){
+        sHours = sH;
+        sMinutes = sM;
+        //console.log("sD Updated");
+        //console.log(sD);
+    }
+    if (eH * 60 + eM > eHours * 60 + eMinutes){
+        eHours = eH;
+        eMinutes = eM;
+        //console.log("eD updated");
+        //console.log(eD);
+    }
  })
-  console.log(sHours, sMinutes, eHours, eMinutes);
+  //console.log(sHours, sMinutes, eHours, eMinutes);
 
   return { sHours, sMinutes, eHours, eMinutes };
 }
@@ -65,7 +79,7 @@ async function loadData() {
   log.value = await studyLog.getLog(props.date);
   subjects.value = await subjectModule.getList();
 
-  console.log(log.value);
+  //console.log(log.value);
 
   for (let i = 0; i < log.value.length; i++) {
     // console.log(log.value[i].SubjectID);
@@ -83,7 +97,7 @@ async function loadData() {
     const endHours = log.value[i].EndHours;
     const endMinutes = log.value[i].EndMinutes;
 
-    console.log(startHours, startMinutes, endHours);
+    //console.log(startHours, startMinutes, endHours);
 
     sum.value += log.value[i].StudyTime;
 
@@ -98,7 +112,7 @@ async function loadData() {
     });
   }
 
-  console.log(...results.value);
+  //console.log(...results.value);
 
   const events = [
     ...results.value.map(item => ({
