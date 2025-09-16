@@ -50,6 +50,9 @@ function getTimeRange(events) {
         //console.log("eD updated");
         //console.log(eD);
     }
+
+    sMinutes = Math.floor(sMinutes / 10) * 10;
+    eMinutes = Math.ceil(eMinutes / 10) * 10;
  })
   //console.log(sHours, sMinutes, eHours, eMinutes);
 
