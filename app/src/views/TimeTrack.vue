@@ -21,17 +21,25 @@ const sum = ref<number>(0)
 const communication_loading = ref<boolean>(false);
 
 function getTimeRange(events) {
-  let start = Infinity;
-  let end = -Infinity;
+  console.log('-getTimeRange-')
+  let sHours = Infinity;
+  let sMinutes = 0;
+  let eHours = -Infinity;
+  let eMinutes = 0;
 
   events.forEach(e => {
-    let s = new Date(e.start).getHours();
-    let t = new Date(e.end).getHours();
-    if (s < start) start = s;
-    if (t > end) end = t;
-  });
+    let sD = new Date(new Date(e.start).getTime() - 15 * 60 * 1000);
+    let eD = new Date(new Date(e.end).getTime() + 15 * 60 * 1000);
+    let sH = sD.getHours();
+    let sM = sD.getMinutes();
+    let eH = eD.getHours();
+    let eM = eD.getMinutes();
+    if (sH * 60 + sM < sHours * 60 + sMinutes) sHours = sH;sMinutes = sM;
+    if (eH * 60 + eM > eHours * 60 + eMinutes) eHours = eH;eMinutes = eM;
+ })
+  console.log(sHours, sMinutes, eHours, eMinutes);
 
-  return { start, end };
+  return { sHours, sMinutes, eHours, eMinutes };
 }
 
 
@@ -102,10 +110,10 @@ async function loadData() {
     }))
   ]
 
-  const { start, end } = getTimeRange(events);
-  console.log(start, end);
+  const { sHours,sMinutes,eHours,eMinutes } = getTimeRange(events);
+  console.log(sHours,sMinutes,eHours,eMinutes);
 
-  console.log(`${String(start).padStart(2, '0')}:00:00`)
+  //console.log(`${String(sHours.padStart(2, '0')}:00:00`)
 
   let ec = createCalendar(
       // HTML element the calendar will be mounted to
@@ -130,8 +138,8 @@ async function loadData() {
           };
         },
         events: events,
-        slotMinTime: `${start - 1}:30:00`, // 最初の予定より前は非表示
-        slotMaxTime: `${end}:30:00`    // 最後の予定より後は非表示
+        slotMinTime: `${ sHours }:${ sMinutes }:00`, // 最初の予定より前は非表示
+        slotMaxTime: `${ eHours }:${ eMinutes }:00`    // 最後の予定より後は非表示
       }
   );
 
