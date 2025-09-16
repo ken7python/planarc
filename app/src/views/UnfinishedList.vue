@@ -16,7 +16,6 @@
   const communication_loading = ref<boolean>(false);
 
   async function loadData() {
-    communication_loading.value = true;
     const profile = await user.profile();
     // console.log(profile);
 
@@ -38,6 +37,8 @@
 
     communication_loading.value = false;
   }
+
+  communication_loading.value = true;
   loadData();
 
   async function deleteList(id :number) {
@@ -54,7 +55,7 @@
 <template>
   <div id="page">
     <div id="List" v-if="!communication_loading">
-      <ul class="list-ul" v-if="unfinishedTask.length > 0">
+      <ul class="list-ul" v-if="unfinishedTask.length > 0" :key="unfinishedTask">
         <li class="list-item" v-for="(task, index) in unfinishedTask" :key="index">
           <div class="left-group">
             <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;"></span>

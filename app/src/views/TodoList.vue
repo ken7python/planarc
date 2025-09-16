@@ -35,8 +35,6 @@
   let subjects = ref<any[]>([]);
 
   async function loadData() {
-    communication_loading.value = true;
-
     const subject_list = await subjectModule.getList();
     //console.log(subject_list);
     subjects.value = subject_list;
@@ -50,7 +48,6 @@
 
     //console.log("MUST---");
     //console.log(TODO_MUST.value);
-
     communication_loading.value = false;
   }
 
@@ -145,6 +142,7 @@
     }
   }
 
+  communication_loading.value = true;
   loadData();
   loadStatus();
 </script>
@@ -207,7 +205,7 @@
             <Addicon v-if="!communication_loading"></Addicon>
             <span v-if="!communication_loading">追加</span>
 
-            <span v-if="communication_saving">通信中</span>
+            <span v-if="communication_saving" >通信中</span>
           </button>
         </div>
         <br>
@@ -220,23 +218,23 @@
       <div>
         <div id="MUST" class="frame">
           <span>MUST</span>
-          <ToDoCard :LIST="TODO_MUST" @reload="loadData" />
+          <ToDoCard :LIST="TODO_MUST" @reload="loadData" :key="TODO_MUST"/>
         </div>
 
 
         <div id="WANT" class="frame">
           <span>WANT</span>
-          <ToDoCard :LIST="TODO_WANT" @reload="loadData" />
+          <ToDoCard :LIST="TODO_WANT" @reload="loadData" :key="TODO_WANT" />
         </div>
 
 
         <div id="Checked" class="frame">
           <span>完了</span>
-          <ToDoCard :LIST="TODO_checked" @reload="loadData" />
+          <ToDoCard :LIST="TODO_checked" @reload="loadData" :key="TODO_checked" />
         </div>
       </div>
     </div>
-    <div v-else style="text-align: center; margin-top: 20px;">
+    <div v-else style="color: white;text-align: center; margin-top: 20px;">
       <p>通信中...</p>
     </div>
   </div>
