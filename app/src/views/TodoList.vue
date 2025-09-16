@@ -207,7 +207,7 @@
             <Addicon v-if="!communication_loading"></Addicon>
             <span v-if="!communication_loading">追加</span>
 
-            <span v-if="communication_saving">通信中</span>
+            <span v-if="communication_saving" >通信中</span>
           </button>
         </div>
         <br>
@@ -236,7 +236,7 @@
         </div>
       </div>
     </div>
-    <div v-else style="text-align: center; margin-top: 20px;">
+    <div v-else style="color: white;text-align: center; margin-top: 20px;">
       <p>通信中...</p>
     </div>
   </div>
