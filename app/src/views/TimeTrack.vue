@@ -119,7 +119,7 @@ async function loadData() {
 
   const events = [
     ...results.value.map(item => ({
-      title: item.name,
+      title: item.StudyTime < 15 ? "" : item.name,
       start: props.date + 'T' + String(item.sHours).padStart(2, '0') + ':' + String(item.sMinutes).padStart(2, '0') + ':00',
       end: props.date + 'T' + String(item.eHours).padStart(2, '0') + ':' + String(item.eMinutes).padStart(2, '0') + ':00',
       color: item.color,
