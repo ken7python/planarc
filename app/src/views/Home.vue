@@ -26,7 +26,9 @@
   const sumToday = ref<number>(0);
 
   const sumTodayofSubject = ref<number>(0);
+  const loadingSumTodayofSubject = ref<boolean>(false);
   async function getTodayofSubject(subjectId: number) {
+    loadingSumTodayofSubject.value = true;
     const studyLogs = await studyLog.getLog(today);
     console.log(studyLogs);
 
@@ -34,7 +36,8 @@
       if (log.SubjectID === subjectId) {
         sumTodayofSubject.value += log.StudyTime;
       }
-    });
+    })
+    loadingSumTodayofSubject.value = false;
   }
 
   watch (subjectName, (newVal) => {
@@ -50,26 +53,43 @@
   const uSubjectNames = ref<string[]>([]);
 
   const username = ref<string | null>(null);
+
+const loadingSum = ref<boolean>(true);
+
   async function loadData() {
     const profile = await user.profile();
     // console.log(profile);
     username.value = profile.username;
 
     const subject_list = await subjectModule.getList();
-    console.log(subject_list);
-
     const studyLogs = await studyLog.getLog(today);
     console.log(studyLogs);
-
+    //console.log(subject_list);
+    subject_list.map(subject => {
+       let sum = 0;
+       studyLogs.map(log => {
+       //console.log(log);
+            if (log.SubjectID === subject.ID){
+                sum += log.StudyTime;
+            }
+        })
+        subject.StudyTime = sum;
+        //console.log(subject);
+        //console.log(sum);
+    })
+    subject_list.sort((a, b) => b.StudyTime - a.StudyTime);
+    //console.log(subject_list);
+    loadingSum.value = true;
     studyLogs.map(log => {
       sumToday.value += log.StudyTime;
     })
+    loadingSum.value = false;
 
     const subjectSet = new Set();
     // console.log(studyLogs);
     studyLogs.map(log => {
       // console.log(log.ID);
-      console.log(log.SubjectID);
+      //console.log(log.SubjectID);
       subjectSet.add(log.SubjectID);
     })
 
@@ -78,8 +98,8 @@
         subjects.value.push(subject);
       }
     })
-    console.log(subjectSet);
-
+    //console.log(subjectSet);
+   
     const TODOList = await todoModule.getList(today);
     console.log(TODOList);
 
@@ -105,15 +125,15 @@
         return task.SubjectID;
       }
     }))];
-    console.log(uSubjectIDs);
+    //console.log(uSubjectIDs);
     uSubjectNames.value = subject_list.filter(subject => uSubjectIDs.includes(subject.ID)).map(subject => {
       return subject.Name;
     });
-    console.log(uSubjectNames.value);
+    //console.log(uSubjectNames.value);
   }
-
+const loading = ref<boolean>(true);
   onMounted(() => {
-    loadData();
+        loadData();
   });
 </script>
 
@@ -149,11 +169,11 @@
 
       <div id="studyTime">
         <div class="frame">
-          <h3>学習時間　<span class="underlined">{{ Math.floor(sumToday / 60) }}時間{{ sumToday % 60 }}分</span></h3>
+            <h3>学習時間　<span v-if="loadingSum">loading...</span><span v-else class="underlined">{{ Math.floor(sumToday / 60) }}時間{{ sumToday % 60 }}分</span></h3>
           <Pie></Pie>
         </div>
         <div class="frame">
-          <h3>学習時間（科目別）　<span class="underlined">{{ Math.floor(sumTodayofSubject / 60) }}時間{{ sumTodayofSubject % 60 }}分</span></h3>
+            <h3>学習時間(科目別) <span v-if="loadingSumTodayofSubject">loading...</span><span v-else-if='subjectName != ""' class="underlined">{{ Math.floor(sumTodayofSubject / 60) }}時間{{ sumTodayofSubject % 60 }}分</span></h3>
 
           <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
             <option value="">科目を選択</option>
