@@ -276,9 +276,11 @@
   #pieChart {
     max-width: 90vw;
     max-height: 25vh;
+    overflow-y: scroll;
   }
   #barChart {
     max-width: 90vw;
     max-height: 25vh;
+    overflow-y: scroll;
   }
 </style>
