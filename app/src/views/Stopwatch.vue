@@ -50,7 +50,7 @@
 
   async function save() {
     communication_saving.value = true;
-    studyLog.write(props.date,stopwatch.subject.value,stopwatch.sHours.value,stopwatch.sMinutes.value,stopwatch.eHours.value,stopwatch.eMinutes.value)
+    await studyLog.write(props.date,stopwatch.subject.value,stopwatch.sHours.value,stopwatch.sMinutes.value,stopwatch.eHours.value,stopwatch.eMinutes.value)
     communication_saving.value = false;
   }
 </script>
