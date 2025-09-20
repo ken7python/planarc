@@ -55,10 +55,17 @@
         responsive: true,
         plugins: {
           // title: { display: true, text: '月別：学習＋活動（積み上げ）' },
-          legend: { position: 'bottom' }
+          legend: {
+            position: 'bottom',
+            display: false,
+          }
         },
         scales: {
-          x: { stacked: true },   // ← ここで積み上げを有効にする
+          x: {
+            stacked: true,
+            categoryPercentage: 1.0,
+            barPercentage: 1.0
+          },   // ← ここで積み上げを有効にする
           y: { stacked: true }    // ← 縦軸も積み上げに
         }
       }
@@ -157,8 +164,9 @@
       dateSet.add(log.Date);
     })
     dateSet.forEach(date => {
-      dateArr.push(date);
-    })
+      const [year, month, day] = date.split('-');
+      dateArr.push(`${Number(month)}.${Number(day)}`);
+    });
 
     console.log(dateSet);
 
@@ -182,7 +190,8 @@
         label: name,
         data: daily,
         backgroundColor: color,
-        stack: '勉強'
+        stack: '勉強',
+        barThickness: 30,
       })
     });
 
