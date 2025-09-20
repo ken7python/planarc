@@ -50,7 +50,8 @@
     const comment = await CommentModule.ask(props.date,message.value);
     console.log(comment);
     if (await comment) {
-      message.value = '';
+      // message.value = '';
+      await loadData();
     }else {
       disabled.value = false;
     }
@@ -67,7 +68,12 @@
 
 <template>
   <div id="note">
-    <div class="micdiv">
+    <div v-if="CommentModule.refUserNote.value">
+      <p class="yourComment">
+        {{ CommentModule.refUserNote }}
+      </p>
+    </div>
+    <div class="micdiv" v-else>
       <textarea placeholder="メモ" v-model="message"></textarea>
       <mic-icon class="mic" :style="mic.micStyle()" @click="micbtn"></mic-icon>
     </div>
@@ -80,6 +86,7 @@
       </button>
       <br>
     </div>
+
     <div id="comment">
       <div v-if="CommentModule.refComment.value">
         <span>{{ CommentModule.refComment }}</span>
@@ -105,6 +112,17 @@
     padding: 10px;
     font-size: 16px;
     margin: 4px 0;
+    border: 1px solid #E2E8F8;
+    border-radius: 4px;
+  }
+
+  .yourComment {
+    width: 70%;
+    background-color: #FFFFFF;
+    padding: 10px;
+    font-size: 16px;
+    margin: 4px auto;
+    margin-bottom: 16px;
     border: 1px solid #E2E8F8;
     border-radius: 4px;
   }

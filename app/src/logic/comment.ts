@@ -5,6 +5,7 @@ import { ref } from "vue";
 export const CommentModule = {
     api: CONST.api() + '/comment',
     refComment: ref(""),
+    refUserNote: ref(""),
     ask: async function(date :string, note :string){
         const res = await fetch(`${ this.api }/ask`,{
             method: 'POST',
@@ -48,11 +49,15 @@ export const CommentModule = {
         if (await res.ok) {
             const json = await res.json();
             if (json) {
+                // console.log(json);
                 this.refComment.value = json.Note;
-                return json.comment;
+                this.refUserNote.value = json.UserNote;
+                return json;
             }else {
                 this.refComment.value = "";
+                this.refUserNote.value = "";
             }
+
         }
     }
 }

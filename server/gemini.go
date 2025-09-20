@@ -11,10 +11,11 @@ import (
 )
 
 type Comment struct {
-	ID   uint   `gorm:"primaryKey"`
-	Date string `gorm:"not null"`
-	UUID string `gorm:"not null"`
-	Note string `gorm:"not null"`
+	ID       uint   `gorm:"primaryKey"`
+	Date     string `gorm:"not null"`
+	UUID     string `gorm:"not null"`
+	Note     string `gorm:"not null"`
+	UserNote string `gorm:"not null"`
 }
 
 func getPrompt(uuid string, date string, name string, note string) string {
@@ -69,16 +70,16 @@ func getPrompt(uuid string, date string, name string, note string) string {
 私が勉強をがんばれるような声かけをするのが得意です。
 次のようなステップで300字程度コメントしてください。
 今日は%sです
-なお、返事は来ないものとしてマークダウンではなく平文で作成してください。
+なお、返事は来ないものとしてマークダウンや箇条書きで番号リストではなく、先生が返すような文章のみで作成してください。
 
 1.今日の取り組み成果に対する評価
 2.明日以降の提案
 3.今日の気分や振り返りコメントに関連したこと
 
 ## 添付情報
-### 今日の気分（4段階）
+### 今日の気分（4段階）(0は記入なし)
 %d
-### 今日の楽しみ
+### 今日の楽しみ(空文字は記入なし)
 %s
 ### 勉強時間
 %s
@@ -113,9 +114,12 @@ func reqComment(c *gin.Context) {
 	}
 
 	var name string = "あなた"
-	if GetProfile(c) != nil {
-		name = GetProfile(c).Username
+	yourProfile := GetProfile(c)
+	if yourProfile != nil {
+		name = yourProfile.Username
 	}
+
+	saveUserComment(yourProfile.UUID, req.Date, req.Note)
 
 	ctx := context.Background()
 
@@ -160,7 +164,7 @@ func reqComment(c *gin.Context) {
 		flusher.Flush()
 	}
 
-	saveComment(uuid, req.Date, response)
+	saveAIComment(uuid, req.Date, response)
 
 	fmt.Println("Success generating content")
 }
@@ -188,11 +192,33 @@ func getComment(c *gin.Context) {
 	c.JSON(http.StatusOK, comment)
 }
 
-func saveComment(uuid string, date string, note string) {
+func saveAIComment(uuid string, date string, note string) {
 	comment := Comment{
 		Date: date,
 		UUID: uuid,
 		Note: note,
+	}
+	if retGetComment(uuid, date) == nil {
+		fmt.Println("No existing comment, creating new one.")
+		if err := db.Create(&comment).Error; err != nil {
+			fmt.Println("Error creating comment:", err)
+			return
+		}
+		fmt.Println("Success creating comment")
+	} else {
+		if err := db.Model(&Comment{}).Where("date = ? AND uuid = ?", date, uuid).Updates(comment).Error; err != nil {
+			fmt.Println("Error updating comment:", err)
+			return
+		}
+		fmt.Println("Success updating comment")
+	}
+}
+
+func saveUserComment(uuid string, date string, note string) {
+	comment := Comment{
+		Date:     date,
+		UUID:     uuid,
+		UserNote: note,
 	}
 	if retGetComment(uuid, date) == nil {
 		fmt.Println("No existing comment, creating new one.")
