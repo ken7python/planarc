@@ -191,7 +191,6 @@
         data: daily,
         backgroundColor: color,
         stack: '勉強',
-        barThickness: 30,
       })
     });
 
