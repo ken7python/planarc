@@ -281,10 +281,10 @@
   }
   #pieChart {
     max-width: 90vw;
-    max-height: 32vh;
+    max-height: 440px;
   }
   #barChart {
     max-width: 90vw;
-    max-height: 32vh;
+    max-height: 440px;
   }
 </style>
