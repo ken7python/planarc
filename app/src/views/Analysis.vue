@@ -232,12 +232,13 @@
 </script>
 
 <template>
+  <header>
+    <Header />
+  </header>
+
   <div>
-    <header>
-      <Header />
-    </header>
     <div id="main">
-      <!-- Analysis content goes here -->
+        <!-- Analysis content goes here -->
       <div id="datepicker">
         <h2>指定期間</h2>
         <b>開始</b><input type="date" v-model="startDay"  />
@@ -254,38 +255,36 @@
         <p v-else>期間合計：0時間</p>
         <canvas id="pieChart"></canvas>
       </div>
-    </div>
 
-    <div id="bar">
-      <canvas id="barChart"></canvas>
+      <div id="bar">
+        <canvas id="barChart"></canvas>
+      </div>
     </div>
-    <footer>
-      <Footer />
-    </footer>
   </div>
+  <footer>
+    <Footer />
+  </footer>
 </template>
 
 <style scoped>
+#main {
+  height: calc(100dvh - 80px); /* ヘッダーとフッターの高さを引く */
+  overflow-y: auto;     /* 縦スクロールを自動で表示 */
+  overflow-x: hidden;   /* 横スクロールを隠す（必要なら auto にする） */
+}
   #circle, #bar {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-top: 16px;
-
-    /* スクロール可能にする */
-    overflow: auto;
-
-    /* コンテナサイズを制限 */
-    max-width: 100vw;
-    max-height: 50vh;
   }
   #pieChart {
     max-width: 90vw;
-    max-height: 25vh;
+    max-height: 32vh;
   }
   #barChart {
     max-width: 90vw;
-    max-height: 25vh;
+    max-height: 32vh;
   }
 </style>
