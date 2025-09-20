@@ -251,8 +251,8 @@
       </div>
 
       <div id="circle">
-        <p v-if="sum > 0">期間合計：<span v-if="Math.floor(sum / 60) > 0">{{ Math.floor(sum / 60) }}時間</span><span v-if="sum % 60 > 0">{{sum % 60}}分</span></p>
-        <p v-else>期間合計：0時間</p>
+        <span v-if="sum > 0">期間合計：<span v-if="Math.floor(sum / 60) > 0">{{ Math.floor(sum / 60) }}時間</span><span v-if="sum % 60 > 0">{{sum % 60}}分</span></span>
+        <span v-else>期間合計：0時間</span>
         <canvas id="pieChart"></canvas>
       </div>
 
@@ -281,10 +281,10 @@
   }
   #pieChart {
     max-width: 90vw;
-    max-height: 440px;
+    max-height: 430px;
   }
   #barChart {
     max-width: 90vw;
-    max-height: 440px;
+    max-height: 430px;
   }
 </style>
