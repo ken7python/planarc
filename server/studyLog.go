@@ -30,6 +30,18 @@ func retGetLogByUserID(uuid string, date string) []StudyLog {
 	return logs
 }
 
+func retGetLogByUserIDAllDay(uuid string) []StudyLog {
+	var logs []StudyLog
+
+	res := db.Model(&StudyLog{}).Where("uuid = ?", uuid).Find(&logs)
+	if res.Error != nil {
+		fmt.Println("Error fetching study logs:", res.Error)
+		return nil
+	}
+
+	return logs
+}
+
 func getLogByUserID(c *gin.Context) {
 	fmt.Println("studylog/")
 	uuid := GetProfile(c).UUID
