@@ -106,7 +106,7 @@ func main() {
 	gemini.GET("/", getComment)
 
 	analysys := api.Group("/analysis")
-	//analysys.Use(authMiddleware())
+	analysys.Use(authMiddleware())
 	analysys.GET("/", getAnalysis)
 
 	fmt.Println("Starting server")
