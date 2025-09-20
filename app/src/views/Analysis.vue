@@ -272,15 +272,20 @@
     align-items: center;
     justify-content: center;
     margin-top: 16px;
+
+    /* スクロール可能にする */
+    overflow: auto;
+
+    /* コンテナサイズを制限 */
+    max-width: 100vw;
+    max-height: 50vh;
   }
   #pieChart {
     max-width: 90vw;
     max-height: 25vh;
-    overflow-y: scroll;
   }
   #barChart {
     max-width: 90vw;
     max-height: 25vh;
-    overflow-y: scroll;
   }
 </style>
