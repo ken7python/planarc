@@ -202,8 +202,8 @@
           <br>
           <br>
           <button class="btn" style="margin: 0 auto;" @click="add" :disabled="communication_loading">
-            <Addicon v-if="!communication_loading"></Addicon>
-            <span v-if="!communication_loading">追加</span>
+            <Addicon v-if="!communication_saving"></Addicon>
+            <span v-if="!communication_saving">追加</span>
 
             <span v-if="communication_saving" >通信中</span>
           </button>
