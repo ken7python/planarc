@@ -123,7 +123,7 @@
   }
   const getMoodStyle = (mood: number) => {
     return {
-      color: selectedMood.value === mood ? 'black' : 'gray',
+      color: selectedMood.value === mood ? '#4d5161' : 'gray',
       background: selectedMood.value === mood ? 'yellow' : 'white',
       cursor: 'pointer'
     };

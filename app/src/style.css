@@ -20,6 +20,7 @@
 
 input[type="text"], input[type="password"],.selectbox {
     width: 80vw;
+    color: #4d5161;
     background-color: #FFFFFF;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -38,7 +39,7 @@ input[type="date"] {
     border: 1px solid #E2E8F8;
     border-radius: 6px;
     box-sizing: border-box;
-    color: #333;
+    color: #4d5161;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -79,7 +80,7 @@ input[type="time"] {
     border: 1px solid #E2E8F8;
     border-radius: 6px;
     box-sizing: border-box;
-    color: #333;
+    color: #4d5161;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;

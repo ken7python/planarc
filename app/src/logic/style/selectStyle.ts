@@ -8,7 +8,7 @@ export const selectStyle = {
     },
     getSelectStyle: function(value) {
         return {
-            color: selectStyle.isSelected(value) ? "#000" : "#AEB7BD",
+            color: selectStyle.isSelected(value) ? "#4d5161" : "#AEB7BD",
         }
     },
 }
