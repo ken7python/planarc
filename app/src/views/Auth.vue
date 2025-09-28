@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { CONST } from '@/logic/const.js';
+  import { CONST } from '@/logic/const.ts';
   import Header from "@/components/Header.vue";
 </script>
 

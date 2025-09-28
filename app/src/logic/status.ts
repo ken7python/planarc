@@ -1,4 +1,4 @@
-import { CONST } from "./const";
+import { CONST } from "@/logic/const.ts";
 import { user } from "./user";
 
 export const statusModule = {

@@ -11,7 +11,7 @@
   import accountIcon from '@/assets/icons/account_circle.svg';
 
 
-  import { CONST } from '@/logic/const.js';
+  import { CONST } from '@/logic/const.ts';
   import { user } from '@/logic/user.js';
   import Analysis from "../views/Analysis.vue";
 

@@ -1,5 +1,5 @@
 // let account_url = "http://localhost:8080/api/accounts";
-import { CONST } from '@/logic/const.js';
+import { CONST } from '@/logic/const.ts';
 
 export const user = {
     account_url: CONST.account_url(),
