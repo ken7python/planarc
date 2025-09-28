@@ -6,7 +6,7 @@
   import flagIcon from '@/assets/icons/flag.svg';
   import analysisIcon from '@/assets/icons/analytics.svg';
 
-  import { CONST } from '@/logic/const.js';
+  import { CONST } from '@/logic/const.ts';
   import Analysis from "../views/Analysis.vue";
 
   const route = useRoute()
@@ -37,7 +37,7 @@
     }
   }
 
-  // console.log(CONST);
+  // console.log(Const);
 </script>
 
 <template>

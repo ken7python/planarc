@@ -4,7 +4,7 @@ import Auth from '../views/Auth.vue'
 import Signup from "../views/Signup.vue";
 import Login from '../views/Login.vue'
 
-import { CONST } from '@/logic/const.js'
+import { CONST } from '@/logic/const.ts';
 import Daily from "@/views/Daily.vue";
 import Flag from "@/views/Flag.vue";
 import AddSubject from "../views/AddSubject.vue";

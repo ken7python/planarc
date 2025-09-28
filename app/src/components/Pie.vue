@@ -1,10 +1,14 @@
 <script setup lang="ts">
   import { subjectModule } from '@/logic/subject';
-  import { CONST } from '@/logic/const';
+  import { CONST } from '@/logic/const.ts';
   import { studyLog } from "@/logic/StudyLog";
-  import {onMounted, ref, watch, onUnmounted} from "vue";
+  import { ref, watch, onUnmounted} from "vue";
 
   let chartInstance = null; // チャートインスタンスを保存
+
+  const props = defineProps({
+    date: String
+  })
 
   function drawPieChart() {
     if (subjects.value && subjects.value.length > 0) {
@@ -47,9 +51,7 @@
   });
 
   let subjects = ref<any[]>([]);
-  const today = CONST.getToday();
-
- async function loadData() {
+ async function loadData(today :string) {
    const subject_list = await subjectModule.getList();
    // console.log(subject_list);
    // subjects.value = subject_list;
@@ -96,7 +98,7 @@
    drawPieChart();
  }
 
- loadData();
+ loadData(props.date ?? CONST.getToday());
 
   watch(subjects, () => {
     drawPieChart();
