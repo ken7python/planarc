@@ -25,11 +25,16 @@
 
   const sumToday = ref<number>(0);
 
+  const today = new Date();
+  const date = ref<string>(CONST.dateToString(today));
+
+  console.log(date.value);
+
   const sumTodayofSubject = ref<number>(0);
   const loadingSumTodayofSubject = ref<boolean>(false);
   async function getTodayofSubject(subjectId: number) {
     loadingSumTodayofSubject.value = true;
-    const studyLogs = await studyLog.getLog(today);
+    const studyLogs = await studyLog.getLog(date.value);
     console.log(studyLogs);
 
     studyLogs.map( log => {
@@ -47,8 +52,8 @@
     }
   });
 
-  const today = CONST.getToday();
-  console.log(today);
+  // const today = Const.getToday();
+  // console.log(CONST.getToday());
 
   const uSubjectNames = ref<string[]>([]);
 
@@ -62,7 +67,7 @@ const loadingSum = ref<boolean>(true);
     username.value = profile.username;
 
     const subject_list = await subjectModule.getList();
-    const studyLogs = await studyLog.getLog(today);
+    const studyLogs = await studyLog.getLog(date.value);
     console.log(studyLogs);
     //console.log(subject_list);
     subject_list.map(subject => {
@@ -100,7 +105,7 @@ const loadingSum = ref<boolean>(true);
     })
     //console.log(subjectSet);
    
-    const TODOList = await todoModule.getList(today);
+    const TODOList = await todoModule.getList(date.value);
     console.log(TODOList);
 
     const finished = TODOList.filter(task => task.Checked)
@@ -132,9 +137,23 @@ const loadingSum = ref<boolean>(true);
     //console.log(uSubjectNames.value);
   }
 const loading = ref<boolean>(true);
-  onMounted(() => {
-        loadData();
-  });
+
+watch(date, (newVal) => {
+  loading.value = true;
+  subjects.value = [];
+  sumToday.value = 0;
+  subjectName.value = '';
+  sumTodayofSubject.value = 0;
+  numberOfToDO.value = null;
+  finishedToDo.value = null;
+  document.getElementById("progress-bar").innerHTML = null;
+  loadData();
+  loading.value = false;
+})
+
+onMounted(() => {
+      loadData();
+});
 </script>
 
 <template>
@@ -144,6 +163,9 @@ const loading = ref<boolean>(true);
 <!--      <HeaderHome v-model:menu="activeMenu" />-->
     </header>
     <div id="main">
+      <div id="calendar">
+        <input type="date" v-model="date">
+      </div>
       <div id="progress" class="frame">
         <h3>進捗バー</h3>
         <div v-show="numberOfToDO != null && finishedToDo != null">
@@ -170,7 +192,7 @@ const loading = ref<boolean>(true);
       <div id="studyTime">
         <div class="frame">
             <h3>学習時間　<span v-if="loadingSum">loading...</span><span v-else class="underlined">{{ Math.floor(sumToday / 60) }}時間{{ sumToday % 60 }}分</span></h3>
-          <Pie></Pie>
+          <Pie :key="date" :date="date"></Pie>
         </div>
         <div class="frame">
             <h3>学習時間(科目別) <span v-if="loadingSumTodayofSubject">loading...</span><span v-else-if='subjectName != ""' class="underlined">{{ Math.floor(sumTodayofSubject / 60) }}時間{{ sumTodayofSubject % 60 }}分</span></h3>
@@ -231,7 +253,19 @@ h3 {
   margin: 5px;
   padding-right: 5px;
   padding-left: 5px;
-  padding-bottom: 20px;
-  margin-top: 24px;
+  padding-bottom: 16px;
+  margin-top: 16px;
+}
+
+#calendar {
+  width: 100%;
+  height: 40px;
+  padding-top: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: bold;
 }
 </style>
