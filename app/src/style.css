@@ -121,7 +121,7 @@ input[type="time"] {
     display: flex;
     justify-content: space-between; /* 左右に配置 */
     align-items: center;
-    border-top: 1px solid var(--border-color);
+    border-top: 2px solid var(--border-color);
     /*border-bottom: 1px solid var(--border-color);*/
     background-color: var(--white-color);
     /*border-radius: 4px; !* 角を丸く *!*/

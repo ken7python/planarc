@@ -264,7 +264,7 @@
   }
 
   .frame {
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     background: var(--white-color);
     border-radius: 8px;
     margin: 5px;
