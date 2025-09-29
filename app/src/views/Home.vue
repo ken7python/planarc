@@ -223,7 +223,6 @@ h3 {
 
  #main {
    overflow-y: scroll;
-   background-color: #3d7fe0;
  }
  #tmp {
    height: calc(100dvh - 80px);
@@ -247,7 +246,7 @@ h3 {
 }
 
 .frame {
-  border: 1px solid #FFFFFF;
+  border: 1px solid var(--border-color);
   background-color: #FFFFFF;
   border-radius: 8px;
   margin: 5px;

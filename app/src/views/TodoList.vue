@@ -213,7 +213,6 @@
     </div>
 
     </div>
-
     <div id="List" v-if="!communication_loading">
       <div>
         <div id="MUST" class="frame">
@@ -245,7 +244,7 @@
     text-align: center;
   }
   #ToDoPage {
-    background-color: #3d7fe0;
+    /* background-color: #3d7fe0; */
     height: calc(100dvh - 80px - 34px - 40px - 10px);
     display: grid;
     grid-template-rows: auto 1fr;
@@ -265,8 +264,8 @@
   }
 
   .frame {
-    border: 1px solid #e4f2ff;
-    background-color: #e4f2ff;
+    border: 1px solid var(--border-color);
+    background: var(--white-color);
     border-radius: 8px;
     margin: 5px;
     padding: 5px;
