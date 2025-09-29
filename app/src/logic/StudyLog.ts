@@ -255,5 +255,29 @@ export const studyLog = {
         const ok = await this.write(date, subject, start.hours, start.minutes, end.hours, end.minutes);
         // console.log(res);
         return ok;
+    },
+    delete: async function(id :number) {
+        const res = await fetch(`${this.api}/delete`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${user.getToken()}`
+            },
+            body: JSON.stringify({
+                "id": id
+            })
+        })
+        console.log(await res)
+        if (res.ok) {
+            alert("勉強記録を削除しました");
+            return true;
+        }else {
+            console.error('Failed to fetch study_logs:', res.statusText);
+            const err :string = await res.json();
+            if (err){
+                alert("勉強記録の削除に失敗しました");
+                return false;
+            }
+        }
     }
 }

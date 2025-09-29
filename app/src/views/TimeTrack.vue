@@ -6,8 +6,6 @@ import { CONST } from "@/logic/const.ts";
 
 import {createCalendar, TimeGrid} from '@event-calendar/core';
 
-const calendar = ref(null)
-
 const props = defineProps({
     date: String
 })
@@ -80,6 +78,11 @@ function getContrastColor(hex) {
 async function loadData() {
   communication_loading.value = true;
 
+  log.value = [];
+  subjects.value = [];
+  results.value = [];
+  sum.value = 0;
+
   log.value = await studyLog.getLog(props.date);
   subjects.value = await subjectModule.getList();
 
@@ -132,14 +135,17 @@ async function loadData() {
     }))
   ]
 
+  console.log(events);
+
   const { sHours,sMinutes,eHours,eMinutes } = getTimeRange(events);
   console.log(sHours,sMinutes,eHours,eMinutes);
 
   //console.log(`${String(sHours.padStart(2, '0')}:00:00`)
-
+  const ecEl = document.getElementById('ec');
+  ecEl.innerHTML = ''; // 既存のカレンダーをクリア
   let ec = createCalendar(
       // HTML element the calendar will be mounted to
-      document.getElementById('ec'),
+      ecEl,
       // Array of plugins
       [TimeGrid],
       // Options object
@@ -171,12 +177,13 @@ async function loadData() {
           attachLongPress(info.el, () => {
             const e = info.event;
             console.log(e);
-            const id :number = e.id;
+            const id :number = Number(e.id);
             const title :string = e.title;
             const start :string = CONST.timeToString(e.start);
             const end :string = CONST.timeToString(e.end);
             if (confirm(`${start}〜${end}の${title}を削除しますか？`)) {
-              alert('削除しました（仮）');
+              // alert('削除しました（仮）');
+              deleteLog(id);
             }
           })
         }
@@ -184,6 +191,13 @@ async function loadData() {
   );
 
   communication_loading.value = false;
+}
+
+async function deleteLog (id :number) {
+  const res: boolean = await studyLog.delete(id);
+  if (res) {
+    await loadData();
+  }
 }
 
 function attachLongPress(el, onLongPress, delay = 500) {
