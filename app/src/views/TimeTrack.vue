@@ -209,12 +209,10 @@ function attachLongPress(el, onLongPress, delay = 500) {
   }
 
   const cancel = () => { if (t) { clearTimeout(t); t = null; } };
-  const move = () => { if (t) { moved = true; cancel(); } };
 
   el.addEventListener('pointerdown', start, { passive: true });
   el.addEventListener('pointerup', cancel, { passive: true });
   el.addEventListener('pointercancel', cancel, { passive: true });
-  el.addEventListener('pointermove', move, { passive: true});
   el.addEventListener('contextmenu', (e) => e.preventDefault());
 }
 
