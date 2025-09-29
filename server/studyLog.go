@@ -42,6 +42,16 @@ func retGetLogByUserIDAllDay(uuid string) []StudyLog {
 	return logs
 }
 
+func retDeleteLogByID(id int, uuid string) bool {
+	res := db.Where("id = ? AND uuid = ?", id, uuid).Delete(&StudyLog{})
+	if res.Error != nil {
+		fmt.Println("Error deleting study log:", res.Error)
+		return false
+	}
+
+	return true
+}
+
 func getLogByUserID(c *gin.Context) {
 	fmt.Println("studylog/")
 	uuid := GetProfile(c).UUID
@@ -55,6 +65,26 @@ func getLogByUserID(c *gin.Context) {
 
 	fmt.Println("Fetched study logs:", len(logs))
 	c.JSON(http.StatusOK, logs)
+}
+
+func deleteLogByID(c *gin.Context) {
+	fmt.Println("studylog/delete")
+	uuid := GetProfile(c).UUID
+	var req struct {
+		ID int `json:"id"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		fmt.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "リクエストの解析に失敗しました"})
+		return
+	}
+
+	if !retDeleteLogByID(req.ID, uuid) {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "勉強記録の削除に失敗しました"})
+		return
+	}
+	fmt.Println("Success deleting study log")
+	c.JSON(http.StatusOK, gin.H{"message": "勉強記録を削除しました"})
 }
 
 func AddLog(c *gin.Context) {

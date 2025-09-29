@@ -78,6 +78,7 @@ func main() {
 	studyLogs.Use(authMiddleware())
 	studyLogs.GET("/", getLogByUserID)
 	studyLogs.POST("/add", AddLog)
+	studyLogs.POST("/delete", deleteLogByID)
 
 	todo := api.Group("/todo")
 	todo.Use(authMiddleware())
