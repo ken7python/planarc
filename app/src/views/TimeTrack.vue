@@ -2,6 +2,7 @@
 import {  onMounted ,ref } from 'vue';
 import {studyLog} from "@/logic/StudyLog";
 import {subjectModule} from "@/logic/subject";
+import { CONST } from "@/logic/const.ts";
 
 import {createCalendar, TimeGrid} from '@event-calendar/core';
 
@@ -104,7 +105,10 @@ async function loadData() {
 
     sum.value += log.value[i].StudyTime;
 
+    // console.log(log.value[i]);
+
     results.value.push({
+      "id": log.value[i].ID,
       "name": log.value[i].subjectName,
       "StudyTime": log.value[i].StudyTime,
       "sHours": startHours,
@@ -115,15 +119,16 @@ async function loadData() {
     });
   }
 
-  //console.log(...results.value);
+  // console.log(...results.value);
 
   const events = [
     ...results.value.map(item => ({
+      id: item.id,
       title: item.StudyTime < 15 ? "" : item.name,
       start: props.date + 'T' + String(item.sHours).padStart(2, '0') + ':' + String(item.sMinutes).padStart(2, '0') + ':00',
       end: props.date + 'T' + String(item.eHours).padStart(2, '0') + ':' + String(item.eMinutes).padStart(2, '0') + ':00',
       color: item.color,
-      textColor: getContrastColor(item.color)
+      textColor: getContrastColor(item.color),
     }))
   ]
 
@@ -156,11 +161,47 @@ async function loadData() {
         },
         events: events,
         slotMinTime: `${ sHours }:${ sMinutes }:00`, // 最初の予定より前は非表示
-        slotMaxTime: `${ eHours }:${ eMinutes }:00`    // 最後の予定より後は非表示
+        slotMaxTime: `${ eHours }:${ eMinutes }:00`,    // 最後の予定より後は非表示
+
+        eventClick(info) {
+          console.log('short tap/click')
+        },
+
+        eventDidMount(info) {
+          attachLongPress(info.el, () => {
+            const e = info.event;
+            console.log(e);
+            const id :number = e.id;
+            const title :string = e.title;
+            const start :string = CONST.timeToString(e.start);
+            const end :string = CONST.timeToString(e.end);
+            if (confirm(`${start}〜${end}の${title}を削除しますか？`)) {
+              alert('削除しました（仮）');
+            }
+          })
+        }
       }
   );
 
   communication_loading.value = false;
+}
+
+function attachLongPress(el, onLongPress, delay = 500) {
+  let t = null, moved = false;
+
+  const start = (e) => {
+    moved = false;
+    t = setTimeout(() => {t = null; onLongPress(e); }, delay);
+  }
+
+  const cancel = () => { if (t) { clearTimeout(t); t = null; } };
+  const move = () => { if (t) { moved = true; cancel(); } };
+
+  el.addEventListener('pointerdown', start, { passive: true });
+  el.addEventListener('pointerup', cancel, { passive: true });
+  el.addEventListener('pointercancel', cancel, { passive: true });
+  el.addEventListener('pointermove', move, { passive: true});
+  el.addEventListener('contextmenu', (e) => e.preventDefault());
 }
 
 onMounted(() => {
