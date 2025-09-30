@@ -51,7 +51,7 @@
       <!-- progress -->
       <router-link class="footer-item" :to="CONST.progressLink" >
         <progressIcon :style='getIconStyle(CONST.progressLink)'></progressIcon>
-        <p :style="getLinkStyle(CONST.homeLink)">進捗</p>
+        <p :style="getLinkStyle(CONST.progressLink)">進捗</p>
       </router-link>
       <!-- SUBJECT -->
       <router-link class="footer-item" :to="CONST.subjectLink">
