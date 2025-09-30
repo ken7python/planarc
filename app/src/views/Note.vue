@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import commentIcon from '@/assets/icons/comment.svg';
+  import commentIcon from '@/assets/icons/send.svg';
   import MicIcon from '@/assets/icons/mic.svg';
   import { ref } from 'vue';
   import { mic } from '@/logic/mic';
@@ -47,6 +47,10 @@
 
   async function ask() {
     disabled.value = true;
+
+    CommentModule.refUserNote.value = message.value;
+    CommentModule.refComment.value = "通信中...";
+
     const comment = await CommentModule.ask(props.date,message.value);
     console.log(comment);
     if (await comment) {
@@ -68,23 +72,16 @@
 
 <template>
   <div id="note">
-    <div v-if="CommentModule.refUserNote.value">
-      <p class="yourComment">
-        {{ CommentModule.refUserNote }}
-      </p>
-    </div>
-    <div class="micdiv" v-else>
-      <textarea placeholder="メモ" v-model="message"></textarea>
-      <mic-icon class="mic" :style="mic.micStyle()" @click="micbtn"></mic-icon>
-    </div>
-    <div v-if="!CommentModule.refComment.value">
-      <br>
-      <button class="btn" style="margin: 0 auto;" @click="ask" :disabled="disabled">
-        <commentIcon style="margin-right: 8px;"></commentIcon>
-        <span v-if="!disabled">AIからのコメント</span>
-        <span v-else>通信中...</span>
-      </button>
-      <br>
+    <div id="mine">
+<!--    <div id="mine">-->
+      <div v-if="CommentModule.refUserNote.value">
+        <span class="yourComment">
+          {{ CommentModule.refUserNote }}
+        </span>
+      </div>
+      <div v-else>
+        <span>ひとこと</span>
+      </div>
     </div>
 
     <div id="comment">
@@ -92,9 +89,22 @@
         <span>{{ CommentModule.refComment }}</span>
       </div>
       <div v-else>
-        <span>コメントはまだありません。</span>
+        <span>AIからのコメント</span>
       </div>
     </div>
+
+    <div class="micdiv" id="memo-input" v-if="!CommentModule.refComment.value">
+      <textarea placeholder="感想" v-model="message"></textarea>
+      <div v-if="message.length > 0">
+        <button id="send-btn" style="margin: 0 auto;" @click="ask" :disabled="disabled">
+          <commentIcon id="send-icon"></commentIcon>
+        </button>
+      </div>
+      <div v-else>
+        <mic-icon class="mic" :style="mic.micStyle()" @click="micbtn"></mic-icon>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -105,25 +115,61 @@
     height: calc(100vh - 70px - 60px - 30px);
   }
 
+  #memo-input {
+    position: absolute;
+    bottom: 80px;
+    width: 90%;
+  }
   textarea {
-    width: 70%;
+    width: 100%;
     height: 22vh;
     background-color: #FFFFFF;
     padding: 10px;
     font-size: 16px;
-    margin: 4px 0;
     border: 1px solid #E2E8F8;
     border-radius: 4px;
   }
+  .mic, #send-btn {
+    position: relative;
+    left: 8px;
+    width: 40px;
+    height: 40px;
+  }
 
-  .yourComment {
-    width: 70%;
-    background-color: #FFFFFF;
+  #send-icon {
+    color: #4071e9;
+  }
+
+  #send-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  #mine, #comment {
+    width: 75%;
+    margin: 4px auto;
     padding: 10px;
     font-size: 16px;
-    margin: 4px auto;
     margin-bottom: 16px;
     border: 1px solid #E2E8F8;
     border-radius: 4px;
+    clear: both;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    box-sizing: border-box;
+    min-height: 50px;
+    max-width: 90%;
+    text-align: left;
+  }
+
+  #mine{
+    background-color: #93df83;
+    float: right;
+  }
+
+  #comment{
+    background-color: #FFFFFF;
+    float: left;
   }
 </style>
