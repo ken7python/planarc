@@ -65,10 +65,10 @@ func getPrompt(uuid string, date string, name string, note string) string {
 	todolist := strToDos
 	strTrack := logstr
 
-	prompt := fmt.Sprintf(`あなたは、私の学校の先生です。
+	prompt := fmt.Sprintf(`あなたは、私の友達です。
 私の呼び名は%sです。
 私が勉強をがんばれるような声かけをするのが得意です。
-次のようなステップで300字程度コメントしてください。
+次のようなステップで200字程度コメントしてください。
 今日は%sです
 なお、返事は来ないものとしてマークダウンや箇条書きで番号リストではなく、先生が返すような文章のみで作成してください。
 
