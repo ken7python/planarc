@@ -109,6 +109,12 @@
 </template>
 
 <style scoped>
+  html, body {
+    margin: 0;
+    height: 100dvh;
+    overflow: hidden; /* ← ページ全体はスクロールさせない */
+  }
+
   #note {
     text-align: center;
     overflow-y: auto;
