@@ -67,11 +67,11 @@
     if (!mic.shouldRestart.value) {        // ← .value
       console.log("start");
       mic.result = '';
-      mic.micON.value = true;
+      // mic.micON.value = true;
       await mic.start();
     } else {
       console.log("stop");
-      mic.micON.value = false;
+      // mic.micON.value = false;
       mic.stop();
     }
   };

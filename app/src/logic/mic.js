@@ -53,7 +53,7 @@ export const mic = {
             alert('マイク権限が必要です（設定でChromeのマイクを許可してね）');
             return;
         }
-
+        mic.micON.value = true;
         this.shouldRestart.value = true;   // ← .value
         this.tmp = '';
         try { this.rec.start(); } catch (e) { /* 連打でAlready started等 */ }
@@ -61,6 +61,7 @@ export const mic = {
 
     stop() {
         this.shouldRestart.value = false;  // ← .value
+        mic.micON.value = false;
         try { this.rec.stop(); } catch (_) {}
     },
 

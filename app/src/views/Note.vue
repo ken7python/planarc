@@ -13,11 +13,11 @@
     if (!mic.shouldRestart.value) {
       console.log("start");
       mic.result = message.value;
-      mic.micON.value = true;
+      // mic.micON.value = true；
       await mic.start();
     } else {
       console.log("stop");
-      mic.micON.value = false;
+      // mic.micON.value = false;
       await mic.stop();
     }
   }
@@ -101,7 +101,7 @@
         </button>
       </div>
       <div v-else>
-        <mic-icon class="mic" :style="mic.micStyle()" @click="micbtn"></mic-icon>
+        <mic-icon class="mic" :style="mic.micStyle(true)" @click="micbtn"></mic-icon>
       </div>
     </div>
 
@@ -112,7 +112,7 @@
   #note {
     text-align: center;
     overflow-y: auto;
-    height: calc(100vh - 70px - 60px - 30px);
+    height: calc(100dvh - 70px - 60px - 30px);
   }
 
   #memo-input {
