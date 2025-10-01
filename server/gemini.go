@@ -18,7 +18,7 @@ type Comment struct {
 	UserNote string `gorm:"not null"`
 }
 
-func getPrompt(uuid string, date string, name string, note string) string {
+func getPrompt(uuid string, date string, name string, note string, chr string) string {
 	// Status取得
 	status := retGetStatus(uuid, date)
 	//strStatus := fmt.Sprintf("Mood: %v, Enjoyment: %v", status.Mood, status.Enjoyment)
@@ -65,7 +65,7 @@ func getPrompt(uuid string, date string, name string, note string) string {
 	todolist := strToDos
 	strTrack := logstr
 
-	prompt := fmt.Sprintf(`あなたは、私の友達です。
+	prompt := fmt.Sprintf(`あなたは、私の%sです。
 私の呼び名は%sです。
 私が勉強をがんばれるような声かけをするのが得意です。
 次のようなステップで200字程度コメントしてください。
@@ -93,7 +93,7 @@ func getPrompt(uuid string, date string, name string, note string) string {
 %s
 ### 今日の振り返り
 %s
-`, name, date, mood, enjoyment, studyTime, subjectID, todolist, strTrack, strUnfinished, note)
+`, chr, name, date, mood, enjoyment, studyTime, subjectID, todolist, strTrack, strUnfinished, note)
 	fmt.Println(prompt)
 	return prompt
 }
@@ -104,6 +104,7 @@ func reqComment(c *gin.Context) {
 	type RequestBody struct {
 		Date string `json:"Date"`
 		Note string `json:"Note"`
+		Chr  string `json:"Chr"`
 	}
 	var req RequestBody
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -141,7 +142,7 @@ func reqComment(c *gin.Context) {
 
 	modelName := "gemini-2.5-flash"
 
-	prompt := getPrompt(uuid, req.Date, name, req.Note)
+	prompt := getPrompt(uuid, req.Date, name, req.Note, req.Chr)
 
 	contents := genai.Text(prompt)
 
