@@ -116,9 +116,10 @@
   }
 
   #memo-input {
-    position: absolute;
-    bottom: 80px;
+    position: sticky;
+    bottom: calc(env(safe-area-inset-bottom) + 16px);
     width: 90%;
+    margin-top: auto;
   }
   textarea {
     width: 100%;
