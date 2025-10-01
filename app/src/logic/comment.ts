@@ -16,6 +16,8 @@ export const CommentModule = {
             return null;
         }
 
+        this.refComment.value = "通信中...";
+
         const res = await fetch(`${ this.api }/ask`,{
             method: 'POST',
             headers: {

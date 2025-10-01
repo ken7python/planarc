@@ -80,7 +80,7 @@
     disabled.value = true;
 
     CommentModule.refUserNote.value = message.value;
-    CommentModule.refComment.value = "通信中...";
+    // CommentModule.refComment.value = "通信中...";
 
     const comment = await CommentModule.ask(props.date,message.value,chr.value);
     console.log(comment);
