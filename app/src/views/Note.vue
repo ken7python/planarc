@@ -199,6 +199,26 @@
     min-height: 50px;
     max-width: 90%;
     text-align: left;
+
+    display: inline-block;
+    position: relative;
+  }
+
+  #mine::after, #comment::after {
+    content: "";
+    position: absolute;
+    top: 100%;  /* 本体の下に配置 */
+    border-width: 20px;
+    border-style: solid;
+    /* 上だけ背景色、それ以外は透明 */
+  }
+  #mine::after {
+    border-color: #93df83 transparent transparent transparent;
+    right: 20px; /* 左から20pxの位置に */
+  }
+  #comment::after {
+    border-color: #E2E8F8 transparent transparent transparent;
+    left: 20px; /* 左から20pxの位置に */
   }
 
   #mine{
