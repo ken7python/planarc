@@ -122,12 +122,16 @@
   }
   textarea {
     width: 100%;
-    height: 22vh;
+    height: min(22dvh, 200px);
+    max-height: 200px;
     background-color: #FFFFFF;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #E2E8F8;
     border-radius: 4px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    margin: 0;
   }
   .mic, #send-btn {
     position: relative;
