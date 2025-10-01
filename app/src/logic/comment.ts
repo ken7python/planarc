@@ -6,7 +6,18 @@ export const CommentModule = {
     api: CONST.api() + '/comment',
     refComment: ref(""),
     refUserNote: ref(""),
-    ask: async function(date :string, note :string){
+    ask: async function(date :string, note :string,chr :string){
+        if (chr === "") {
+            alert("キャラを選択してください");
+            return null;
+        }
+        if (note === "") {
+            alert("日記が空です");
+            return null;
+        }
+
+        this.refComment.value = "通信中...";
+
         const res = await fetch(`${ this.api }/ask`,{
             method: 'POST',
             headers: {
@@ -15,7 +26,8 @@ export const CommentModule = {
             },
             body: JSON.stringify({
                 "date": date,
-                "note": note
+                "note": note,
+                "chr": chr
             })
         })
 

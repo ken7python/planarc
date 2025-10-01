@@ -6,7 +6,7 @@
 
   import { CommentModule } from "../logic/comment";
 
-  const message = ref<string>('');
+  const message = ref<string>("");
 
   async function micbtn() {
     // alert('マイクボタンが押されました。');
@@ -74,13 +74,15 @@
   });
   CommentModule.refComment.value = "";
 
+  const chr = ref("");
+
   async function ask() {
     disabled.value = true;
 
     CommentModule.refUserNote.value = message.value;
-    CommentModule.refComment.value = "通信中...";
+    // CommentModule.refComment.value = "通信中...";
 
-    const comment = await CommentModule.ask(props.date,message.value);
+    const comment = await CommentModule.ask(props.date,message.value,chr.value);
     console.log(comment);
     if (await comment) {
       // message.value = '';
@@ -123,7 +125,15 @@
     </div>
 
     <div class="micdiv" id="memo-input" v-if="!CommentModule.refComment.value" :style="{ bottom: memoBottom }">
-      <textarea placeholder="感想" v-model="message"></textarea>
+      <div>
+        <select class="selectbox" v-model="chr">
+          <option v-if="chr===''" disabled value="">キャラを選択</option>
+          <option value="先生">先生</option>
+          <option value="友達">友達</option>
+          <option value="親">親</option>
+        </select>
+        <textarea placeholder="感想" v-model="message"></textarea>
+      </div>
       <div v-if="message.length > 0">
         <button id="send-btn" style="margin: 0 auto;" @click="ask" :disabled="disabled">
           <commentIcon id="send-icon"></commentIcon>
