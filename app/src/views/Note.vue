@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import commentIcon from '@/assets/icons/send.svg';
   import MicIcon from '@/assets/icons/mic.svg';
-  import { ref } from 'vue';
+  import { ref, onMounted, onBeforeUnmount } from 'vue';
   import { mic } from '@/logic/mic';
 
   import { CommentModule } from "../logic/comment";
@@ -43,6 +43,35 @@
   })
 
   const disabled = ref(false);
+  const noteHeight = ref('auto');
+  const memoBottom = ref('80px');
+  const NOTE_LAYOUT_OFFSET = 70 + 60 + 30;
+
+  const updateViewportMetrics = () => {
+    const viewport = window.visualViewport;
+    const viewportHeight = viewport ? viewport.height : window.innerHeight;
+    const keyboardOffset = Math.max(0, window.innerHeight - viewportHeight);
+
+    noteHeight.value = `${Math.max(viewportHeight - NOTE_LAYOUT_OFFSET, 160)}px`;
+    memoBottom.value = `${Math.max(16, 80 + keyboardOffset)}px`;
+  };
+
+  onMounted(() => {
+    updateViewportMetrics();
+    window.addEventListener('resize', updateViewportMetrics);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', updateViewportMetrics);
+      window.visualViewport.addEventListener('scroll', updateViewportMetrics);
+    }
+  });
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateViewportMetrics);
+    if (window.visualViewport) {
+      window.visualViewport.removeEventListener('resize', updateViewportMetrics);
+      window.visualViewport.removeEventListener('scroll', updateViewportMetrics);
+    }
+  });
   CommentModule.refComment.value = "";
 
   async function ask() {
@@ -71,7 +100,7 @@
 </script>
 
 <template>
-  <div id="note">
+  <div id="note" :style="{ height: noteHeight }">
     <div id="mine">
 <!--    <div id="mine">-->
       <div v-if="CommentModule.refUserNote.value">
@@ -93,7 +122,7 @@
       </div>
     </div>
 
-    <div class="micdiv" id="memo-input" v-if="!CommentModule.refComment.value">
+    <div class="micdiv" id="memo-input" v-if="!CommentModule.refComment.value" :style="{ bottom: memoBottom }">
       <textarea placeholder="感想" v-model="message"></textarea>
       <div v-if="message.length > 0">
         <button id="send-btn" style="margin: 0 auto;" @click="ask" :disabled="disabled">
@@ -118,12 +147,10 @@
   #note {
     text-align: center;
     overflow-y: auto;
-    height: calc(100dvh - 70px - 60px - 30px);
   }
 
   #memo-input {
     position: fixed;
-    bottom: 80px;
     width: 90%;
   }
   textarea {
