@@ -112,23 +112,17 @@
   #note {
     text-align: center;
     overflow-y: auto;
-    height: calc(100vh - 70px - 60px - 30px);
-    padding-bottom: 150px;
-    box-sizing: border-box;
+    height: calc(100dvh - 70px - 60px - 30px);
   }
 
   #memo-input {
-    position: fixed;
+    position: sticky;
     bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
     width: 90%;
-    max-width: 500px;
-    z-index: 1000;
   }
   textarea {
     width: 100%;
-    height: 22vh;
+    height: 22dvh;
     min-height: 80px;
     max-height: 120px;
     background-color: #FFFFFF;
@@ -140,17 +134,6 @@
     resize: none;
   }
   
-  @media screen and (max-height: 600px) {
-    textarea {
-      height: 15vh;
-      min-height: 60px;
-    }
-    
-    #note {
-      height: calc(100vh - 70px - 60px - 30px - 100px);
-    }
-  }
-
   .mic, #send-btn {
     position: relative;
     left: 8px;
