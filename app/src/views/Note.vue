@@ -13,7 +13,7 @@
     if (!mic.shouldRestart.value) {
       console.log("start");
       mic.result = message.value;
-      // mic.micON.value = true；
+      // mic.micON.value = true;
       await mic.start();
     } else {
       console.log("stop");
@@ -112,33 +112,45 @@
   #note {
     text-align: center;
     overflow-y: auto;
-    height: calc(100dvh - 70px - 60px - 30px);
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
+    height: calc(100vh - 70px - 60px - 30px);
+    padding-bottom: 150px;
+    box-sizing: border-box;
   }
 
   #memo-input {
-    position: sticky;
-    bottom: calc(env(safe-area-inset-bottom) + 16px);
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 90%;
-    margin-top: auto;
+    max-width: 500px;
+    z-index: 1000;
   }
   textarea {
     width: 100%;
-    height: min(22dvh, 200px);
-    max-height: 200px;
+    height: 22vh;
+    min-height: 80px;
+    max-height: 120px;
     background-color: #FFFFFF;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #E2E8F8;
     border-radius: 4px;
     box-sizing: border-box;
-    overflow-y: auto;
-    margin: 0;
+    resize: none;
   }
+  
+  @media screen and (max-height: 600px) {
+    textarea {
+      height: 15vh;
+      min-height: 60px;
+    }
+    
+    #note {
+      height: calc(100vh - 70px - 60px - 30px - 100px);
+    }
+  }
+
   .mic, #send-btn {
     position: relative;
     left: 8px;
