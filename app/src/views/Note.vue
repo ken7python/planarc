@@ -113,6 +113,11 @@
     text-align: center;
     overflow-y: auto;
     height: calc(100dvh - 70px - 60px - 30px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 80px);
   }
 
   #memo-input {
