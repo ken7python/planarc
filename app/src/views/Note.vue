@@ -122,7 +122,7 @@
   }
 
   #memo-input {
-    position: sticky;
+    position: fixed;
     bottom: 80px;
     width: 90%;
   }
