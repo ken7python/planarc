@@ -1,8 +1,9 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+import {ref, watch} from 'vue';
   import { selectStyle } from '@/logic/style/selectStyle';
   import { subjectModule } from '@/logic/subject';
   import { studyLog } from "@/logic/StudyLog";
+  import { stopwatch } from '@/logic/StudyLog';
 
   import writeIcon from '@/assets/icons/write.svg';
 
@@ -22,9 +23,26 @@
     const subject_list = await subjectModule.getList();
     //console.log(subject_list);
     subjects.value = subject_list;
+    //console.log(subject_list);
+    subjects.value = subject_list;
+
+    stopwatch.init();
+    subjectID.value = stopwatch.subject.value;
+
+    await studyLog.getLog(props.date);
   }
 
   loadData();
+
+  watch(subjectID, (newVal, oldVal) => {
+    if (newVal != undefined) {
+      //console.log(newVal);
+      //console.log(stopwatch);
+      stopwatch.subject.value = newVal;
+      stopwatch.save();
+      stopwatch.init();
+    }
+  });
 
   async function record() {
     communication_saving.value = true;
