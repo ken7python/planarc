@@ -217,18 +217,21 @@
       <div>
         <div id="MUST" class="frame">
           <span>MUST</span>
+          <span v-if="TODO_MUST.length > 0">({{ TODO_MUST.length }})</span>
           <ToDoCard :LIST="TODO_MUST" @reload="loadData" :key="TODO_MUST"/>
         </div>
 
 
         <div id="WANT" class="frame">
           <span>WANT</span>
+          <span v-if="TODO_WANT.length > 0">({{ TODO_WANT.length }})</span>
           <ToDoCard :LIST="TODO_WANT" @reload="loadData" :key="TODO_WANT" />
         </div>
 
 
         <div id="Checked" class="frame">
           <span>完了</span>
+          <span v-if="TODO_checked.length > 0">({{ TODO_checked.length }})</span>
           <ToDoCard :LIST="TODO_checked" @reload="loadData" :key="TODO_checked" />
         </div>
       </div>
