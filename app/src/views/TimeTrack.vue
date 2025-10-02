@@ -27,8 +27,10 @@ function getTimeRange(events) {
   let eMinutes = 0;
 
   events.forEach(e => {
-    let sD = new Date(new Date(e.start).getTime() - 15 * 60 * 1000);
-    let eD = new Date(new Date(e.end).getTime() + 15 * 60 * 1000);
+    // let sD = new Date(new Date(e.start).getTime() - 15 * 60 * 1000);
+    // let eD = new Date(new Date(e.end).getTime() + 15 * 60 * 1000);
+    let sD = new Date(e.start);
+    let eD = new Date(e.end);
     //console.log("StartDate");
     //console.log(sD);
     //console.log("EndDate");
@@ -50,8 +52,8 @@ function getTimeRange(events) {
         //console.log(eD);
     }
 
-    sMinutes = Math.floor(sMinutes / 10) * 10;
-    eMinutes = Math.ceil(eMinutes / 10) * 10;
+    sMinutes = Math.floor(sMinutes / 30) * 30;
+    eMinutes = Math.ceil(eMinutes / 30) * 30;
  })
   //console.log(sHours, sMinutes, eHours, eMinutes);
 
