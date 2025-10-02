@@ -208,7 +208,7 @@ export const studyLog = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "date": date,
@@ -236,7 +236,7 @@ export const studyLog = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
         }).catch(err => {
             alert(err);
@@ -261,7 +261,7 @@ export const studyLog = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "id": id

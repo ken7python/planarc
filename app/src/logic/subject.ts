@@ -6,7 +6,7 @@ export const subjectModule = {
     getList: async function(){
         const subjects = await fetch(`${ subjectModule.api }/`,{headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${user.getToken()}`
+            Authorization: `Bearer ${await user.getToken()}`
         }})
         if (await subjects.ok) {
             const res = await subjects.json();
@@ -23,7 +23,7 @@ export const subjectModule = {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "name": Name,
@@ -44,7 +44,7 @@ export const subjectModule = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "id": ID,

@@ -28,7 +28,9 @@
   async function loadData() {
     const profile = await user.profile();
     // console.log(profile);
-    username.value = profile.username;
+    if (profile) {
+      username.value = profile.username;
+    }
   }
   loadData();
 </script>

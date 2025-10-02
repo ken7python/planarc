@@ -22,7 +22,7 @@ export const CommentModule = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "date": date,
@@ -54,7 +54,7 @@ export const CommentModule = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             }
         })
 

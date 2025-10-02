@@ -6,7 +6,7 @@ export const statusModule = {
     get: async function(date :string){
         const res = await fetch(`${ this.api }/?date=${date}`,{headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             }})
         if (await res.ok) {
             return await res.json();
@@ -24,7 +24,7 @@ export const statusModule = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "enjoyment": enjoyment
@@ -44,7 +44,7 @@ export const statusModule = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "mood": mood

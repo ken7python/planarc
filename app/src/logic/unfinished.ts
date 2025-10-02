@@ -7,7 +7,7 @@ export const unfinishedModule = {
     getList: async function(date :string){
         const lists = await fetch(`${ this.api }/`,{headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             }})
         if (await lists.ok) {
             const res = await lists.json();
@@ -23,7 +23,7 @@ export const unfinishedModule = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "id": id
@@ -43,7 +43,7 @@ export const unfinishedModule = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "id": id
@@ -63,7 +63,7 @@ export const unfinishedModule = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "id": id

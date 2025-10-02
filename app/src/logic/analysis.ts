@@ -8,7 +8,7 @@ export const analysisModule = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             }
         })
 
