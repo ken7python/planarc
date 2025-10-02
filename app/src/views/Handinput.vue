@@ -52,7 +52,7 @@ import {ref, watch} from 'vue';
     if (await ok) {
       startTime.value = null;
       endTime.value = null;
-      subjectID.value = '';
+      // subjectID.value = '';
     }
     communication_saving.value = false;
   }
@@ -62,7 +62,7 @@ import {ref, watch} from 'vue';
 <!--  {{ date }}-->
   <div id="headerinput">
     <select class="selectbox" :style="selectStyle.getSelectStyle(subjectID)" v-model="subjectID">
-      <option value="">科目を選択</option>
+      <option disabled value="">科目を選択</option>
       <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
         {{ subject.Name }}
       </option>
