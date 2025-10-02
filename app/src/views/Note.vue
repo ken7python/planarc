@@ -5,6 +5,7 @@
   import { mic } from '@/logic/mic';
 
   import { CommentModule } from "../logic/comment";
+  import {overrides} from "chart.js/dist/core/core.defaults";
 
   const message = ref<string>("");
 
@@ -78,9 +79,11 @@
 
   async function ask() {
     disabled.value = true;
-
-    CommentModule.refUserNote.value = message.value;
-    // CommentModule.refComment.value = "通信中...";
+    await mic.stop();
+    if (!(message.value === "") && !(chr.value === "")) {
+      CommentModule.refUserNote.value = message.value;
+      // CommentModule.refComment.value = "通信中...";
+    }
 
     const comment = await CommentModule.ask(props.date,message.value,chr.value);
     console.log(comment);
@@ -103,29 +106,33 @@
 
 <template>
   <div id="note" :style="{ height: noteHeight }">
-    <div id="mine">
+    <div id="mine" v-show="CommentModule.refUserNote.value">
 <!--    <div id="mine">-->
-      <div v-if="CommentModule.refUserNote.value">
+<!--      <div v-if="CommentModule.refUserNote.value">-->
         <span class="yourComment">
           {{ CommentModule.refUserNote }}
         </span>
-      </div>
-      <div v-else>
-        <span>ひとこと</span>
-      </div>
+<!--      </div>-->
+<!--      <div v-else>-->
+<!--        <span>ひとこと</span>-->
+<!--      </div>-->
     </div>
 
-    <div id="comment">
-      <div v-if="CommentModule.refComment.value">
+    <div id="comment" v-show="CommentModule.refComment.value">
+<!--      <div v-if="CommentModule.refComment.value">-->
         <span>{{ CommentModule.refComment }}</span>
-      </div>
-      <div v-else>
-        <span>AIからのコメント</span>
-      </div>
+<!--      </div>-->
+<!--      <div v-else>-->
+<!--        <span>AIからのコメント</span>-->
+<!--      </div>-->
+    </div>
+
+    <div v-if="!CommentModule.refComment.value && !CommentModule.refUserNote.value" id="about-note">
+      <span>感想を書いてAIからのコメントをもらおう！</span>
     </div>
 
     <div class="micdiv" id="memo-input" v-if="!CommentModule.refComment.value" :style="{ bottom: memoBottom }">
-      <div>
+      <div class="input-area">
         <select class="selectbox" v-model="chr">
           <option v-if="chr===''" disabled value="">キャラを選択</option>
           <option value="先生">先生</option>
@@ -134,13 +141,20 @@
         </select>
         <textarea placeholder="感想" v-model="message"></textarea>
       </div>
-      <div v-if="message.length > 0">
-        <button id="send-btn" style="margin: 0 auto;" @click="ask" :disabled="disabled">
-          <commentIcon id="send-icon"></commentIcon>
-        </button>
-      </div>
-      <div v-else>
-        <mic-icon class="mic" :style="mic.micStyle(true)" @click="micbtn"></mic-icon>
+      <div>
+        <div>
+          <mic-icon class="mic" :style="mic.micStyle(true)" @click="micbtn"></mic-icon>
+        </div>
+        <div v-if="message.length > 0">
+          <button id="send-btn" style="margin: 0 auto;" @click="ask" :disabled="disabled">
+            <commentIcon id="send-icon"></commentIcon>
+          </button>
+        </div>
+        <div v-else>
+          <button id="send-btn" style="margin: 0 auto;" disabled>
+            <commentIcon id="send-icon" style="opacity: 0;"></commentIcon>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -159,9 +173,22 @@
     overflow-y: auto;
   }
 
+  #about-note {
+    text-align: center;
+    padding-top: 10px;
+  }
+
   #memo-input {
     position: fixed;
-    width: 90%;
+    width: 90vw;
+  }
+
+  .input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
   }
   textarea {
     width: 100%;
@@ -178,8 +205,6 @@
   }
   
   .mic, #send-btn {
-    position: relative;
-    left: 8px;
     width: 40px;
     height: 40px;
   }
