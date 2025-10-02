@@ -198,7 +198,7 @@ onMounted(() => {
             <h3>学習時間(科目別) <span v-if="loadingSumTodayofSubject">loading...</span><span v-else-if='subjectName != ""' class="underlined">{{ Math.floor(sumTodayofSubject / 60) }}時間{{ sumTodayofSubject % 60 }}分</span></h3>
 
           <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
-            <option value="">科目を選択</option>
+            <option disabled value="">科目を選択</option>
             <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
               {{ subject.Name }}
             </option>
