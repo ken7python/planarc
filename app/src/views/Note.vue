@@ -79,9 +79,11 @@
 
   async function ask() {
     disabled.value = true;
-
-    CommentModule.refUserNote.value = message.value;
-    // CommentModule.refComment.value = "通信中...";
+    await mic.stop();
+    if (!(message.value === "") && !(chr.value === "")) {
+      CommentModule.refUserNote.value = message.value;
+      // CommentModule.refComment.value = "通信中...";
+    }
 
     const comment = await CommentModule.ask(props.date,message.value,chr.value);
     console.log(comment);
@@ -104,25 +106,29 @@
 
 <template>
   <div id="note" :style="{ height: noteHeight }">
-    <div id="mine">
+    <div id="mine" v-show="CommentModule.refUserNote.value">
 <!--    <div id="mine">-->
-      <div v-if="CommentModule.refUserNote.value">
+<!--      <div v-if="CommentModule.refUserNote.value">-->
         <span class="yourComment">
           {{ CommentModule.refUserNote }}
         </span>
-      </div>
-      <div v-else>
-        <span>ひとこと</span>
-      </div>
+<!--      </div>-->
+<!--      <div v-else>-->
+<!--        <span>ひとこと</span>-->
+<!--      </div>-->
     </div>
 
-    <div id="comment">
-      <div v-if="CommentModule.refComment.value">
+    <div id="comment" v-show="CommentModule.refComment.value">
+<!--      <div v-if="CommentModule.refComment.value">-->
         <span>{{ CommentModule.refComment }}</span>
-      </div>
-      <div v-else>
-        <span>AIからのコメント</span>
-      </div>
+<!--      </div>-->
+<!--      <div v-else>-->
+<!--        <span>AIからのコメント</span>-->
+<!--      </div>-->
+    </div>
+
+    <div v-if="!CommentModule.refComment.value && !CommentModule.refUserNote.value" id="about-note">
+      <span>感想を書いてAIからのコメントをもらおう！</span>
     </div>
 
     <div class="micdiv" id="memo-input" v-if="!CommentModule.refComment.value" :style="{ bottom: memoBottom }">
@@ -165,6 +171,11 @@
   #note {
     text-align: center;
     overflow-y: auto;
+  }
+
+  #about-note {
+    text-align: center;
+    padding-top: 10px;
   }
 
   #memo-input {
