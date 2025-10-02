@@ -3,11 +3,21 @@ import { CONST } from '@/logic/const.ts';
 
 export const user = {
     account_url: CONST.account_url(),
-    getToken: function() {
+    getTokenStr: function () {
         return localStorage.getItem('token');
     },
+    getToken: async function() {
+        const token = this.getTokenStr();
+        const isOK = await this.profile();
+        if (isOK) {
+            return token;
+        }else {
+            alert('ご利用にはログインまたは新規登録が必要です。')
+            return;
+        }
+    },
     profile: async function(){
-        const token = user.getToken();
+        const token = await user.getTokenStr();
         try {
             const response = await fetch(this.account_url + "/profile", {
                 headers: {
@@ -24,7 +34,7 @@ export const user = {
         } catch (error) {
             // alert('ユーザー情報の取得に失敗しました')
             console.error('ユーザー情報の取得に失敗しました:', error);
-            user.directToLogin();
+            await user.directToLogin();
         }
     },
 

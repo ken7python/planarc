@@ -8,7 +8,7 @@ export const todoModule = {
     getList: async function(date :string){
         const todos = await fetch(`${ this.api }/?date=${ date }`,{headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             }})
         if (await todos.ok) {
             const res = await todos.json();
@@ -22,7 +22,7 @@ export const todoModule = {
     getListGroup: async function(date :string){
         const todos = await fetch(`${ this.api }/group?date=${ date }`,{headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             }})
         if (await todos.ok) {
             const res = await todos.json();
@@ -86,7 +86,7 @@ export const todoModule = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "date": date,
@@ -109,7 +109,7 @@ export const todoModule = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "id": ID,
@@ -124,12 +124,12 @@ export const todoModule = {
             return null;
         }
     },
-    check(ID: number) {
+    async check(ID: number) {
         return fetch(`${this.api}/check`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.getToken()}`
+                Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
                 "id": ID
