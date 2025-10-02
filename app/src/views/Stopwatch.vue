@@ -59,7 +59,7 @@
 <!--  {{ date }}-->
   <div id="stopwatch">
     <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
-      <option value="">科目を選択</option>
+      <option disabled value="">科目を選択</option>
       <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
         {{ subject.Name }}
       </option>
