@@ -71,11 +71,14 @@
         <span v-if="stopwatch.sHours.value != null && stopwatch.sMinutes.value != null">
           <span v-if="stopwatch.sHours.value != null && stopwatch.sHours.value<10">0{{ stopwatch.sHours.value }}</span>
           <span v-else>{{ stopwatch.sHours.value }}</span>
-          <span v-if="stopwatch.sMinutes.value != null">:</span>
+          <span v-if="stopwatch.sMinutes.value != null">
+            <span v-if="stopwatch.eHours.value != null && stopwatch.eMinutes.value != null">:</span>
+            <span v-else class="blink">:</span>
+          </span>
           <span v-if="stopwatch.sMinutes.value != null && stopwatch.sMinutes.value<10">0{{ stopwatch.sMinutes.value }}</span>
           <span v-else>{{ stopwatch.sMinutes }}</span>
         </span>
-        <span v-else>--:--</span>
+        <span v-else>--<span>:</span>--</span>
       </span>
     </div>
     <div id="end">
@@ -96,11 +99,15 @@
         <span v-if="stopwatch.dHours.value != null">{{ stopwatch.dHours }}時間</span>
         <span v-if="stopwatch.dMinutes.value != null">{{ stopwatch.dMinutes.value }}分</span>
       </span>
-      <button class="btn" @click="save" style="margin: 0 auto;" :disabled="communication_saving">
+      <button class="btn" style="margin: 0 auto;" @click="save" v-if="stopwatch.sHours.value != null && stopwatch.sMinutes.value != null && stopwatch.eHours.value != null && stopwatch.eMinutes.value != null">
         <writeIcon v-if="!communication_saving"></writeIcon>
         <span v-if="!communication_saving">記録</span>
 
         <span v-if="communication_saving">通信中...</span>
+      </button>
+      <button v-else class="btn" style="margin: 0 auto;opacity: 0.3" disabled>
+        <writeIcon></writeIcon>
+        <span>記録</span>
       </button>
 
       <br>
@@ -132,5 +139,15 @@
 
   .sbtn {
     width: 100px;
+  }
+
+  .blink {
+    animation: blinkAnimation 1s step-start infinite;
+  }
+
+  @keyframes blinkAnimation {
+    50% {
+      opacity: 0;
+    }
   }
 </style>
