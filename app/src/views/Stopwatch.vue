@@ -102,6 +102,13 @@
 
         <span v-if="communication_saving">通信中...</span>
       </button>
+
+      <br>
+
+      <button class="btn" @click="stopwatch.reset" style="margin: 0 auto;">
+        <writeIcon v-if="!communication_saving"></writeIcon>
+        <span v-if="!communication_saving">リセット</span>
+      </button>
     </div>
   </div>
 </template>
