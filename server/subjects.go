@@ -31,7 +31,7 @@ func getSubjectByUserID(c *gin.Context) {
 	if subjectList == nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "科目の取得に失敗しました"})
 	}
-	
+
 	c.JSON(http.StatusOK, subjectList)
 }
 
@@ -62,8 +62,9 @@ func EditSubject(c *gin.Context) {
 	fmt.Println("subject/edit")
 	uuid := GetProfile(c).UUID
 	var req struct {
-		ID        int    `json:"id"`
-		AfterName string `json:"aftername"`
+		ID         int    `json:"id"`
+		AfterName  string `json:"aftername"`
+		AfterColor string `json:"aftercolor"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -74,7 +75,7 @@ func EditSubject(c *gin.Context) {
 	fmt.Println(req.ID)
 	fmt.Println(req.AfterName)
 
-	res := db.Model(&Subjects{}).Where("id = ? AND uuid = ?", req.ID, uuid).Update("name", req.AfterName)
+	res := db.Model(&Subjects{}).Where("id = ? AND uuid = ?", req.ID, uuid).Update("name", req.AfterName).Update("color", req.AfterColor)
 
 	if res.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": res.Error.Error()})

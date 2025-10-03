@@ -39,7 +39,7 @@ export const subjectModule = {
             return null;
         }
     },
-    edit: async function(ID: number, AfterName: string){
+    edit: async function(ID: number, AfterName: string, AfterColor: string){
         const res = await fetch(`${subjectModule.api}/edit`,{
             method: 'POST',
             headers: {
@@ -49,6 +49,7 @@ export const subjectModule = {
             body: JSON.stringify({
                 "id": ID,
                 "aftername": AfterName,
+                "aftercolor": AfterColor
             })
         })
         if (res.ok) {
