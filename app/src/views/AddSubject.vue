@@ -41,8 +41,8 @@
   }
 
   async function edit() {
-    let id = subjects.value.find(item => item.ID === editID.value);
-    await subjectModule.edit(editID.value, id.Name);
+    const target = subjects.value.find(item => item.ID === editID.value);
+    await subjectModule.edit(editID.value, target.Name, target.Color);
     editID.value = 0;
     await loadData();
   }
@@ -113,9 +113,13 @@
       <ul class="list-ul" v-if="subjects" v-for="(subject, index) in subjects" :key="index">
         <li class="list-item">
           <div class="left-group">
-            <span :style="getColorboxStyle(subject.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
-            <input type="text" v-if="editID === subject.ID" v-model="subject.Name" class="task-input" style="height: 20px;">
-            <span class="task-title" v-else>{{ subject.Name }}</span>
+            <label v-if="editID === subject.ID" class="color-field">
+              <input type="color" value="#5B8DEF" aria-label="Select accent color" v-model="subject.Color" />
+            </label>
+            <span v-else :style="getColorboxStyle(subject.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
+
+            <input v-if="editID === subject.ID" type="text" v-model="subject.Name" class="task-input" style="height: 20px;">
+            <span v-else class="task-title">{{ subject.Name }}</span>
           </div>
           <div class="right">
             <button v-if="subject.ID != editID" @click="editID=subject.ID" class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;">
@@ -155,8 +159,9 @@
   }
 
   .color-field input[type="color"] {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 38px;
+    margin-left: 2px;
     border: none;
     padding: 0;
     border-radius: 6px;
