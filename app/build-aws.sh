@@ -1,4 +1,5 @@
 cd /home/ec2-user/planarc/app
+npm install
 npm run build:aws
 
 DEPLOY_DIR="/var/www/planarc"
