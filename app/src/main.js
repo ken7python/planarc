@@ -6,13 +6,15 @@ import { vLongpress } from '@nanogiants/vue3-longpress'
 
 import '@event-calendar/core/index.css';
 
-import ElementPlus from 'element-plus'
+// import ElementPlus from 'element-plus'
+import { ElButton, ElDialog } from 'element-plus'
 import 'element-plus/dist/index.css'
 
 
 const app = createApp(App)
 app.directive('use-longpress', vLongpress)
 app.use(router).mount('#app')
-app.use(ElementPlus)
+app.use(ElDialog)
+app.use(ElButton)
 //
 // createApp(App).use(router).mount('#app')

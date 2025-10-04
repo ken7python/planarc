@@ -44,5 +44,16 @@ export default defineConfig({
     host: true, // 外部アクセス許可
     port: 4173,
   },
-  preview: { port: 4173 }
+  preview: { port: 4173 },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vue: ['vue'],
+          elementPlus: ['element-plus'],
+          chart: ['chart.js'], // 重いライブラリは分割
+        }
+      }
+    }
+  }
 })
