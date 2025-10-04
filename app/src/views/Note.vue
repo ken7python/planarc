@@ -134,7 +134,7 @@
     <div class="micdiv" id="memo-input" v-if="!CommentModule.refComment.value" :style="{ bottom: memoBottom }">
       <div class="input-area">
         <select class="selectbox" v-model="chr">
-          <option v-if="chr===''" disabled value="">サポーターを選択</option>
+          <option v-if="chr===''" disabled value="">AIサポーターを選択</option>
           <option value="先生">先生</option>
           <option value="親">親</option>
           <option value="友達">友達</option>
