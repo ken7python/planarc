@@ -128,7 +128,7 @@
     </div>
 
     <div v-if="!CommentModule.refComment.value && !CommentModule.refUserNote.value" id="about-note">
-      <span>感想を書いてAIからコメントをもらおう！</span>
+      <span>感想を書いてAIからメッセージをもらおう！</span>
     </div>
 
     <div class="micdiv" id="memo-input" v-if="!CommentModule.refComment.value" :style="{ bottom: memoBottom }">
