@@ -50,9 +50,22 @@
     await unfinishedModule.back(id);
     loadData();
   }
+
+  const dialogVisible = ref(true);
+  const date = ref('');
 </script>
 
 <template>
+  <div>
+    <el-dialog v-model="dialogVisible" width="90vw" title="日付選択">
+        <input type="date" v-model="date" >
+      <template #footer>
+        <el-button @click="dialogVisible = false">キャンセル</el-button>
+        <el-button type="primary" @click="dialogVisible = false">OK</el-button>
+      </template>
+    </el-dialog>
+  </div>
+
   <div id="page">
     <div id="List" v-if="!communication_loading">
       <ul class="list-ul" v-if="unfinishedTask.length > 0" :key="unfinishedTask">
