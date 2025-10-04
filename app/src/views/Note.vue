@@ -128,16 +128,16 @@
     </div>
 
     <div v-if="!CommentModule.refComment.value && !CommentModule.refUserNote.value" id="about-note">
-      <span>感想を書いてAIからのコメントをもらおう！</span>
+      <span>感想を書いてAIからコメントをもらおう！</span>
     </div>
 
     <div class="micdiv" id="memo-input" v-if="!CommentModule.refComment.value" :style="{ bottom: memoBottom }">
       <div class="input-area">
         <select class="selectbox" v-model="chr">
-          <option v-if="chr===''" disabled value="">キャラを選択</option>
+          <option v-if="chr===''" disabled value="">サポーターを選択</option>
           <option value="先生">先生</option>
-          <option value="友達">友達</option>
           <option value="親">親</option>
+          <option value="友達">友達</option>
         </select>
         <textarea placeholder="感想" v-model="message"></textarea>
       </div>
