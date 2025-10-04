@@ -43,16 +43,39 @@
 
   async function deleteList(id :number) {
     await unfinishedModule.delete(id);
-    loadData();
-  };
+    loadData()
+  }
 
-  async function back(id :number) {
-    await unfinishedModule.back(id);
+  const dialogVisible = ref(false);
+  const date = ref('');
+  const backId = ref(0);
+
+  async function back(id :number, dateStr :string) {
+    if (dateStr === '') {
+      alert('日付を選択してください');
+      return;
+    }
+    dialogVisible.value = false;
+    await unfinishedModule.back(id, dateStr);
     loadData();
   }
-</script>
+  async function selectBackDate(id :number){
+    dialogVisible.value = true;
+    backId.value = id;
+  }
+  </script>
 
 <template>
+  <div>
+    <el-dialog v-model="dialogVisible" width="90vw" title="日付選択">
+        <input type="date" v-model="date" >
+      <template #footer>
+        <el-button @click="dialogVisible = false">キャンセル</el-button>
+        <el-button type="primary" @click="back(backId, date)">OK</el-button>
+      </template>
+    </el-dialog>
+  </div>
+
   <div id="page">
     <div id="List" v-if="!communication_loading">
       <ul class="list-ul" v-if="unfinishedTask.length > 0" :key="unfinishedTask">
@@ -62,7 +85,7 @@
             <span class="task-title">{{ task.Title }}</span>
           </div>
           <div class="right">
-            <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;" @click="back(task.ID)"><moveIcon></moveIcon></button>
+            <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;" @click="selectBackDate(task.ID)"><moveIcon></moveIcon></button>
             <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;" @click="deleteList(task.ID)"><deleteIcon></deleteIcon></button>
           </div>
         </li>

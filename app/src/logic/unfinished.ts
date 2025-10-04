@@ -58,7 +58,7 @@ export const unfinishedModule = {
             return null;
         }
     },
-    back: async function(id :number){
+    back: async function(id :number, dateStr? :string){
         const res = await fetch(`${this.api}/back`,{
             method: 'POST',
             headers: {
@@ -66,7 +66,8 @@ export const unfinishedModule = {
                 Authorization: `Bearer ${await user.getToken()}`
             },
             body: JSON.stringify({
-                "id": id
+                "id": id,
+                "date": dateStr
             })
         })
         console.log(await res)
