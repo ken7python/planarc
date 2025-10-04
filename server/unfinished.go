@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"time"
 )
 
 type unfinishedLIST struct {
@@ -104,7 +103,8 @@ func deleteUnfinished(c *gin.Context) {
 func backUnfinished(c *gin.Context) {
 	fmt.Println("unfinished/back")
 	var req struct {
-		ID uint `json:"id"`
+		ID   uint   `json:"id"`
+		Date string `json:"date"`
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -123,11 +123,12 @@ func backUnfinished(c *gin.Context) {
 	}
 	fmt.Println("Fetched Unfinished List:", unfinished)
 
-	loc, _ := time.LoadLocation("Asia/Tokyo")
-	now := time.Now().In(loc)
+	//loc, _ := time.LoadLocation("Asia/Tokyo")
+	//now := time.Now().In(loc)
 
 	var todo = TODOLIST{
-		Date:      now.Format("2006-01-02"),
+		//Date:      now.Format("2006-01-02"),
+		Date:      req.Date,
 		Title:     unfinished.Title,
 		Status:    unfinished.Status,
 		SubjectID: unfinished.SubjectID,
