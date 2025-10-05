@@ -163,6 +163,12 @@
     studyLogs.map(log => {
       dateSet.add(log.Date);
     })
+
+    const sortedDateSet = [...dateSet].sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+    // console.log(sortedDateSet);
+    dateSet.clear();
+    sortedDateSet.forEach(date => dateSet.add(date));
+
     dateSet.forEach(date => {
       const [year, month, day] = date.split('-');
       dateArr.push(`${Number(month)}.${Number(day)}`);
