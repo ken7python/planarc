@@ -106,11 +106,11 @@
 
     const subjectSet = new Set();
     const studyLogs = await analysisModule.get(startDay.value, endDay.value);
-    console.log(studyLogs);
+    // console.log(studyLogs);
 
     studyLogs.map(log => {
       // console.log(log.ID);
-      console.log(log.SubjectID);
+      // console.log(log.SubjectID);
       subjectSet.add(log.SubjectID);
     })
 
@@ -122,7 +122,7 @@
       }
     })
 
-    console.log(subjectSet);
+    // console.log(subjectSet);
 
     // console.log(subject_list_included);
 
@@ -137,12 +137,12 @@
     // console.log(subject_list_included);
 
     subject_list_included.sort((a, b) => b.StudyTime - a.StudyTime);
-    console.log(subject_list_included);
+    // console.log(subject_list_included);
     subjects.value = subject_list_included;
 
     // subjects
     // sort((a, b) => a.StudyTime - b.StudyTime);
-    console.log(subjects.value);
+    // console.log(subjects.value);
 
     subjects.value.map(subject => {
       sum.value += subject.StudyTime;
@@ -153,7 +153,7 @@
     }
     loading.value = false;
 
-    console.log(studyLogs);
+    // console.log(studyLogs);
 
     const dateSet = new Set();
 
@@ -174,7 +174,7 @@
       dateArr.push(`${Number(month)}.${Number(day)}`);
     });
 
-    console.log(dateSet);
+    // console.log(dateSet);
 
     datasets = [];
     subjectSet.forEach(subject => {
@@ -200,8 +200,8 @@
       })
     });
 
-    console.log(datasets);
-    console.log(dateArr);
+    // console.log(datasets);
+    // console.log(dateArr);
 
     // 既存のチャートがあれば破棄
     if (chartInstance) {
