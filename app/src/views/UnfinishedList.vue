@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import {ref} from "vue";
+  import { ref } from "vue";
+  import { CONST } from "@/logic/const";
   import { user } from "@/logic/user.js";
   import { getColorboxStyle } from "@/logic/style/colorbox";
   import { unfinishedModule } from "../logic/unfinished";
@@ -47,7 +48,7 @@
   }
 
   const dialogVisible = ref(false);
-  const date = ref('');
+  const date = ref(CONST.getToday());
   const backId = ref(0);
 
   async function back(id :number, dateStr :string) {
