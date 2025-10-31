@@ -4,7 +4,10 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"google.golang.org/genai"
+	//"google.golang.org/genai"
+
+	"github.com/openai/openai-go/v3"
+	"github.com/openai/openai-go/v3/option"
 	"log"
 	"net/http"
 	"os"
@@ -124,50 +127,101 @@ func reqComment(c *gin.Context) {
 
 	ctx := context.Background()
 
-	apiKey := os.Getenv("GEMINI_API_KEY")
+	// OpenAI version
+	apiKey := os.Getenv("OPENAI_API_KEY")
 	if apiKey == "" {
-		log.Fatal("GOOGLE_API_KEY is not set")
+		log.Fatal("OPEN_API_KEY is not set")
 	}
 
-	client, err := genai.NewClient(ctx, &genai.ClientConfig{
-		Backend: genai.BackendGeminiAPI, // AI StudioのGemini APIを使う
-		APIKey:  apiKey,
-	})
-
-	if err != nil {
-		fmt.Printf("failed to create client: %v", err)
-		c.JSON(500, gin.H{"error": "AIクライアントの作成に失敗しました"})
-		return
-	}
-
-	modelName := "gemini-2.5-flash"
+	client := openai.NewClient(
+		option.WithAPIKey(apiKey),
+	)
 
 	prompt := getPrompt(uuid, req.Date, name, req.Note, req.Chr)
 
-	contents := genai.Text(prompt)
+	stream := client.Chat.Completions.NewStreaming(ctx, openai.ChatCompletionNewParams{
+		Messages: []openai.ChatCompletionMessageParamUnion{
+			openai.UserMessage(prompt),
+		},
+		Model: openai.ChatModelGPT5Nano,
+	})
+	defer stream.Close()
+
+	acc := openai.ChatCompletionAccumulator{}
 
 	response := ""
-
 	c.Writer.Header().Set("Content-Type", "text/event-stream")
 	flusher, _ := c.Writer.(http.Flusher)
 
-	for resp, err := range client.Models.GenerateContentStream(ctx, modelName, contents, nil) {
-		if err != nil {
-			fmt.Printf("failed to generate content: %w", err)
-			c.JSON(500, gin.H{"error": "コンテンツの生成に失敗しました"})
-			return
+	for stream.Next() {
+		chunk := stream.Current()
+		acc.AddChunk(chunk)
+		if len(chunk.Choices) > 0 {
+			char := chunk.Choices[0].Delta.Content
+			fmt.Print(char) // 届いた分だけ出力
+			response += char
+			fmt.Fprintf(c.Writer, char)
+			flusher.Flush()
 		}
-
-		chunk := resp.Text()
-		//fmt.Println(chunk)
-		response += chunk
-		fmt.Fprintf(c.Writer, "%s", chunk)
-		flusher.Flush()
+	}
+	if err := stream.Err(); err != nil {
+		log.Fatal(err)
+		fmt.Printf("failed to generate content: %w", err)
+		c.JSON(500, gin.H{"error": "コンテンツの生成に失敗しました"})
+		return
 	}
 
 	saveAIComment(uuid, req.Date, response)
 
 	fmt.Println("Success generating content")
+
+	// GeminiAPI version
+
+	//apiKey := os.Getenv("GEMINI_API_KEY")
+	//apiKey := os.Getenv("OPENAI_API_KEY")
+	//if apiKey == "" {
+	//	//log.Fatal("GOOGLE_API_KEY is not set")
+	//}
+
+	//client, err := genai.NewClient(ctx, &genai.ClientConfig{
+	//	Backend: genai.BackendGeminiAPI, // AI StudioのGemini APIを使う
+	//	APIKey:  apiKey,
+	//})
+	//
+	//if err != nil {
+	//	fmt.Printf("failed to create client: %v", err)
+	//	c.JSON(500, gin.H{"error": "AIクライアントの作成に失敗しました"})
+	//	return
+	//}
+	//
+	//modelName := "gemini-2.5-flash"
+	//
+	//prompt := getPrompt(uuid, req.Date, name, req.Note, req.Chr)
+	//
+	//contents := genai.Text(prompt)
+	//
+	//response := ""
+	//
+	//c.Writer.Header().Set("Content-Type", "text/event-stream")
+	//flusher, _ := c.Writer.(http.Flusher)
+	//
+	//for resp, err := range client.Models.GenerateContentStream(ctx, modelName, contents, nil) {
+	//	if err != nil {
+	//		fmt.Printf("failed to generate content: %w", err)
+	//		c.JSON(500, gin.H{"error": "コンテンツの生成に失敗しました"})
+	//		return
+	//	}
+	//
+	//	chunk := resp.Text()
+	//	//fmt.Println(chunk)
+	//	response += chunk
+	//	fmt.Fprintf(c.Writer, "%s", chunk)
+	//	flusher.Flush()
+	//}
+
+	//saveAIComment(uuid, req.Date, response)
+	//
+	//fmt.Println("Success generating content")
 }
 
 func retGetComment(uuid string, date string) *Comment {
