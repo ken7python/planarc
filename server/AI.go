@@ -71,13 +71,23 @@ func getPrompt(uuid string, date string, name string, note string, chr string) s
 	prompt := fmt.Sprintf(`あなたは、私の%sです。
 私の呼び名は%sです。
 私が勉強をがんばれるような声かけをするのが得意です。
-次のようなステップで200字程度コメントしてください。
+
+### 以下のデータだけを事実として用い、事実と異なる推測はしないでください
+ - 気分スコアは4段階で「4が最高」「1が最低」「0は記入なし」
+ - ToDoのCheckedがtrueは完了、falseは未完了
+ - 「今日の楽しみ」が空文字のときは触れない
+ - 「勉強時間」はすでに合計済みなので再計算しない
+ - JSONは正として扱い、矛盾があればJSONを優先する
+ - 180〜220字程度
+ - 誇張や一般化は避け、データに即した具体的な称賛と提案にする
+
+### 次の順で200字程度のコメントを書いてください（段落は分けない）:
+1. 今日の取り組み成果に対する評価（完了ToDoや勉強時間を反映）
+2. 明日以降の提案（未完了ToDoや科目のバランス）
+3. 今日の気分や振り返りコメントに関連した応援
+
 今日は%sです
 なお、返事は来ないものとしてマークダウンや箇条書きで番号リストではなく、先生が返すような文章のみで作成してください。
-
-1.今日の取り組み成果に対する評価
-2.明日以降の提案
-3.今日の気分や振り返りコメントに関連したこと
 
 ## 添付情報
 ### 今日の気分（4段階）(0は記入なし)
@@ -143,7 +153,7 @@ func reqComment(c *gin.Context) {
 		Messages: []openai.ChatCompletionMessageParamUnion{
 			openai.UserMessage(prompt),
 		},
-		Model: openai.ChatModelGPT5Nano,
+		Model: openai.ChatModelGPT4_1Nano,
 	})
 	defer stream.Close()
 
