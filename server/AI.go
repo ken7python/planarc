@@ -34,7 +34,14 @@ func getPrompt(uuid string, date string, name string, note string, chr string) s
 
 	strToDos := ""
 	for _, v := range todos {
-		todo := fmt.Sprintf("{Title: %v, Checked: %v Status: %v}\n", v.Title, v.Checked, v.Status)
+		var finished string
+		if v.Checked {
+			finished = "完了しました"
+		} else {
+			finished = "完了してません"
+		}
+
+		todo := fmt.Sprintf(" - ToDoのタイトルは%vです。このタスクは%v。このタスクの優先順位をは%vです}\n", v.Title, finished, v.Status)
 		strToDos += todo
 	}
 
@@ -49,7 +56,7 @@ func getPrompt(uuid string, date string, name string, note string, chr string) s
 
 	var logstr string = ""
 	for _, slog := range logs {
-		str := fmt.Sprintf("{ SubjectID: %v,StartHour: %v,StartMinute: %v,EndHour: %v,EndMinute %v,StudyTime: %v}\n", slog.SubjectID, slog.StartHours, slog.StartMinutes, slog.EndHours, slog.EndMinutes, slog.StudyTime)
+		str := fmt.Sprintf(" - 科目のID: %v、勉強開始時刻:%v:%v、終了時刻: %v:%v \n", slog.SubjectID, slog.StartHours, slog.StartMinutes, slog.EndHours, slog.EndMinutes, slog.StudyTime)
 		logstr += str
 	}
 	//fmt.Println(logstr)
@@ -59,7 +66,7 @@ func getPrompt(uuid string, date string, name string, note string, chr string) s
 
 	strUnfinished := ""
 	for _, list := range unfinished {
-		strUnfinished += fmt.Sprintf("{Title: %v, Status: %v, Date: %v,SubjectID: %v}\n", list.Title, list.Status, list.Date, list.SubjectID)
+		strUnfinished += fmt.Sprintf(" - タイトル:%v¥、優先順位:%v、日付:%v、科目ID:%v\n", list.Title, list.Status, list.Date, list.SubjectID)
 	}
 
 	mood := status.Mood
@@ -68,7 +75,32 @@ func getPrompt(uuid string, date string, name string, note string, chr string) s
 	todolist := strToDos
 	strTrack := logstr
 
-	prompt := fmt.Sprintf(`あなたは、私の%sです。
+	feature := "### キャラの性格を示すプロンプト\n"
+	if chr == "先生" {
+		feature = `あなたは、優しく頼れる先生です。やさしく論理的に接してください。
+私のことを後から示す呼び名で「さん」をつけて呼んでください。
+ 私が勉強を続けられるように、具体的な称賛と提案を提供します。
+あなたのコメントは、私が前向きに勉強を続けるための大きな助けとなります。
+常に伴奏姿勢で指導してください。中高生にも伝わる言葉を用い、命令形よりも「〜してみましょう」を優先してください。
+`
+	}
+	if chr == "友達" {
+		feature = `あなたは、気持ちに寄り添う親友です。フランクで等身大に接してください。
+私のことを後から示す呼び名で呼んでください。
+まず、気持ちを言い換えて共感してください
+丁寧語をつかわず、タメ口で話してください。
+`
+
+	}
+	if chr == "親" {
+		feature = `あなたは、温かく見守る親です。包み込む安心感で接してください。
+私のことを後から示す呼び名で呼んでください。
+まず、気持ちを言い換えて共感してください。
+丁寧語ではなく、優しい口調で話してください。
+`
+	}
+
+	prompt := fmt.Sprintf(feature+`あなたは、私の%sです。
 私の呼び名は%sです。
 私が勉強をがんばれるような声かけをするのが得意です。
 
@@ -82,9 +114,6 @@ func getPrompt(uuid string, date string, name string, note string, chr string) s
  - 誇張や一般化は避け、データに即した具体的な称賛と提案にする
 
 ### 次の順で200字程度のコメントを書いてください（段落は分けない）:
-1. 今日の取り組み成果に対する評価（完了ToDoや勉強時間を反映）
-2. 明日以降の提案（未完了ToDoや科目のバランス）
-3. 今日の気分や振り返りコメントに関連した応援
 
 今日は%sです
 なお、返事は来ないものとしてマークダウンや箇条書きで番号リストではなく、先生が返すような文章のみで作成してください。
@@ -94,11 +123,11 @@ func getPrompt(uuid string, date string, name string, note string, chr string) s
 %d
 ### 今日の楽しみ(空文字は記入なし)
 %s
-### 勉強時間
+### 勉強時間（注意：勉強時間について言及する際はここだけを見るようにしてください）
 %s
 ### 全科目ID一覧(ToDoやStudyLog。未完了リストのSubjectIDに対応)
 %s
-### ToDoの達成状況
+### ToDoの達成状況（Checked: trueは完了タスク、Checked: falseは未完了タスクです。これらを踏まえた上で言及してください）
 %s
 ### TimeTracking
 %s
