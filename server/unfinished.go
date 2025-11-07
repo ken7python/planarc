@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type unfinishedLIST struct {
@@ -19,6 +20,17 @@ func retGetUnfinishedByUserID(uuid string) []unfinishedLIST {
 	var unfinishedLists []unfinishedLIST
 
 	res := db.Model(&unfinishedLIST{}).Where("uuid = ?", uuid).Find(&unfinishedLists)
+	if res.Error != nil {
+		fmt.Println("Error fetching Unfinished List:", res.Error)
+		return nil
+	}
+	return unfinishedLists
+}
+
+func retGetUnfinishedByUserIDTop10(uuid string) []unfinishedLIST {
+	var unfinishedLists []unfinishedLIST
+
+	res := db.Model(&unfinishedLIST{}).Where("uuid = ?", uuid).Order("date ASC").Limit(10).Find(&unfinishedLists)
 	if res.Error != nil {
 		fmt.Println("Error fetching Unfinished List:", res.Error)
 		return nil

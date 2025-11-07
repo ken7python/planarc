@@ -68,6 +68,7 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 	//fmt.Println("Unfinished:", unfinished)
 
 	strUnfinished := ""
+
 	for _, list := range unfinished {
 		strUnfinished += fmt.Sprintf(" - タイトル:%v¥、優先順位:%v、日付:%v、科目ID:%v\n", list.Title, list.Status, list.Date, list.SubjectID)
 	}
