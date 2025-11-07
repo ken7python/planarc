@@ -4,12 +4,8 @@ package main
 import (
 	"sync"
 
-	"time"
-
 	"fmt"
-	"strings"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/time/rate"
 )
@@ -36,17 +32,17 @@ func main() {
 	InitDB_MySQL()
 	r := gin.Default()
 
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173", "http://localhost:4173", "https://planarc.kencode.tech", "https://planarc.kencode.tech/"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
-		AllowOriginFunc: func(origin string) bool {
-			return strings.Contains(origin, "planarc.kencode.tech")
-		},
-	}))
+	// r.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     []string{"http://localhost:5173", "http://localhost:4173", "https://planarc.kencode.tech", "https://planarc.kencode.tech/"},
+	// 	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	// 	AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+	// 	ExposeHeaders:    []string{"Content-Length"},
+	// 	AllowCredentials: true,
+	// 	MaxAge:           12 * time.Hour,
+	// 	AllowOriginFunc: func(origin string) bool {
+	// 		return strings.Contains(origin, "planarc.kencode.tech")
+	// 	},
+	// }))
 
 	r.OPTIONS("/*path", func(c *gin.Context) {
 		c.Status(204)
