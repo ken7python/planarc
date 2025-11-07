@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"fmt"
+	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -42,6 +43,9 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
+		AllowOriginFunc: func(origin string) bool {
+			return strings.Contains(origin, "planarc.kencode.tech")
+		},
 	}))
 
 	r.OPTIONS("/*path", func(c *gin.Context) {
