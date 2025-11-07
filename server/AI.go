@@ -198,6 +198,11 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 func reqComment(c *gin.Context) {
 	uuid := GetProfile(c).UUID
 
+	if retGetComment(uuid, c.Query("date")) != nil {
+		c.JSON(400, gin.H{"error": "その日のコメントは既に存在します"})
+		return
+	}
+
 	type RequestBody struct {
 		Date string `json:"Date"`
 		Note string `json:"Note"`
