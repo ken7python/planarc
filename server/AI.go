@@ -36,6 +36,10 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 
 	// ② 現在時刻を取得
 	now := time.Now()
+	if parsedTime.After(now) {
+		fmt.Println("Error: Date is in the future.")
+		return nil
+	}
 
 	// ③ 差を計算
 	diff := now.Sub(parsedTime)
@@ -65,12 +69,12 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 	for _, v := range todos {
 		var finished string
 		if v.Checked {
-			finished = "完了しました"
+			finished = "完了済み"
 		} else {
-			finished = "完了してません"
+			finished = "未完了"
 		}
 
-		todo := fmt.Sprintf(" - ToDoのタイトルは%vです。このタスクは%v。このタスクの優先順位をは%vです}\n", v.Title, finished, v.Status)
+		todo := fmt.Sprintf(" - タイトル「%v」このタスクは%v、優先順位%v\n", v.Title, finished, v.Status)
 		strToDos += todo
 	}
 
@@ -85,8 +89,14 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 
 	var logstr string = ""
 	for _, slog := range logs {
-		str := fmt.Sprintf(" - 科目のID: %v、勉強開始時刻:%v:%v、終了時刻: %v:%v \n", slog.SubjectID, slog.StartHours, slog.StartMinutes, slog.EndHours, slog.EndMinutes, slog.StudyTime)
+		str := fmt.Sprintf(" - 科目のID: %v、開始時刻:%v:%v、終了時刻: %v:%v \n", slog.SubjectID, slog.StartHours, slog.StartMinutes, slog.EndHours, slog.EndMinutes, slog.StudyTime)
 		logstr += str
+	}
+
+	var substr string = ""
+	for _, sublog := range subjectID {
+		str_sub := fmt.Sprintf("ID:%v, 科目名:%v", sublog.ID, sublog.Name)
+		substr += str_sub
 	}
 	//fmt.Println(logstr)
 
@@ -165,7 +175,7 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 %s
 ### 今日の振り返り
 %s
-`, chr, name, date, mood, enjoyment, studyTime, subjectID, todolist, strTrack, strUnfinished, note)
+`, chr, name, date, mood, enjoyment, studyTime, substr, todolist, strTrack, strUnfinished, note)
 	fmt.Println(prompt)
 	lenNote := len(note)
 	lenPrompt := len(prompt)
