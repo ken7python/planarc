@@ -182,13 +182,13 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 
 	fmt.Printf("Length of note: %d, Length of prompt: %d\n", lenNote, lenPrompt)
 
-	if lenNote > 4000 {
-		fmt.Println("Warning: Note length exceeds 4000 characters, which may cause issues with token limits.")
+	if lenNote > 1000 {
+		fmt.Println("Warning: Note length exceeds 1000 characters, which may cause issues with token limits.")
 		return nil
 	}
 
-	if lenPrompt > 6000 {
-		fmt.Println("Warning: Prompt length exceeds 6000 characters, which may cause issues with token limits.")
+	if lenPrompt > 10000 {
+		fmt.Println("Warning: Prompt length exceeds 10000 characters, which may cause issues with token limits.")
 		return nil
 	}
 
