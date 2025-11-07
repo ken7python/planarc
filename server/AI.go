@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -25,6 +26,31 @@ type Comment struct {
 }
 
 func getPrompt(uuid string, date string, name string, note string, chr string) *string {
+	// ① 文字列を time.Time に変換（フォーマットに注意！）
+	layout := "2006-01-02" // Goでは固定（これでYYYY-MM-DD扱い）
+	parsedTime, err := time.Parse(layout, date)
+	if err != nil {
+		fmt.Println("日付の変換エラー:", err)
+		return nil
+	}
+
+	// ② 現在時刻を取得
+	now := time.Now()
+
+	// ③ 差を計算
+	diff := now.Sub(parsedTime)
+
+	// ④ 未来の日付の場合は負の値になるので、絶対値で比較
+	if diff < 0 {
+		diff = -diff
+	}
+
+	// ⑤ 1週間以内（7日以内）かどうか判定
+	if diff.Hours() > 24*7 {
+		fmt.Println("Error: Date is more than one week ago.")
+		return nil
+	}
+
 	// Status取得
 	status := retGetStatus(uuid, date)
 	//strStatus := fmt.Sprintf("Mood: %v, Enjoyment: %v", status.Mood, status.Enjoyment)
@@ -64,7 +90,7 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 	}
 	//fmt.Println(logstr)
 
-	unfinished := retGetUnfinishedByUserID(uuid)
+	unfinished := retGetUnfinishedByUserIDTop10(uuid)
 	//fmt.Println("Unfinished:", unfinished)
 
 	strUnfinished := ""
