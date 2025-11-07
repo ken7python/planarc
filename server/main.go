@@ -36,13 +36,17 @@ func main() {
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173", "http://localhost:4173", "https://planarc.kencode.tech"},
+		AllowOrigins:     []string{"http://localhost:5173", "http://localhost:4173", "https://planarc.kencode.tech", "https://planarc.kencode.tech/"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+
+	r.OPTIONS("/*path", func(c *gin.Context) {
+		c.Status(204)
+	})
 
 	r.Static("/static", "./static")
 
