@@ -3,14 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
+
 	"github.com/gin-gonic/gin"
+
 	//"google.golang.org/genai"
 
-	"github.com/openai/openai-go/v3"
-	"github.com/openai/openai-go/v3/option"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/openai/openai-go/v3"
+	"github.com/openai/openai-go/v3/option"
 )
 
 type Comment struct {
@@ -21,7 +24,7 @@ type Comment struct {
 	UserNote string `gorm:"not null"`
 }
 
-func getPrompt(uuid string, date string, name string, note string, chr string) string {
+func getPrompt(uuid string, date string, name string, note string, chr string) *string {
 	// Status取得
 	status := retGetStatus(uuid, date)
 	//strStatus := fmt.Sprintf("Mood: %v, Enjoyment: %v", status.Mood, status.Enjoyment)
@@ -137,7 +140,22 @@ func getPrompt(uuid string, date string, name string, note string, chr string) s
 %s
 `, chr, name, date, mood, enjoyment, studyTime, subjectID, todolist, strTrack, strUnfinished, note)
 	fmt.Println(prompt)
-	return prompt
+	lenNote := len(note)
+	lenPrompt := len(prompt)
+
+	fmt.Printf("Length of note: %d, Length of prompt: %d\n", lenNote, lenPrompt)
+
+	if lenNote > 4000 {
+		fmt.Println("Warning: Note length exceeds 4000 characters, which may cause issues with token limits.")
+		return nil
+	}
+
+	if lenPrompt > 6000 {
+		fmt.Println("Warning: Prompt length exceeds 6000 characters, which may cause issues with token limits.")
+		return nil
+	}
+
+	return &prompt
 }
 
 func reqComment(c *gin.Context) {
@@ -162,8 +180,6 @@ func reqComment(c *gin.Context) {
 		name = yourProfile.Username
 	}
 
-	saveUserComment(yourProfile.UUID, req.Date, req.Note)
-
 	ctx := context.Background()
 
 	// OpenAI version
@@ -177,10 +193,14 @@ func reqComment(c *gin.Context) {
 	)
 
 	prompt := getPrompt(uuid, req.Date, name, req.Note, req.Chr)
+	if prompt == nil {
+		c.JSON(500, gin.H{"error": "AIに送信するデータの量が多すぎます。コメントを短くしてください。"})
+		return
+	}
 
 	stream := client.Chat.Completions.NewStreaming(ctx, openai.ChatCompletionNewParams{
 		Messages: []openai.ChatCompletionMessageParamUnion{
-			openai.UserMessage(prompt),
+			openai.UserMessage(*prompt),
 		},
 		Model: openai.ChatModelGPT4_1Nano,
 	})
@@ -210,6 +230,7 @@ func reqComment(c *gin.Context) {
 		return
 	}
 
+	saveUserComment(yourProfile.UUID, req.Date, req.Note)
 	saveAIComment(uuid, req.Date, response)
 
 	fmt.Println("Success generating content")

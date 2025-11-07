@@ -31,20 +31,29 @@ export const CommentModule = {
             })
         })
 
-        const reader = res.body.getReader();
+        const resBody = res.body;
+        if (!resBody) {
+            alert("サーバとの通信に失敗しました");
+            return null;
+        }
+        const reader = resBody.getReader();
         const decoder = new TextDecoder();
 
         if (await res.ok) {
             while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                const decodedValue = decoder.decode(value);
-                this.refComment.value += decodedValue;
-                console.log(decodedValue);
+                if (res.ok === false) {
+                    alert("サーバとの通信に失敗しました");
+                    return null;
+                } else {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    const decodedValue = decoder.decode(value);
+                    this.refComment.value += decodedValue;
+                    console.log(decodedValue);
+                }
             }
             return true;
-        }
-        else {
+        } else {
             alert("サーバとの通信に失敗しました");
             return null;
         }

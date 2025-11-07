@@ -5,8 +5,7 @@
   import { mic } from '@/logic/mic';
 
   import { CommentModule } from "../logic/comment";
-  import {overrides} from "chart.js/dist/core/core.defaults";
-
+  
   const message = ref<string>("");
 
   async function micbtn() {
