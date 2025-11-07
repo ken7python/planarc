@@ -7,3 +7,5 @@ server/DB
 main
 node_modules
 *.log
+server/.env
+app/.env*
