@@ -95,7 +95,7 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 
 	var substr string = ""
 	for _, sublog := range subjectID {
-		str_sub := fmt.Sprintf("ID:%v, 科目名:%v", sublog.ID, sublog.Name)
+		str_sub := fmt.Sprintf("ID:%v, 科目名:%v\n", sublog.ID, sublog.Name)
 		substr += str_sub
 	}
 	//fmt.Println(logstr)
@@ -187,8 +187,8 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 		return nil
 	}
 
-	if lenPrompt > 10000 {
-		fmt.Println("Warning: Prompt length exceeds 10000 characters, which may cause issues with token limits.")
+	if lenPrompt > 12000 {
+		fmt.Println("Warning: Prompt length exceeds 12000 characters, which may cause issues with token limits.")
 		return nil
 	}
 
