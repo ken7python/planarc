@@ -159,7 +159,11 @@
       if ("serviceWorker" in navigator) {
         console.log("1. Service Worker対応確認 OK");
 
-        const reg = await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`);
+        // ビルド後に正しいパスで登録
+        const swPath = import.meta.env.PROD ? '/sw.js' : `${import.meta.env.BASE_URL}sw.js`;
+        console.log("Service Worker登録パス:", swPath);
+
+        const reg = await navigator.serviceWorker.register(swPath);
         console.log("2. Service Worker 登録完了:", reg);
 
         // 通知許可の確認
@@ -228,6 +232,47 @@
     const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
     const rawData = atob(base64);
     return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
+  }
+
+  // デバッグ用テスト通知機能
+  async function testNotification() {
+    console.log("=== テスト通知開始 ===");
+
+    try {
+      // 1. 直接通知テスト（Service Worker経由なし）
+      if (Notification.permission === 'granted') {
+        console.log("1. 直接通知テスト");
+        new Notification("直接通知テスト", {
+          body: "これは直接通知です（Service Worker経由なし）",
+          icon: "/pwa-192x192.png"
+        });
+
+        // 2秒後にService Worker経由のテストも実行
+        setTimeout(async () => {
+          console.log("2. Service Worker経由テスト");
+
+          // Service Worker経由の通知
+          const reg = await navigator.serviceWorker.getRegistration();
+          if (reg && reg.active) {
+            await reg.showNotification("Service Worker テスト", {
+              body: "これはService Worker経由の通知です",
+              icon: "/pwa-192x192.png",
+              tag: "test"
+            });
+            console.log("Service Worker通知送信完了");
+          } else {
+            console.error("Service Workerが見つかりません");
+          }
+        }, 2000);
+
+        alert("テスト通知を送信しました！");
+      } else {
+        alert("通知許可が必要です");
+      }
+    } catch (error) {
+      console.error("テスト通知エラー:", error);
+      alert("テスト通知エラー: " + error.message);
+    }
   }
 </script>
 
@@ -326,6 +371,11 @@
 
     <button @click="register" style="position: fixed; bottom: 80px; right: 20px; z-index: 1000;">
       🔔 通知を許可して送信
+    </button>
+
+    <!-- デバッグ用テスト通知ボタン -->
+    <button @click="testNotification" style="position: fixed; bottom: 140px; right: 20px; z-index: 1000; background: orange; color: white; padding: 8px; border: none; border-radius: 4px;">
+      🧪 テスト通知
     </button>
   </div>
 </template>

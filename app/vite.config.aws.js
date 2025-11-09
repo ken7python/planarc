@@ -10,8 +10,11 @@ export default defineConfig({
       vue(),
     svgLoader(),
     VitePWA({
-      registerType: 'autoUpdate', // 自動更新（またはprompt）
-      includeAssets: ['vite.svg',],
+      strategies: 'injectManifest',
+      srcDir: 'public',
+      filename: 'sw.js',
+      registerType: 'autoUpdate',
+      includeAssets: ['vite.svg', 'pwa-192x192.png', 'pwa-512x512.png'],
       manifest: {
         name: 'PlanArc',
         short_name: 'PlanArc',
@@ -31,6 +34,11 @@ export default defineConfig({
             type: 'image/png'
           }
         ]
+      },
+      injectManifest: {
+        swSrc: 'public/sw.js',
+        swDest: 'sw.js',
+        injectionPoint: undefined
       }
     })
   ],

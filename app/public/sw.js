@@ -1,5 +1,11 @@
 // バージョン管理（キャッシュ破棄の足がかりに）
-const SW_VERSION = "v1";
+const SW_VERSION = "v2";
+
+// VitePWAのプリキャッシュ機能（本番ビルド時に自動注入）
+if (typeof self.__WB_MANIFEST !== 'undefined') {
+  // Workboxのプリキャッシュが利用可能な場合
+  console.log("Workbox プリキャッシュ利用可能");
+}
 
 // 即時反映
 self.addEventListener("install", (e) => {
@@ -14,52 +20,79 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener('push', (event) => {
-    console.log("プッシュイベント受信:", event);
+    console.log("🚀 プッシュイベント受信:", event);
+    console.log("プッシュデータ存在確認:", !!event.data);
 
     try {
+        let title = "PlanArc通知";
+        let body = "新しいメッセージがあります";
+
         // データの存在確認
-        if (!event.data) {
-            console.warn("プッシュデータがありません");
-            return;
+        if (event.data) {
+            try {
+                const data = event.data.json();
+                console.log("📦 プッシュデータ:", data);
+                title = data.title || title;
+                body = data.body || body;
+            } catch (jsonError) {
+                console.warn("JSONパースエラー:", jsonError);
+                console.log("生データ:", event.data.text());
+                body = event.data.text() || body;
+            }
+        } else {
+            console.warn("⚠️ プッシュデータがありません - デフォルト通知を表示");
         }
 
-        const data = event.data.json();
-        console.log("プッシュデータ:", data);
+        console.log("📱 通知表示開始 - タイトル:", title, "本文:", body);
 
-        // デフォルト値を設定
-        const title = data.title || "通知";
-        const body = data.body || "メッセージがあります";
+        const notificationPromise = self.registration.showNotification(title, {
+            body: body,
+            icon: '/pwa-192x192.png',
+            badge: '/pwa-192x192.png',
+            tag: 'planarc-notification',
+            requireInteraction: false,
+            actions: [
+                {
+                    action: 'open',
+                    title: '開く'
+                }
+            ]
+        });
 
         event.waitUntil(
-            self.registration.showNotification(title, {
-                body: body,
-                // icon: data.icon || '/icon-192x192.png', // オプション
-                // badge: data.badge || '/badge-72x72.png', // オプション
-                tag: data.tag || 'default',
-                requireInteraction: false,
+            notificationPromise.then(() => {
+                console.log("✅ 通知表示完了");
+            }).catch((error) => {
+                console.error("❌ 通知表示エラー:", error);
             })
         );
 
-        console.log("通知表示完了");
     } catch (error) {
-        console.error("プッシュ通知エラー:", error);
+        console.error("❌ プッシュ処理エラー:", error);
+        console.error("エラースタック:", error.stack);
 
         // エラー時でも通知を表示
         event.waitUntil(
-            self.registration.showNotification("通知", {
-                body: "メッセージを受信しました"
+            self.registration.showNotification("PlanArc - エラー通知", {
+                body: `通知処理中にエラーが発生しました: ${error.message}`,
+                icon: '/pwa-192x192.png',
+                tag: 'error-notification'
+            }).catch((showError) => {
+                console.error("❌❌ 緊急通知表示エラー:", showError);
             })
         );
     }
 });
 
-// 通知クリック時の処理（オプション）
+// 通知クリック時の処理
 self.addEventListener('notificationclick', (event) => {
-    console.log("通知がクリックされました:", event);
+    console.log("🖱️ 通知がクリックされました:", event);
     event.notification.close();
 
     // アプリを開く
     event.waitUntil(
-        clients.openWindow('/')
+        clients.openWindow('/').catch((error) => {
+            console.error("ウィンドウを開けませんでした:", error);
+        })
     );
 });
