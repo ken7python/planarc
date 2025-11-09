@@ -46,6 +46,21 @@ type Subscription struct {
 	} `json:"keys"`
 }
 
+// 指定時刻に非同期で1回だけ実行（過ぎてたら何もしない）
+func ScheduleOnce(when time.Time, job func()) {
+	d := time.Until(when)
+	if d <= 0 {
+		fmt.Println("⏱️ もう過ぎてるので実行しません:", when)
+		return
+	}
+
+	// ゴルーチンで裏実行
+	go func() {
+		time.Sleep(d)
+		job()
+	}()
+}
+
 func main() {
 	InitDB_MySQL()
 	r := gin.Default()
@@ -179,42 +194,56 @@ func main() {
 		log.Printf("🔑 P256dh length: %d", len(sub.Keys.P256dh))
 		log.Printf("🔑 Auth length: %d", len(sub.Keys.Auth))
 
-		// 通知内容
-		message := map[string]string{
-			"title": "🎉 GoからWeb Push通知！",
-			"body":  "こんにちは！Goサーバーから届いたよ！",
-		}
-		payload, _ := json.Marshal(message)
-		log.Printf("📝 Payload: %s", string(payload))
+		loc, _ := time.LoadLocation("Asia/Tokyo")
 
-		// WebPush送信
-		log.Println("🚀 Sending notification...")
-		resp, err := webpush.SendNotification(payload, &webpush.Subscription{
-			Endpoint: sub.Endpoint,
-			Keys: webpush.Keys{
-				P256dh: sub.Keys.P256dh,
-				Auth:   sub.Keys.Auth,
-			},
-		}, &webpush.Options{
-			VAPIDPrivateKey: vapidPrivateKey,
-			VAPIDPublicKey:  vapidPublicKey,
-			TTL:             30,
-			Subscriber:      "mailto:test@example.com",
+		// 例①：特定日時で
+		runAt := time.Now().Add(10 * time.Second)
+
+		// 例②：今から10秒後
+		// runAt := time.Now().Add(10 * time.Second)
+
+		ScheduleOnce(runAt, func() {
+			fmt.Println("🟢 実行しました！:", time.Now().In(loc))
+
+			// 通知内容
+			message := map[string]string{
+				"title": "🎉 GoからWeb Push通知！",
+				"body":  "こんにちは！Goサーバーから届いたよ！",
+			}
+			payload, _ := json.Marshal(message)
+			log.Printf("📝 Payload: %s", string(payload))
+
+			// WebPush送信
+			log.Println("🚀 Sending notification...")
+			resp, err := webpush.SendNotification(payload, &webpush.Subscription{
+				Endpoint: sub.Endpoint,
+				Keys: webpush.Keys{
+					P256dh: sub.Keys.P256dh,
+					Auth:   sub.Keys.Auth,
+				},
+			}, &webpush.Options{
+				VAPIDPrivateKey: vapidPrivateKey,
+				VAPIDPublicKey:  vapidPublicKey,
+				TTL:             30,
+				Subscriber:      "mailto:test@example.com",
+			})
+
+			if err != nil {
+				log.Printf("❌ WebPush Send Error: %v", err)
+				c.JSON(500, gin.H{"error": err.Error()})
+				return
+			}
+			defer resp.Body.Close()
+
+			responseBody, _ := io.ReadAll(resp.Body)
+			log.Printf("✅ WebPush sent successfully!")
+			log.Printf("📊 Status Code: %d", resp.StatusCode)
+			log.Printf("📄 Response: %s", string(responseBody))
 		})
 
-		if err != nil {
-			log.Printf("❌ WebPush Send Error: %v", err)
-			c.JSON(500, gin.H{"error": err.Error()})
-			return
-		}
-		defer resp.Body.Close()
+		fmt.Println("✅ スケジュール登録:", runAt)
 
-		responseBody, _ := io.ReadAll(resp.Body)
-		log.Printf("✅ WebPush sent successfully!")
-		log.Printf("📊 Status Code: %d", resp.StatusCode)
-		log.Printf("📄 Response: %s", string(responseBody))
-
-		c.JSON(200, gin.H{"success": true, "status": resp.StatusCode})
+		c.JSON(200, gin.H{"success": true, "status": 200})
 	})
 
 	fmt.Println("Starting server")

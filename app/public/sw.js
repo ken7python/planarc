@@ -45,19 +45,27 @@ self.addEventListener('push', (event) => {
 
         console.log("📱 通知表示開始 - タイトル:", title, "本文:", body);
 
-        const notificationPromise = self.registration.showNotification(title, {
+        const notificationOptions = {
             body: body,
             icon: '/pwa-192x192.png',
             badge: '/pwa-192x192.png',
-            tag: 'planarc-notification',
+            tag: 'planarc-notification-' + Date.now(), // ユニークなタグで確実に表示
             requireInteraction: false,
+            silent: false, // 音を鳴らす
             actions: [
                 {
                     action: 'open',
                     title: '開く'
                 }
-            ]
-        });
+            ],
+            data: { // 追加データ
+                timestamp: Date.now(),
+                url: '/'
+            }
+        };
+
+        console.log("📋 通知オプション:", notificationOptions);
+        const notificationPromise = self.registration.showNotification(title, notificationOptions);
 
         event.waitUntil(
             notificationPromise.then(() => {
