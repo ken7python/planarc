@@ -162,7 +162,7 @@ func main() {
 			VAPIDPrivateKey: os.Getenv("VAPID_PRIVATE_KEY"),
 			VAPIDPublicKey:  os.Getenv("VAPID_PUBLIC_KEY"),
 			TTL:             30,
-			Subscriber:      "mailto:you@example.com",
+			Subscriber:      "Subscriber: \"mailto:test@example.com\"",
 		})
 		if err != nil {
 			log.Println("Error:", err)
