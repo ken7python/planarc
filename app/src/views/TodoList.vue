@@ -153,22 +153,73 @@
   const publicVapidKey = "BKdgyFaYbmA8NNQvlHbr6TQ6wJudtWWzmlcDmPogbp9ppkRuvB7kQThDjVw0LDwjynesVAQvlRlFkdfMu45KO6g";
 
   async function register() {
-    if ("serviceWorker" in navigator) {
-      const reg = await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`);
-      console.log(await reg);
-      console.log("Service Worker 登録完了");
+    console.log("=== プッシュ通知登録開始 ===");
 
-      const sub = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
-      });
+    try {
+      if ("serviceWorker" in navigator) {
+        console.log("1. Service Worker対応確認 OK");
 
-      await fetch(`${CONST.api()}/send`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(sub),
-      });
-      alert("通知を送信しました🎉");
+        const reg = await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`);
+        console.log("2. Service Worker 登録完了:", reg);
+
+        // 通知許可の確認
+        console.log("3. 通知許可確認開始");
+        const permission = await Notification.requestPermission();
+        console.log("4. 通知許可結果:", permission);
+
+        if (permission !== "granted") {
+          console.error("❌ 通知が許可されていません");
+          alert("通知が許可されていません。ブラウザの設定で通知を許可してください。");
+          return;
+        }
+
+        // プッシュマネージャーの確認
+        if (!reg.pushManager) {
+          console.error("❌ プッシュマネージャーが利用できません");
+          alert("このブラウザはプッシュ通知に対応していません");
+          return;
+        }
+
+        console.log("5. プッシュ購読開始");
+        console.log("VAPIDキー:", publicVapidKey.substring(0, 20) + "...");
+
+        const sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
+        });
+        console.log("6. プッシュ購読完了:", sub);
+        console.log("購読エンドポイント:", sub.endpoint);
+
+        console.log("7. サーバー送信開始");
+        const apiUrl = `${CONST.api()}/send`;
+        console.log("API URL:", apiUrl);
+
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(sub),
+        });
+
+        console.log("8. サーバーレスポンス:", response.status, response.statusText);
+
+        if (response.ok) {
+          console.log("✅ 通知登録完了");
+          alert("通知登録完了🎉");
+        } else {
+          const errorText = await response.text();
+          console.error("❌ サーバーエラー:", response.status, errorText);
+          alert(`サーバーエラー: ${response.status}\n詳細: ${errorText}`);
+        }
+      } else {
+        console.error("❌ Service Worker非対応");
+        alert("このブラウザはService Workerに対応していません");
+      }
+    } catch (error) {
+      console.error("❌ 通知登録エラー:", error);
+      console.error("エラー詳細:", error.stack);
+      alert(`エラーが発生しました: ${error.message}`);
     }
   }
 
