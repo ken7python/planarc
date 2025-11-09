@@ -2,10 +2,14 @@
 package main
 
 import (
+	"github.com/SherClockHolmes/webpush-go"
+	"io"
+	"log"
 	"sync"
 
 	"fmt"
 
+	"encoding/json"
 	"os"
 	"strings"
 	"time"
@@ -32,6 +36,14 @@ func rateLimitMiddleware() gin.HandlerFunc {
 		}
 		c.Next()
 	}
+}
+
+type Subscription struct {
+	Endpoint string `json:"endpoint"`
+	Keys     struct {
+		P256dh string `json:"p256dh"`
+		Auth   string `json:"auth"`
+	} `json:"keys"`
 }
 
 func main() {
@@ -126,6 +138,40 @@ func main() {
 	analysys := api.Group("/analysis")
 	analysys.Use(authMiddleware())
 	analysys.GET("/", getAnalysis)
+
+	r.POST("/send", func(c *gin.Context) {
+		var sub Subscription
+		body, _ := io.ReadAll(c.Request.Body)
+		json.Unmarshal(body, &sub)
+
+		// 通知内容
+		message := map[string]string{
+			"title": "🎉 GoからWeb Push通知！",
+			"body":  "こんにちは！Goサーバーから届いたよ！",
+		}
+		payload, _ := json.Marshal(message)
+
+		// WebPush送信
+		resp, err := webpush.SendNotification(payload, &webpush.Subscription{
+			Endpoint: sub.Endpoint,
+			Keys: webpush.Keys{
+				P256dh: sub.Keys.P256dh,
+				Auth:   sub.Keys.Auth,
+			},
+		}, &webpush.Options{
+			VAPIDPrivateKey: os.Getenv("VAPID_PRIVATE_KEY"),
+			VAPIDPublicKey:  os.Getenv("VAPID_PUBLIC_KEY"),
+			TTL:             30,
+			Subscriber:      "mailto:you@example.com",
+		})
+		if err != nil {
+			log.Println("Error:", err)
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+		defer resp.Body.Close()
+		c.JSON(200, gin.H{"success": true})
+	})
 
 	fmt.Println("Starting server")
 

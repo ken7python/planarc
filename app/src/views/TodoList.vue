@@ -145,6 +145,36 @@
   communication_loading.value = true;
   loadData();
   loadStatus();
+
+  // test
+
+  const publicVapidKey = "BKdgyFaYbmA8NNQvlHbr6TQ6wJudtWWzmlcDmPogbp9ppkRuvB7kQThDjVw0LDwjynesVAQvlRlFkdfMu45KO6g";
+
+  async function register() {
+    if ("serviceWorker" in navigator) {
+      const reg = await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`);
+      console.log("Service Worker 登録完了");
+
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
+      });
+
+      await fetch("http://localhost:8080/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(sub),
+      });
+      alert("通知を送信しました🎉");
+    }
+  }
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+    const rawData = atob(base64);
+    return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
+  }
 </script>
 
 <template>
@@ -239,6 +269,10 @@
     <div v-else style="color: white;text-align: center; margin-top: 20px;">
       <p>通信中...</p>
     </div>
+
+    <button @click="register" style="position: fixed; bottom: 80px; right: 20px; z-index: 1000;">
+      🔔 通知を許可して送信
+    </button>
   </div>
 </template>
 
