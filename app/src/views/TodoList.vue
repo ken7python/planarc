@@ -7,6 +7,8 @@
   import { statusModule } from "@/logic/status";
   import ToDoCard from "../components/ToDoCard.vue";
 
+  import { CONST } from '@/logic/const';
+
   import Addicon from '@/assets/icons/add.svg';
   import MicIcon from '@/assets/icons/mic.svg';
 
@@ -160,7 +162,7 @@
         applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
       });
 
-      await fetch("http://localhost:8080/send", {
+      await fetch(`${CONST.api()}/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(sub),

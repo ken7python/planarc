@@ -139,7 +139,7 @@ func main() {
 	analysys.Use(authMiddleware())
 	analysys.GET("/", getAnalysis)
 
-	r.POST("/send", func(c *gin.Context) {
+	api.POST("/send", func(c *gin.Context) {
 		var sub Subscription
 		body, _ := io.ReadAll(c.Request.Body)
 		json.Unmarshal(body, &sub)
