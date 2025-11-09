@@ -51,9 +51,26 @@ func main() {
 	r := gin.Default()
 
 	if err := godotenv.Load(); err != nil {
-		panic("Error loading .env file")
+		log.Println("Warning: .env file not found, using environment variables")
 	}
 	CORS_GO := os.Getenv("CORS_GO")
+
+	// VAPID鍵の検証
+	vapidPrivateKey := os.Getenv("VAPID_PRIVATE_KEY")
+	vapidPublicKey := os.Getenv("VAPID_PUBLIC_KEY")
+
+	log.Printf("=== VAPID Keys Check ===")
+	log.Printf("Private Key set: %v (length: %d)", vapidPrivateKey != "", len(vapidPrivateKey))
+	log.Printf("Public Key set: %v (length: %d)", vapidPublicKey != "", len(vapidPublicKey))
+
+	if vapidPrivateKey == "" || vapidPublicKey == "" {
+		log.Fatal("❌ Error: VAPID keys not set in environment variables")
+	}
+
+	// 鍵の形式を確認（秘密鍵は短く、公開鍵は長い）
+	if len(vapidPrivateKey) > len(vapidPublicKey) {
+		log.Fatal("❌ Error: VAPID keys appear to be swapped!")
+	}
 
 	// ローカルのときは有効にしてください
 	if CORS_GO == "ON" {
@@ -140,9 +157,27 @@ func main() {
 	analysys.GET("/", getAnalysis)
 
 	api.POST("/send", func(c *gin.Context) {
+		log.Println("=== /api/send endpoint called ===")
+
 		var sub Subscription
-		body, _ := io.ReadAll(c.Request.Body)
-		json.Unmarshal(body, &sub)
+		body, err := io.ReadAll(c.Request.Body)
+		if err != nil {
+			log.Printf("❌ Error reading body: %v", err)
+			c.JSON(400, gin.H{"error": "Failed to read request body"})
+			return
+		}
+
+		log.Printf("📦 Received body: %s", string(body))
+
+		if err := json.Unmarshal(body, &sub); err != nil {
+			log.Printf("❌ JSON Unmarshal Error: %v", err)
+			c.JSON(400, gin.H{"error": "Invalid JSON"})
+			return
+		}
+
+		log.Printf("📍 Endpoint: %s", sub.Endpoint)
+		log.Printf("🔑 P256dh length: %d", len(sub.Keys.P256dh))
+		log.Printf("🔑 Auth length: %d", len(sub.Keys.Auth))
 
 		// 通知内容
 		message := map[string]string{
@@ -150,8 +185,10 @@ func main() {
 			"body":  "こんにちは！Goサーバーから届いたよ！",
 		}
 		payload, _ := json.Marshal(message)
+		log.Printf("📝 Payload: %s", string(payload))
 
 		// WebPush送信
+		log.Println("🚀 Sending notification...")
 		resp, err := webpush.SendNotification(payload, &webpush.Subscription{
 			Endpoint: sub.Endpoint,
 			Keys: webpush.Keys{
@@ -159,18 +196,25 @@ func main() {
 				Auth:   sub.Keys.Auth,
 			},
 		}, &webpush.Options{
-			VAPIDPrivateKey: os.Getenv("VAPID_PRIVATE_KEY"),
-			VAPIDPublicKey:  os.Getenv("VAPID_PUBLIC_KEY"),
+			VAPIDPrivateKey: vapidPrivateKey,
+			VAPIDPublicKey:  vapidPublicKey,
 			TTL:             30,
-			Subscriber:      "Subscriber: \"mailto:test@example.com\"",
+			Subscriber:      "mailto:test@example.com",
 		})
+
 		if err != nil {
-			log.Println("Error:", err)
+			log.Printf("❌ WebPush Send Error: %v", err)
 			c.JSON(500, gin.H{"error": err.Error()})
 			return
 		}
 		defer resp.Body.Close()
-		c.JSON(200, gin.H{"success": true})
+
+		responseBody, _ := io.ReadAll(resp.Body)
+		log.Printf("✅ WebPush sent successfully!")
+		log.Printf("📊 Status Code: %d", resp.StatusCode)
+		log.Printf("📄 Response: %s", string(responseBody))
+
+		c.JSON(200, gin.H{"success": true, "status": resp.StatusCode})
 	})
 
 	fmt.Println("Starting server")
