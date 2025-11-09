@@ -155,6 +155,7 @@
   async function register() {
     if ("serviceWorker" in navigator) {
       const reg = await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`);
+      console.log(await reg);
       console.log("Service Worker 登録完了");
 
       const sub = await reg.pushManager.subscribe({
