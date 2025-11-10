@@ -54,10 +54,17 @@
     communication_loading.value = false;
   }
 
+  const datetime = ref<string>('');
+
   async function add() {
     communication_saving.value = true;
     await todoModule.add(props.date, todoText.value, subjectName.value, status.value);
+    console.log("通知登録日時:", datetime.value);
+    if (datetime.value) {
+      await register(datetime.value)
+    }
     todoText.value = "";
+    datetime.value = "";
     communication_saving.value = false;
     loadData();
   };
@@ -153,7 +160,7 @@
 
   const publicVapidKey = "BKdgyFaYbmA8NNQvlHbr6TQ6wJudtWWzmlcDmPogbp9ppkRuvB7kQThDjVw0LDwjynesVAQvlRlFkdfMu45KO6g";
 
-  async function register() {
+  async function register(datetime: string = null) {
     console.log("=== プッシュ通知登録開始 ===");
 
     try {
@@ -203,7 +210,8 @@
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${await user.getToken()}`
+            "Authorization": `Bearer ${await user.getToken()}`,
+            "datetime": datetime || ""
           },
           body: JSON.stringify(sub),
         });
@@ -332,6 +340,10 @@
           </select>
           <br>
           <br>
+          <input class="selectbox" type="datetime-local" id="meeting" name="meeting" v-model="datetime">
+
+          <br>
+          <br>
           <button class="btn" style="margin: 0 auto;" @click="add" :disabled="communication_loading">
             <Addicon v-if="!communication_saving"></Addicon>
             <span v-if="!communication_saving">追加</span>
@@ -371,9 +383,9 @@
       <p>通信中...</p>
     </div>
 
-    <button @click="register" style="position: fixed; bottom: 80px; right: 20px; z-index: 1000;">
-      🔔 通知を許可して送信
-    </button>
+<!--    <button @click="register()" style="position: fixed; bottom: 80px; right: 20px; z-index: 1000;">-->
+<!--      🔔 通知を許可して送信-->
+<!--    </button>-->
 
 <!--    &lt;!&ndash; デバッグ用テスト通知ボタン &ndash;&gt;-->
 <!--    <button @click="testNotification" style="position: fixed; bottom: 140px; right: 20px; z-index: 1000; background: orange; color: white; padding: 8px; border: none; border-radius: 4px;">-->

@@ -90,9 +90,10 @@ func main() {
 	// ローカルのときは有効にしてください
 	if CORS_GO == "ON" {
 		r.Use(cors.New(cors.Config{
-			AllowOrigins:     []string{"http://localhost:5173", "http://localhost:4173", "https://planarc.kencode.tech", "https://planarc.kencode.tech/"},
-			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-			AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+			AllowOrigins: []string{"http://localhost:5173", "http://localhost:4173", "https://planarc.kencode.tech", "https://planarc.kencode.tech/"},
+			AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+			// datetime ヘッダーをプリフライトで許可（大文字小文字の違いにも対応）
+			AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "Datetime", "datetime", "X-Requested-With"},
 			ExposeHeaders:    []string{"Content-Length"},
 			AllowCredentials: true,
 			MaxAge:           12 * time.Hour,
@@ -172,6 +173,20 @@ func main() {
 	analysys.GET("/", getAnalysis)
 
 	api.POST("/send", func(c *gin.Context) {
+		datetimeTemp := c.GetHeader("datetime")
+
+		// ① その時刻を「日本時間(Asia/Tokyo)」として解釈
+		loc, _ := time.LoadLocation("Asia/Tokyo")
+		layout := "2006-01-02T15:04" // 秒なし
+		datetime, err := time.ParseInLocation(layout, datetimeTemp, loc)
+		if err != nil {
+			log.Printf("❌ Datetime Parse Error: %v", err)
+			c.JSON(400, gin.H{"error": "Invalid datetime format"})
+			return
+		}
+
+		fmt.Println("Tokyo:", datetime) // 2025-11-10 21:47:00 +0900 JST
+
 		log.Println("=== /api/send endpoint called ===")
 
 		var sub Subscription
@@ -194,10 +209,10 @@ func main() {
 		log.Printf("🔑 P256dh length: %d", len(sub.Keys.P256dh))
 		log.Printf("🔑 Auth length: %d", len(sub.Keys.Auth))
 
-		loc, _ := time.LoadLocation("Asia/Tokyo")
+		//loc, _ := time.LoadLocation("Asia/Tokyo")
 
 		// 例①：特定日時で
-		runAt := time.Now().Add(10 * time.Second)
+		runAt := datetime
 
 		// 例②：今から10秒後
 		// runAt := time.Now().Add(10 * time.Second)
@@ -207,8 +222,8 @@ func main() {
 
 			// 通知内容
 			message := map[string]string{
-				"title": "🎉 GoからWeb Push通知！",
-				"body":  "こんにちは！Goサーバーから届いたよ！",
+				"title": "PlanArcからのお知らせ",
+				"body":  "予定の時間になりました！勉強を始めましょう！",
 			}
 			payload, _ := json.Marshal(message)
 			log.Printf("📝 Payload: %s", string(payload))
