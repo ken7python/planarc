@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -215,19 +216,145 @@ type Subscription struct {
 	} `json:"keys"`
 }
 
-// 指定時刻に非同期で1回だけ実行（過ぎてたら何もしない）
-func ScheduleOnce(when time.Time, job func()) {
-	d := time.Until(when)
+type Notify struct {
+	ID          uint      `gorm:"primaryKey"`
+	DateTime    time.Time `gorm:"not null"`
+	ToDoID      int       `gorm:"not null"`
+	UUID        string    `gorm:"not null"`
+	Endpoint    string    `gorm:"not null"`
+	P256dh      string    `gorm:"not null"`
+	Auth        string    `gorm:"not null"`
+	CreatedDate string    `gorm:"not null"`
+}
+
+// func push(when time.Time, c *gin.Context, uuid string, nTaskid int, Endpoint string, P256dh string, Auth string, vapidPrivateKey string, vapidPublicKey string) {
+func push(notify Notify, c *gin.Context, vapidPrivateKey string, vapidPublicKey string) {
+	d := time.Until(notify.DateTime)
 	if d <= 0 {
-		fmt.Println("⏱️ もう過ぎてるので実行しません:", when)
+		fmt.Println("⏱️ もう過ぎてるので実行しません:", notify.DateTime)
 		return
 	}
 
 	// ゴルーチンで裏実行
 	go func() {
+		fmt.Println("✅ スケジュール登録:", notify.DateTime)
 		time.Sleep(d)
-		job()
+		dNotify(notify.ID)
+		fmt.Println("🟢 実行しました！:", time.Now())
+
+		var todos TODOLIST
+
+		res := db.Model(&TODOLIST{}).Where(`uuid = ? and id = ?`, notify.UUID, notify.ToDoID).First(&todos)
+		if res.Error != nil {
+			fmt.Println("Error fetching ToDo List:", res.Error)
+		}
+		fmt.Println("Fetched ToDo Title:", todos.Title)
+		titleOfTask := todos.Title
+
+		// 通知内容
+		message := map[string]string{
+			"title": "時間になりました",
+			"body":  titleOfTask,
+		}
+		payload, _ := json.Marshal(message)
+		log.Printf("📝 Payload: %s", string(payload))
+
+		// WebPush送信
+		log.Println("🚀 Sending notification...")
+		resp, err := webpush.SendNotification(payload, &webpush.Subscription{
+			Endpoint: notify.Endpoint,
+			Keys: webpush.Keys{
+				P256dh: notify.P256dh,
+				Auth:   notify.Auth,
+			},
+		}, &webpush.Options{
+			VAPIDPrivateKey: vapidPrivateKey,
+			VAPIDPublicKey:  vapidPublicKey,
+			TTL:             30,
+			Subscriber:      "mailto:test@example.com",
+		})
+
+		if err != nil {
+			log.Printf("❌ WebPush Send Error: %v", err)
+			c.JSON(500, gin.H{"error": err.Error()})
+			return
+		}
+		defer resp.Body.Close()
+
+		responseBody, _ := io.ReadAll(resp.Body)
+		log.Printf("✅ WebPush sent successfully!")
+		log.Printf("📊 Status Code: %d", resp.StatusCode)
+		log.Printf("📄 Response: %s", string(responseBody))
 	}()
+}
+
+func dNotify(id uint) {
+	var n Notify
+	n.ID = id
+	if err := db.Delete(&n).Error; err != nil {
+		fmt.Println("Error deleting Notify:", err)
+		return
+	}
+	fmt.Println("Success deleting Notify")
+}
+
+type NotifyResponse struct {
+	ID       uint      `json:"id"`
+	DateTime time.Time `json:"date_time"`
+	ToDoID   int       `json:"to_do_id"`
+}
+
+func retGetNotifyByUUID(uuid string, datetime string) []NotifyResponse {
+	//var notifies []Notify
+
+	var notifies []NotifyResponse
+
+	res := db.Model(&Notify{}).Select("id", "date_time", "to_do_id").Where("uuid = ? AND created_date = ?", uuid, datetime).Scan(&notifies)
+	if res.Error != nil {
+		fmt.Println("Error fetching Notify:", res.Error)
+		return nil
+	}
+	if res.RowsAffected == 0 {
+		return []NotifyResponse{}
+	}
+	return notifies
+}
+
+func getNotifyByUUID(c *gin.Context) {
+	fmt.Println("api/notify/")
+	uuid := GetProfile(c).UUID
+	datetime := c.Query("datetime")
+
+	notifies := retGetNotifyByUUID(uuid, datetime)
+	if notifies == nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Notifyの取得に失敗しました"})
+		return
+	}
+	fmt.Println("Fetched Notify:", len(notifies))
+	c.JSON(http.StatusOK, notifies)
+}
+
+func refreshNotify() {
+	if err := godotenv.Load(); err != nil {
+		log.Println("Warning: .env file not found, using environment variables")
+	}
+
+	// VAPID鍵の検証
+	vapidPrivateKey := os.Getenv("VAPID_PRIVATE_KEY")
+	vapidPublicKey := os.Getenv("VAPID_PUBLIC_KEY")
+
+	var notifies []Notify
+
+	res := db.Model(&Notify{}).Find(&notifies)
+	if res.Error != nil {
+		fmt.Println("Error fetching Notify:", res.Error)
+	}
+	if res.RowsAffected == 0 {
+		return
+	}
+	for _, notify := range notifies {
+		push(notify, nil, vapidPrivateKey, vapidPublicKey)
+	}
 }
 
 func notify(c *gin.Context) {
@@ -256,21 +383,13 @@ func notify(c *gin.Context) {
 
 	datetimeTemp := c.GetHeader("datetime")
 	nTaskid := c.GetHeader("Task")
+	createdDate := c.GetHeader("CreatedDate")
 	fmt.Println((c.GetHeader("Authorization")))
 	uuid := GetProfile(c).UUID
 	fmt.Println(uuid)
 
 	fmt.Println(datetimeTemp)
 	fmt.Println(nTaskid)
-
-	var todos TODOLIST
-
-	res := db.Model(&TODOLIST{}).Where(`uuid = ? and id = ?`, uuid, nTaskid).Find(&todos)
-	if res.Error != nil {
-		fmt.Println("Error fetching ToDo List:", res.Error)
-	}
-	fmt.Println("Fetched ToDo Title:", todos.Title)
-	titleOfTask := todos.Title
 
 	// ① その時刻を「日本時間(Asia/Tokyo)」として解釈
 	loc, _ := time.LoadLocation("Asia/Tokyo")
@@ -310,50 +429,38 @@ func notify(c *gin.Context) {
 
 	// 例①：特定日時で
 	runAt := datetime
+	id, err := strconv.Atoi(nTaskid)
+	if err != nil {
+		log.Printf("❌ Task ID Conversion Error: %v", err)
+		c.JSON(400, gin.H{"error": "Invalid Task ID"})
+		return
+	}
+
+	P256dh := sub.Keys.P256dh
+	Auth := sub.Keys.Auth
+	Endpoint := sub.Endpoint
+
+	notify := Notify{
+		CreatedDate: createdDate,
+		DateTime:    runAt,
+		ToDoID:      id,
+		UUID:        uuid,
+		Endpoint:    Endpoint,
+		P256dh:      P256dh,
+		Auth:        Auth,
+	}
+
+	if err := db.Model(&Notify{}).Create(&notify).Error; err != nil {
+		fmt.Println("Error creating Notify:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Notifyの作成に失敗しました"})
+		return
+	}
+	fmt.Println("Sccuess creating Notify")
+	push(notify, c, vapidPrivateKey, vapidPublicKey)
+	//push(runAt, c, uuid, id, sub.Endpoint, P256dh, Auth, vapidPrivateKey, vapidPublicKey)
 
 	// 例②：今から10秒後
 	// runAt := time.Now().Add(10 * time.Second)
-
-	ScheduleOnce(runAt, func() {
-		fmt.Println("🟢 実行しました！:", time.Now().In(loc))
-
-		// 通知内容
-		message := map[string]string{
-			"title": "時間になりました",
-			"body":  titleOfTask,
-		}
-		payload, _ := json.Marshal(message)
-		log.Printf("📝 Payload: %s", string(payload))
-
-		// WebPush送信
-		log.Println("🚀 Sending notification...")
-		resp, err := webpush.SendNotification(payload, &webpush.Subscription{
-			Endpoint: sub.Endpoint,
-			Keys: webpush.Keys{
-				P256dh: sub.Keys.P256dh,
-				Auth:   sub.Keys.Auth,
-			},
-		}, &webpush.Options{
-			VAPIDPrivateKey: vapidPrivateKey,
-			VAPIDPublicKey:  vapidPublicKey,
-			TTL:             30,
-			Subscriber:      "mailto:test@example.com",
-		})
-
-		if err != nil {
-			log.Printf("❌ WebPush Send Error: %v", err)
-			c.JSON(500, gin.H{"error": err.Error()})
-			return
-		}
-		defer resp.Body.Close()
-
-		responseBody, _ := io.ReadAll(resp.Body)
-		log.Printf("✅ WebPush sent successfully!")
-		log.Printf("📊 Status Code: %d", resp.StatusCode)
-		log.Printf("📄 Response: %s", string(responseBody))
-	})
-
-	fmt.Println("✅ スケジュール登録:", runAt)
 
 	c.JSON(200, gin.H{"success": true, "status": 200})
 }

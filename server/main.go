@@ -50,7 +50,7 @@ func main() {
 			AllowOrigins: []string{"http://localhost:5173", "http://localhost:4173", "https://planarc.kencode.tech", "https://planarc.kencode.tech/"},
 			AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 			// datetime ヘッダーをプリフライトで許可（大文字小文字の違いにも対応）
-			AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "Datetime", "datetime", "Task", "X-Requested-With"},
+			AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "Datetime", "datetime", "Task", "CreatedDate", "X-Requested-With"},
 			ExposeHeaders:    []string{"Content-Length"},
 			AllowCredentials: true,
 			MaxAge:           12 * time.Hour,
@@ -131,7 +131,9 @@ func main() {
 
 	notifications := api.Group("/notify")
 	notifications.Use(authMiddleware())
+	notifications.GET("/", getNotifyByUUID)
 	notifications.POST("/send", notify)
+	refreshNotify()
 
 	fmt.Println("Starting server")
 

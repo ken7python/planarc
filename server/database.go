@@ -21,6 +21,7 @@ func Migrate(database *gorm.DB) {
 	db.AutoMigrate(&unfinishedLIST{})
 	db.AutoMigrate(&Status{})
 	db.AutoMigrate(&Comment{})
+	db.AutoMigrate(&Notify{})
 	log.Println("✅ データベース接続成功")
 }
 

@@ -7,6 +7,7 @@ import { getColorboxStyle } from "@/logic/style/colorbox";
 import EditIcon from '@/assets/icons/edit.svg';
 import SaveIcon from '@/assets/icons/save.svg';
 import MoveIcon from '@/assets/icons/move.svg';
+import BellIcon from '@/assets/icons/bell.svg';
 
 const props = defineProps({
   LIST: Array
@@ -69,7 +70,11 @@ function getTitleStyle(checked :boolean) {
     <ul class="list-ul" v-for="(task, index) in LIST" :key="index">
       <li class="list-item" style="width: calc(100dvw - 30px);">
         <div class="left-group">
-          <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;"></span>
+          <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;">
+            <span v-if="task.bell" class="bell">
+              <bell-icon></bell-icon>
+            </span>
+          </span>
           <span v-if="editId != task.ID" class="task-title" :style="getTitleStyle(task.Checked)">
               {{ task.Title }}
             </span>
@@ -99,5 +104,15 @@ function getTitleStyle(checked :boolean) {
 </template>
 
 <style scoped>
-
+  .bell {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center; /* 横方向の中央揃え */
+    align-items: center;     /* 縦方向の中央揃え */
+    margin-top: 2px;
+  }
+  .bell svg{
+    color: #FFA500;
+  }
 </style>

@@ -5,6 +5,7 @@ import { subjectModule } from "@/logic/subject";
 
 export const todoModule = {
     api: CONST.api() + '/todo',
+    nAPI : CONST.api() + '/notify',
     getList: async function(date :string){
         const todos = await fetch(`${ this.api }/?date=${ date }`,{headers: {
                 'Content-Type': 'application/json',
@@ -100,7 +101,7 @@ export const todoModule = {
         console.log(body["id"])
         if (await res.ok) {
             if (nDatetime) {
-                await this.register(nDatetime, body["id"]);
+                await this.register(nDatetime, body["id"], date);
             }
             await this.getList()
         }else {
@@ -147,8 +148,23 @@ export const todoModule = {
             }
         });
     },
+    // Notify Registration
     publicVapidKey: "BKdgyFaYbmA8NNQvlHbr6TQ6wJudtWWzmlcDmPogbp9ppkRuvB7kQThDjVw0LDwjynesVAQvlRlFkdfMu45KO6g",
-    register: async function(datetime: string = null, nTask: string = null) {
+    getNotify: async function(date :string){
+        const notifies = await fetch(`${ this.nAPI }/?datetime=${ date }`,{headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${await user.getToken()}`
+            }})
+        if (await notifies.ok) {
+            const res = await notifies.json();
+            // console.log(res);
+            return await res;
+        }else {
+            alert("サーバとの通信に失敗しました");
+            return null;
+        }
+    },
+    register: async function(datetime: string = null, nTask: string = null, createdDate: string = null) {
         console.log("=== プッシュ通知登録開始 ===");
 
         try {
@@ -191,18 +207,19 @@ export const todoModule = {
                 console.log("購読エンドポイント:", sub.endpoint);
 
                 console.log("7. サーバー送信開始");
-                const apiUrl = `${CONST.api()}/notify/send`;
-                console.log("API URL:", apiUrl);
+                // const apiUrl = `${CONST.api()}/notify/send`;
+                // console.log("API URL:", apiUrl);
+                //
+                // console.log(await user.getToken());
 
-                console.log(await user.getToken());
-
-                const response = await fetch(apiUrl, {
+                const response = await fetch(`${this.nAPI}/send`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${await user.getToken()}`,
                         "datetime": datetime || "",
-                        "Task": nTask || ""
+                        "Task": nTask || "",
+                        "CreatedDate": createdDate || "",
                     },
                     body: JSON.stringify(sub),
                 });
