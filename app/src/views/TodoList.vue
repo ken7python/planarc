@@ -37,20 +37,55 @@
 
   let subjects = ref<any[]>([]);
 
+  // const bellIDs = ref<number[]>([]);
+  const bellSets = new Set();
+
   async function loadData() {
     const subject_list = await subjectModule.getList();
     //console.log(subject_list);
     subjects.value = subject_list;
 
     const ToDoList = await todoModule.getListGroup(props.date);
-    //console.log(await ToDoList);
+
+    const Notify = await todoModule.getNotify(props.date);
+    if (Notify.length > 0) {
+      await Notify.map((item => {
+        // console.log(item);
+        bellSets.add(item.to_do_id);
+      }));
+      console.log(bellSets);
+    }
+
+    ToDoList.MUST.map((item => {
+      if (bellSets.has(item.ID)) {
+        item.bell = true;
+      } else {
+        item.bell = false;
+      }
+    }));
+    ToDoList.WANT.map((item => {
+      if (bellSets.has(item.ID)) {
+        item.bell = true;
+      } else {
+        item.bell = false;
+      }
+    }));
+    ToDoList.checked.map((item => {
+      if (bellSets.has(item.ID)) {
+        item.bell = true;
+      } else {
+        item.bell = false;
+      }
+    }));
+
+    console.log(await ToDoList);
 
     TODO_MUST.value = await ToDoList.MUST;
     TODO_WANT.value = await ToDoList.WANT;
     TODO_checked.value = await ToDoList.checked;
 
-    //console.log("MUST---");
-    //console.log(TODO_MUST.value);
+    console.log("MUST---");
+    console.log(TODO_MUST.value);
     communication_loading.value = false;
   }
 
@@ -149,6 +184,7 @@
   }
 
   communication_loading.value = true;
+
   loadData();
   loadStatus();
 </script>
