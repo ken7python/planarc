@@ -193,6 +193,7 @@ export const todoModule = {
                 console.log("7. サーバー送信開始");
                 const apiUrl = `${CONST.api()}/notify/send`;
                 console.log("API URL:", apiUrl);
+                alert(apiUrl)
 
                 console.log(await user.getToken());
 
