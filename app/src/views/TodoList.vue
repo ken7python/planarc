@@ -196,21 +196,27 @@
   <div>
     <el-dialog v-model="AddDialogVisible" width="90vw" title="ToDo作成">
       <div id="AddTodo">
+        <span>科目</span>
         <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
           <option disabled value="">科目を選択</option>
           <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
             {{ subject.Name }}
           </option>
         </select>
+
+        <span>ToDo</span>
         <div class="micdiv">
           <input type="text" placeholder="ToDoを入力" v-model="todoText" />
           <MicIcon class="mic" @click="micTodo" :style="mic.micStyle(tempmode === 'todo')"></MicIcon>
         </div>
+
+        <span>優先度</span>
         <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
           <option value="MUST">MUST</option>
           <option value="WANT">WANT</option>
         </select>
-        <span>通知日時</span>
+
+        <span>通知日時（任意）</span>
         <input class="selectbox" type="datetime-local" id="meeting" name="meeting" v-model="datetime">
       </div>
       <template #footer>
@@ -310,7 +316,9 @@
   }
   #AddTodo span {
     display: flex;
-    justify-content: center;
+    justify-content: left;
+    font-size: 16px;
+    margin-left: 8px;
   }
   #ToDoPage {
     /* background-color: #3d7fe0; */
