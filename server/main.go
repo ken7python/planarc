@@ -134,7 +134,7 @@ func main() {
 	notifications.GET("/", getNotifyByUUID)
 	notifications.POST("/send", notify)
 	refreshNotify()
-
+	
 	fmt.Println("Starting server")
 
 	r.Run("0.0.0.0:8080")
