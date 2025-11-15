@@ -64,7 +64,7 @@ export const todoModule = {
             return null;
         }
     },
-    add: async function(date: string,title :string,suject :number,status :string){
+    add: async function(date: string,title :string,suject :string,status :string, nDatetime: string){
         console.log(date, title, suject, status)
         if( !title ) {
             alert("タイトルを入力してください");
@@ -95,8 +95,13 @@ export const todoModule = {
                 "status": status
             })
         })
-        console.log(await res)
+        const body = await res.json()
+        console.log(body)
+        console.log(body["id"])
         if (await res.ok) {
+            if (nDatetime) {
+                await this.register(nDatetime, body["id"]);
+            }
             await this.getList()
         }else {
             console.error('Failed to fetch ToDos:', res.statusText);
@@ -141,5 +146,93 @@ export const todoModule = {
                 throw new Error('Failed to check ToDo');
             }
         });
+    },
+    publicVapidKey: "BKdgyFaYbmA8NNQvlHbr6TQ6wJudtWWzmlcDmPogbp9ppkRuvB7kQThDjVw0LDwjynesVAQvlRlFkdfMu45KO6g",
+    register: async function(datetime: string = null, nTask: string = null) {
+        console.log("=== プッシュ通知登録開始 ===");
+
+        try {
+            if ("serviceWorker" in navigator) {
+                console.log("1. Service Worker対応確認 OK");
+
+                // ビルド後に正しいパスで登録
+                const swPath = import.meta.env.PROD ? '/sw.js' : `${import.meta.env.BASE_URL}sw.js`;
+                console.log("Service Worker登録パス:", swPath);
+
+                const reg = await navigator.serviceWorker.register(swPath);
+                console.log("2. Service Worker 登録完了:", reg);
+
+                // 通知許可の確認
+                console.log("3. 通知許可確認開始");
+                const permission = await Notification.requestPermission();
+                console.log("4. 通知許可結果:", permission);
+
+                if (permission !== "granted") {
+                    console.error("❌ 通知が許可されていません");
+                    alert("通知が許可されていません。ブラウザの設定で通知を許可してください。");
+                    return;
+                }
+
+                // プッシュマネージャーの確認
+                if (!reg.pushManager) {
+                    console.error("❌ プッシュマネージャーが利用できません");
+                    alert("このブラウザはプッシュ通知に対応していません");
+                    return;
+                }
+
+                console.log("5. プッシュ購読開始");
+                console.log("VAPIDキー:", this.publicVapidKey.substring(0, 20) + "...");
+
+                const sub = await reg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: this.urlBase64ToUint8Array(this.publicVapidKey),
+                });
+                console.log("6. プッシュ購読完了:", sub);
+                console.log("購読エンドポイント:", sub.endpoint);
+
+                console.log("7. サーバー送信開始");
+                const apiUrl = `${CONST.api()}/notify/send`;
+                console.log("API URL:", apiUrl);
+
+                console.log(await user.getToken());
+
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${await user.getToken()}`,
+                        "datetime": datetime || "",
+                        "Task": nTask || ""
+                    },
+                    body: JSON.stringify(sub),
+                });
+                console.log(response);
+
+                console.log("8. サーバーレスポンス:", response.status, response.statusText);
+
+                if (response.ok) {
+                    console.log("✅ 通知登録完了");
+                    alert("通知登録完了🎉");
+                } else {
+                    const errorText = await response.text();
+                    console.error("❌ サーバーエラー:", response.status, errorText);
+                    alert(`サーバーエラー: ${response.status}\n詳細: ${errorText}`);
+                }
+            } else {
+                console.error("❌ Service Worker非対応");
+                alert("このブラウザはService Workerに対応していません");
+            }
+        } catch (error) {
+            console.error("❌ 通知登録エラー:", error);
+            console.error("エラー詳細:", error.stack);
+            alert(`エラーが発生しました: ${error.message}`);
+        }
+    },
+
+    urlBase64ToUint8Array: function (base64String) {
+        const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+        const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+        const rawData = atob(base64);
+        return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
     }
 }

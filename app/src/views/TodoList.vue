@@ -58,11 +58,7 @@
 
   async function add() {
     communication_saving.value = true;
-    await todoModule.add(props.date, todoText.value, subjectName.value, status.value);
-    console.log("通知登録日時:", datetime.value);
-    if (datetime.value) {
-      await register(datetime.value)
-    }
+    await todoModule.add(props.date, todoText.value, subjectName.value, status.value, datetime.value);
     todoText.value = "";
     datetime.value = "";
     communication_saving.value = false;
@@ -155,135 +151,6 @@
   communication_loading.value = true;
   loadData();
   loadStatus();
-
-  // test
-
-  const publicVapidKey = "BKdgyFaYbmA8NNQvlHbr6TQ6wJudtWWzmlcDmPogbp9ppkRuvB7kQThDjVw0LDwjynesVAQvlRlFkdfMu45KO6g";
-
-  async function register(datetime: string = null) {
-    console.log("=== プッシュ通知登録開始 ===");
-
-    try {
-      if ("serviceWorker" in navigator) {
-        console.log("1. Service Worker対応確認 OK");
-
-        // ビルド後に正しいパスで登録
-        const swPath = import.meta.env.PROD ? '/sw.js' : `${import.meta.env.BASE_URL}sw.js`;
-        console.log("Service Worker登録パス:", swPath);
-
-        const reg = await navigator.serviceWorker.register(swPath);
-        console.log("2. Service Worker 登録完了:", reg);
-
-        // 通知許可の確認
-        console.log("3. 通知許可確認開始");
-        const permission = await Notification.requestPermission();
-        console.log("4. 通知許可結果:", permission);
-
-        if (permission !== "granted") {
-          console.error("❌ 通知が許可されていません");
-          alert("通知が許可されていません。ブラウザの設定で通知を許可してください。");
-          return;
-        }
-
-        // プッシュマネージャーの確認
-        if (!reg.pushManager) {
-          console.error("❌ プッシュマネージャーが利用できません");
-          alert("このブラウザはプッシュ通知に対応していません");
-          return;
-        }
-
-        console.log("5. プッシュ購読開始");
-        console.log("VAPIDキー:", publicVapidKey.substring(0, 20) + "...");
-
-        const sub = await reg.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(publicVapidKey),
-        });
-        console.log("6. プッシュ購読完了:", sub);
-        console.log("購読エンドポイント:", sub.endpoint);
-
-        console.log("7. サーバー送信開始");
-        const apiUrl = `${CONST.api()}/send`;
-        console.log("API URL:", apiUrl);
-
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${await user.getToken()}`,
-            "datetime": datetime || ""
-          },
-          body: JSON.stringify(sub),
-        });
-
-        console.log("8. サーバーレスポンス:", response.status, response.statusText);
-
-        if (response.ok) {
-          console.log("✅ 通知登録完了");
-          alert("通知登録完了🎉");
-        } else {
-          const errorText = await response.text();
-          console.error("❌ サーバーエラー:", response.status, errorText);
-          alert(`サーバーエラー: ${response.status}\n詳細: ${errorText}`);
-        }
-      } else {
-        console.error("❌ Service Worker非対応");
-        alert("このブラウザはService Workerに対応していません");
-      }
-    } catch (error) {
-      console.error("❌ 通知登録エラー:", error);
-      console.error("エラー詳細:", error.stack);
-      alert(`エラーが発生しました: ${error.message}`);
-    }
-  }
-
-  function urlBase64ToUint8Array(base64String) {
-    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-    const rawData = atob(base64);
-    return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
-  }
-
-  // // デバッグ用テスト通知機能
-  // async function testNotification() {
-  //   console.log("=== テスト通知開始 ===");
-  //
-  //   try {
-  //     // 1. 直接通知テスト（Service Worker経由なし）
-  //     if (Notification.permission === 'granted') {
-  //       console.log("1. 直接通知テスト");
-  //       new Notification("直接通知テスト", {
-  //         body: "これは直接通知です（Service Worker経由なし）",
-  //         icon: "/pwa-192x192.png"
-  //       });
-  //
-  //       // 2秒後にService Worker経由のテストも実行
-  //       setTimeout(async () => {
-  //         console.log("2. Service Worker経由テスト");
-  //
-  //         // Service Worker経由の通知
-  //         const reg = await navigator.serviceWorker.getRegistration();
-  //         if (reg && reg.active) {
-  //           await reg.showNotification("Service Worker テスト", {
-  //             body: "これはService Worker経由の通知です",
-  //             icon: "/pwa-192x192.png",
-  //             tag: "test"
-  //           });
-  //           console.log("Service Worker通知送信完了");
-  //         } else {
-  //           console.error("Service Workerが見つかりません");
-  //         }
-  //       }, 2000);
-  //
-  //       alert("テスト通知を送信しました！");
-  //     } else {
-  //       alert("通知許可が必要です");
-  //     }
-  //   } catch (error) {
-  //     console.error("テスト通知エラー:", error);
-  //     alert("テスト通知エラー: " + error.message);
-  //   }
-  // }
 </script>
 
 <template>
