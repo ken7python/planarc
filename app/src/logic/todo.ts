@@ -193,7 +193,6 @@ export const todoModule = {
                 console.log("7. サーバー送信開始");
                 const apiUrl = `${CONST.api()}/notify/send`;
                 console.log("API URL:", apiUrl);
-                alert(apiUrl)
 
                 console.log(await user.getToken());
 
@@ -217,7 +216,7 @@ export const todoModule = {
                 } else {
                     const errorText = await response.text();
                     console.error("❌ サーバーエラー:", response.status, errorText);
-                    alert(`サーバーエラー: ${response.status}\n詳細: ${errorText}`);
+                    alert(`サーバーエラー: ${response.status}\n詳細: ${errorText}\n apiUrl: ${apiUrl}`);
                 }
             } else {
                 console.error("❌ Service Worker非対応");
