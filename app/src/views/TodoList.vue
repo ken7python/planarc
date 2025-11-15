@@ -91,12 +91,15 @@
 
   const datetime = ref<string>('');
 
+  const AddDialogVisible = ref(false);
+
   async function add() {
     communication_saving.value = true;
     await todoModule.add(props.date, todoText.value, subjectName.value, status.value, datetime.value);
     todoText.value = "";
     datetime.value = "";
     communication_saving.value = false;
+    AddDialogVisible.value = false;
     loadData();
   };
 
@@ -190,6 +193,38 @@
 </script>
 
 <template>
+  <div>
+    <el-dialog v-model="AddDialogVisible" width="90vw" title="ToDo作成">
+      <div id="AddTodo">
+        <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
+          <option disabled value="">科目を選択</option>
+          <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
+            {{ subject.Name }}
+          </option>
+        </select>
+        <div class="micdiv">
+          <input type="text" placeholder="ToDoを入力" v-model="todoText" />
+          <MicIcon class="mic" @click="micTodo" :style="mic.micStyle(tempmode === 'todo')"></MicIcon>
+        </div>
+        <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
+          <option value="MUST">MUST</option>
+          <option value="WANT">WANT</option>
+        </select>
+        <span>通知日時</span>
+        <input class="selectbox" type="datetime-local" id="meeting" name="meeting" v-model="datetime">
+      </div>
+      <template #footer>
+        <el-button @click="AddDialogVisible = false">キャンセル</el-button>
+        <el-button type="primary" @click="add" :disabled="communication_loading">
+          <Addicon v-if="!communication_saving"></Addicon>
+          <span v-if="!communication_saving">追加</span>
+
+          <span v-if="communication_saving" >通信中</span>
+        </el-button>
+      </template>
+    </el-dialog>
+  </div>
+
   <div id="ToDoPage">
     <div id="top-menu">
     <div id="statusMenu">
@@ -224,38 +259,10 @@
         </details>
       </div>
     <div>
-      <details class="frame">
-        <summary>リスト作成</summary>
-        <div id="AddTodo">
-          <select class="selectbox" :style="selectStyle.getSelectStyle(subjectName)" v-model="subjectName">
-            <option disabled value="">科目を選択</option>
-            <option v-for="subject in subjects" :key="subject.value" :value="subject.ID">
-              {{ subject.Name }}
-            </option>
-          </select>
-          <div class="micdiv">
-            <input type="text" placeholder="ToDoを入力" v-model="todoText" />
-            <MicIcon class="mic" @click="micTodo" :style="mic.micStyle(tempmode === 'todo')"></MicIcon>
-          </div>
-          <select class="selectbox" :style="selectStyle.getSelectStyle(status)" v-model="status">
-            <option value="MUST">MUST</option>
-            <option value="WANT">WANT</option>
-          </select>
-          <br>
-          <br>
-          <input class="selectbox" type="datetime-local" id="meeting" name="meeting" v-model="datetime">
-
-          <br>
-          <br>
-          <button class="btn" style="margin: 0 auto;" @click="add" :disabled="communication_loading">
-            <Addicon v-if="!communication_saving"></Addicon>
-            <span v-if="!communication_saving">追加</span>
-
-            <span v-if="communication_saving" >通信中</span>
-          </button>
-        </div>
-        <br>
-      </details>
+        <button class="btn" style="margin: 10px auto;" @click="AddDialogVisible = true">
+          <Addicon></Addicon>
+          <span>ToDo追加</span>
+        </button>
     </div>
 
     </div>
@@ -299,7 +306,11 @@
 
 <style scoped>
   #AddTodo {
-    text-align: center;
+    margin-top: 2%;
+  }
+  #AddTodo span {
+    display: flex;
+    justify-content: center;
   }
   #ToDoPage {
     /* background-color: #3d7fe0; */
@@ -310,7 +321,7 @@
 
   #top-menu {
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     margin-right: 0px;
     margin-left: 0px;
   }
