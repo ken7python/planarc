@@ -64,6 +64,26 @@ function getTitleStyle(checked :boolean) {
     }
   }
 }
+
+
+function getContrastColor(hex) {
+  // 先頭の # を削除
+  hex = hex.replace("#", "");
+
+  // RGBに分解
+  let r = parseInt(hex.substring(0, 2), 16);
+  let g = parseInt(hex.substring(2, 4), 16);
+  let b = parseInt(hex.substring(4, 6), 16);
+
+  // 明度(YIQ計算式)
+  let yiq = (r * 299 + g * 587 + b * 114) / 1000;
+
+  // 明度が128未満なら濃い色とみなして白を返す
+  const ret = yiq < 128 ? "#FACC15" : "#F97316";
+  return {
+    color: ret
+  }
+}
 </script>
 
 <template>
@@ -72,7 +92,7 @@ function getTitleStyle(checked :boolean) {
         <div class="left-group">
           <span :style="getColorboxStyle(task.Color)" style="margin-right: 4px;margin-left: 4px;">
             <span v-if="task.bell" class="bell">
-              <bell-icon></bell-icon>
+              <bell-icon :style="getContrastColor(task.Color)"></bell-icon>
             </span>
           </span>
           <span v-if="editId != task.ID" class="task-title" :style="getTitleStyle(task.Checked)">
@@ -111,8 +131,5 @@ function getTitleStyle(checked :boolean) {
     justify-content: center; /* 横方向の中央揃え */
     align-items: center;     /* 縦方向の中央揃え */
     margin-top: 2px;
-  }
-  .bell svg{
-    color: #FFA500;
   }
 </style>
