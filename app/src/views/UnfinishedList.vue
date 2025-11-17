@@ -44,6 +44,7 @@
 
   async function deleteList(id :number) {
     await unfinishedModule.delete(id);
+    DeletedialogVisible.value = false;
     loadData()
   }
 
@@ -64,12 +65,35 @@
     dialogVisible.value = true;
     backId.value = id;
   }
+
+  const DeletedialogVisible = ref(false);
+  const nonCheckDelete = ref(false);
+  const deleteTaskID = ref(0);
+  function deleteTask(id :number) {
+    if (nonCheckDelete.value) {
+      deleteList(id);
+      return;
+    }
+    DeletedialogVisible.value = true;
+    deleteTaskID.value = id;
+  }
   </script>
 
 <template>
   <div>
+    <el-dialog v-model="DeletedialogVisible" width="90vw" title="未完了リスト削除確認">
+      <p>本当に未完了リストから削除しますか？</p>
+      <el-checkbox v-model="nonCheckDelete">次回からは確認しない</el-checkbox>
+      <template #footer>
+        <el-button @click="DeletedialogVisible = false">キャンセル</el-button>
+        <el-button type="primary" @click="deleteList(deleteTaskID)">OK</el-button>
+      </template>
+    </el-dialog>
+  </div>
+
+  <div>
     <el-dialog v-model="dialogVisible" width="90vw" title="日付選択">
-        <input type="date" v-model="date" >
+      <input type="date" v-model="date" >
       <template #footer>
         <el-button @click="dialogVisible = false">キャンセル</el-button>
         <el-button type="primary" @click="back(backId, date)">OK</el-button>
@@ -87,7 +111,7 @@
           </div>
           <div class="right">
             <button class="squareBtn btnEdit" style="margin-right: 4px;margin-left: 4px;" @click="selectBackDate(task.ID)"><moveIcon></moveIcon></button>
-            <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;" @click="deleteList(task.ID)"><deleteIcon></deleteIcon></button>
+            <button class="squareBtn btnTrash" style="margin-right: 4px;margin-left: 4px;" @click="deleteTask(task.ID)"><deleteIcon></deleteIcon></button>
           </div>
         </li>
       </ul>
