@@ -67,8 +67,8 @@ export const mic = {
 
     micStyle(wantRed) {
         return {
-            width: '40px',
-            height: '40px',
+            width: '30px',
+            height: '30px',
             cursor: 'pointer',
             fill: this.micON.value && wantRed ? '#FF0000' : '#AEB7BD'
         };

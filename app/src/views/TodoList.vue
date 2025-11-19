@@ -318,7 +318,6 @@
     display: flex;
     justify-content: left;
     font-size: 16px;
-    margin-left: 8px;
   }
   #ToDoPage {
     /* background-color: #3d7fe0; */
@@ -357,5 +356,9 @@
 
   h3 {
     line-height: 0.75;
+  }
+
+  .micdiv {
+    margin-bottom: 0px;
   }
 </style>

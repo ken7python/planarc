@@ -83,7 +83,7 @@
   <div id="subjectMain">
     <div>
       <div id="addSubject">
-        <div class="micdiv">
+        <div class="micdiv" id="idSinput">
           <input type="text" placeholder="科目名を入力" v-model="subjectName" />
           <MicIcon class="mic" @click="micbtn" :style="mic.micStyle(true)"></MicIcon>
         </div>
@@ -149,6 +149,11 @@
   }
   #addSubject {
     text-align: center;
+  }
+  #idSinput {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .color-field {
