@@ -15,14 +15,14 @@ import (
 )
 
 type TODOLIST struct {
-	ID        uint      `gorm:"primaryKey"`
-	Date      string    `gorm:"not null"`
-	SubjectID int       `gorm:"not null"`
-	UUID      string    `gorm:"not null"`
-	Title     string    `gorm:"not null"`
-	Checked   bool      `gorm:"not null"`
-	Status    string    `gorm:"not null"`
-	CreatedAt time.Time `gorm:"autoCreateTime"`
+	ID        uint       `gorm:"primaryKey"`
+	Date      string     `gorm:"not null"`
+	SubjectID int        `gorm:"not null"`
+	UUID      string     `gorm:"not null"`
+	Title     string     `gorm:"not null"`
+	Checked   bool       `gorm:"not null"`
+	Status    string     `gorm:"not null"`
+	CreatedAt *time.Time `gorm:"autoCreateTime"`
 	CheckedAt *time.Time
 }
 
@@ -168,7 +168,7 @@ func ToDoChecked(c *gin.Context) {
 	} else {
 		todo.CheckedAt = nil
 	}
-	
+
 	if err := db.Save(&todo).Error; err != nil {
 		fmt.Println("Error updating ToDo:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "ToDoの更新に失敗しました"})

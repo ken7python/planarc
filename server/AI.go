@@ -75,7 +75,16 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 			finished = "未完了"
 		}
 
-		todo := fmt.Sprintf(" - タイトル「%v」このタスクは%v、優先順位%v\n", v.Title, finished, v.Status)
+		CreatedAt := "NULL"
+		if v.CreatedAt != nil {
+			CreatedAt = v.CreatedAt.Format("2006-01-02 15:04")
+		}
+		CheckedAt := "NULL"
+		if v.CheckedAt != nil {
+			CheckedAt = v.CheckedAt.Format("2006-01-02 15:04")
+		}
+
+		todo := fmt.Sprintf(" - タイトル「%v」このタスクは%v、優先順位%v、作成日時:%v、完了日時：%v \n", v.Title, finished, v.Status, CreatedAt, CheckedAt)
 		strToDos += todo
 	}
 
@@ -107,11 +116,16 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 	strUnfinished := ""
 
 	for _, list := range unfinished {
-		strUnfinished += fmt.Sprintf(" - タイトル:%v¥、優先順位:%v、日付:%v、科目ID:%v\n", list.Title, list.Status, list.Date, list.SubjectID)
+		CreatedAt := "NULL"
+		if list.CreatedAt != nil {
+			CreatedAt = list.CreatedAt.Format("2006-01-02 15:04")
+		}
+		strUnfinished += fmt.Sprintf(" - タイトル:%v¥、優先順位:%v、日付:%v、科目ID:%v、作成日時:%v \n", list.Title, list.Status, list.Date, list.SubjectID, CreatedAt)
 	}
 
 	mood := status.Mood
 	enjoyment := status.Enjoyment
+	statusUpdatedAt := status.UpdatedAt.Format("2006-01-02 15:04")
 	studyTime := fmt.Sprintf("%d時間%d分", sum/60, sum%60)
 	todolist := strToDos
 	strTrack := logstr
@@ -164,6 +178,8 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 %d
 ### 今日の楽しみ(空文字は記入なし)
 %s
+### 今日の気分・楽しみ最終更新日時
+%s
 ### 勉強時間（注意：勉強時間について言及する際はここだけを見るようにしてください）
 %s
 ### 全科目ID一覧(ToDoやStudyLog。未完了リストのSubjectIDに対応)
@@ -176,7 +192,7 @@ func getPrompt(uuid string, date string, name string, note string, chr string) *
 %s
 ### 今日の振り返り
 %s
-`, chr, name, date, mood, enjoyment, studyTime, substr, todolist, strTrack, strUnfinished, note)
+`, chr, name, date, mood, enjoyment, statusUpdatedAt, studyTime, substr, todolist, strTrack, strUnfinished, note)
 	fmt.Println(prompt)
 	lenNote := len(note)
 	lenPrompt := len(prompt)

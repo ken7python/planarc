@@ -9,13 +9,13 @@ import (
 )
 
 type unfinishedLIST struct {
-	ID        uint      `gorm:"primaryKey"`
-	Date      string    `gorm:"not null"`
-	SubjectID int       `gorm:"not null"`
-	UUID      string    `gorm:"not null"`
-	Title     string    `gorm:"not null"`
-	Status    string    `gorm:"not null"`
-	CreatedAt time.Time `gorm:"autoCreateTime"`
+	ID        uint       `gorm:"primaryKey"`
+	Date      string     `gorm:"not null"`
+	SubjectID int        `gorm:"not null"`
+	UUID      string     `gorm:"not null"`
+	Title     string     `gorm:"not null"`
+	Status    string     `gorm:"not null"`
+	CreatedAt *time.Time `gorm:"autoCreateTime"`
 }
 
 func retGetUnfinishedByUserID(uuid string) []unfinishedLIST {
