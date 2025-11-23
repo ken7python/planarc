@@ -15,13 +15,15 @@ import (
 )
 
 type TODOLIST struct {
-	ID        uint   `gorm:"primaryKey"`
-	Date      string `gorm:"not null"`
-	SubjectID int    `gorm:"not null"`
-	UUID      string `gorm:"not null"`
-	Title     string `gorm:"not null"`
-	Checked   bool   `gorm:"not null"`
-	Status    string `gorm:"not null"`
+	ID        uint      `gorm:"primaryKey"`
+	Date      string    `gorm:"not null"`
+	SubjectID int       `gorm:"not null"`
+	UUID      string    `gorm:"not null"`
+	Title     string    `gorm:"not null"`
+	Checked   bool      `gorm:"not null"`
+	Status    string    `gorm:"not null"`
+	CreatedAt time.Time `gorm:"autoCreateTime"`
+	CheckedAt *time.Time
 }
 
 func retGetTODOByUserID(uuid string, date string) []TODOLIST {
@@ -124,11 +126,12 @@ func AddToDo(c *gin.Context) {
 
 	todo := TODOLIST{
 		Date:      req.Date,
-		Title:     req.Title,
-		Status:    req.Status,
 		SubjectID: req.SubjectID,
-		Checked:   false,
 		UUID:      uuid,
+		Title:     req.Title,
+		Checked:   false,
+		Status:    req.Status,
+		CheckedAt: nil,
 	}
 
 	if err := db.Model(&TODOLIST{}).Create(&todo).Error; err != nil {
@@ -159,7 +162,13 @@ func ToDoChecked(c *gin.Context) {
 	}
 
 	todo.Checked = !todo.Checked
-
+	now := time.Now()
+	if todo.Checked {
+		todo.CheckedAt = &now
+	} else {
+		todo.CheckedAt = nil
+	}
+	
 	if err := db.Save(&todo).Error; err != nil {
 		fmt.Println("Error updating ToDo:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "ToDoの更新に失敗しました"})

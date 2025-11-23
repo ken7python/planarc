@@ -3,14 +3,16 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 type Status struct {
-	ID        uint   `gorm:"primaryKey"`
-	UUID      string `gorm:"not null"`
-	Date      string `gorm:"not null"`
-	Enjoyment string `gorm:"not null"`
-	Mood      uint   `gorm:"not null"`
+	ID        uint      `gorm:"primaryKey"`
+	UUID      string    `gorm:"not null"`
+	Date      string    `gorm:"not null"`
+	Enjoyment string    `gorm:"not null"`
+	Mood      uint      `gorm:"not null"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 }
 
 func statusInit(uuid string, date string) *Status {

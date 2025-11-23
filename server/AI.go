@@ -18,11 +18,12 @@ import (
 )
 
 type Comment struct {
-	ID       uint   `gorm:"primaryKey"`
-	Date     string `gorm:"not null"`
-	UUID     string `gorm:"not null"`
-	Note     string `gorm:"not null"`
-	UserNote string `gorm:"not null"`
+	ID        uint      `gorm:"primaryKey"`
+	Date      string    `gorm:"not null"`
+	UUID      string    `gorm:"not null"`
+	Note      string    `gorm:"not null"`
+	UserNote  string    `gorm:"not null"`
+	CreatedAt time.Time `gorm:"autoCreateTime"`
 }
 
 func getPrompt(uuid string, date string, name string, note string, chr string) *string {

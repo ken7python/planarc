@@ -3,15 +3,18 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Subjects struct {
-	ID    uint   `gorm:"primaryKey"`
-	Name  string `gorm:"unique/not null"`
-	UUID  string `gorm:"unique/not null"`
-	Color string `gorm:"unique/not null"`
+	ID        uint      `gorm:"primaryKey"`
+	Name      string    `gorm:"unique/not null"`
+	UUID      string    `gorm:"unique/not null"`
+	Color     string    `gorm:"unique/not null"`
+	CreatedAt time.Time `gorm:"autoCreateTime"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime"`
 }
 
 func retGetSubjectByUserID(uuid string) []Subjects {

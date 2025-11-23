@@ -35,7 +35,7 @@ func InitDB_MySQL() {
 	port := os.Getenv("DB_PORT")
 	dbName := os.Getenv("DB_NAME")
 
-	dsn := user + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := user + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Asia%2FTokyo"
 	//println(dsn)
 	database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
